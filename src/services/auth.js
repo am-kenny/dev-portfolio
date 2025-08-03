@@ -1,11 +1,12 @@
 import { jwtDecode } from 'jwt-decode';
+import config from './config.js';
 
 const TOKEN_KEY = 'adminToken';
 
 export const authService = {
   async login(password) {
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch(config.getApiUrl('/api/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

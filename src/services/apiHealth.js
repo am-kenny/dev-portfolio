@@ -1,3 +1,5 @@
+import config from './config.js';
+
 // API Health Check Service
 class ApiHealthService {
   constructor() {
@@ -12,7 +14,7 @@ class ApiHealthService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.checkTimeout);
       
-      const response = await fetch('/api/health', {
+      const response = await fetch(config.getApiUrl('/api/health'), {
         method: 'GET',
         signal: controller.signal
       });

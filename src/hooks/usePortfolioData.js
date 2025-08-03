@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import config from '../services/config.js';
 
 export const usePortfolioData = () => {
   const [data, setData] = useState(null);
@@ -11,7 +12,7 @@ export const usePortfolioData = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/api/portfolio');
+      const response = await fetch(config.getApiUrl('/api/portfolio'));
       if (!response.ok) {
         throw new Error('Failed to fetch portfolio data');
       }
@@ -27,7 +28,7 @@ export const usePortfolioData = () => {
   const fetchSection = async (section) => {
     try {
       setSectionLoading(prev => ({ ...prev, [section]: true }));
-      const response = await fetch(`/api/portfolio/${section}`);
+      const response = await fetch(config.getApiUrl(`/api/portfolio/${section}`));
       if (!response.ok) {
         throw new Error(`Failed to fetch ${section} data`);
       }
@@ -46,7 +47,7 @@ export const usePortfolioData = () => {
   const updateData = async (newData, token) => {
     try {
       setLoading(true);
-      const response = await fetch('/api/portfolio', {
+      const response = await fetch(config.getApiUrl('/api/portfolio'), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ export const usePortfolioData = () => {
   const updateSection = async (section, newSectionData, token) => {
     try {
       setSectionLoading(prev => ({ ...prev, [section]: true }));
-      const response = await fetch(`/api/portfolio/${section}`, {
+      const response = await fetch(config.getApiUrl(`/api/portfolio/${section}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
