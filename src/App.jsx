@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Admin from './pages/Admin'
 import AdminLogin from './pages/AdminLogin'
+import Debug from './pages/Debug'
 import { PortfolioProvider } from './context/PortfolioContext'
 import ApiHealthWrapper from './components/common/ApiHealthWrapper'
 import Hero from './components/portfolio/Hero'
@@ -58,6 +59,11 @@ function App() {
           <Route path="/admin" element={
             <ApiHealthWrapper>
               <Admin />
+            </ApiHealthWrapper>
+          } />
+          <Route path="/debug" element={
+            <ApiHealthWrapper>
+              <Debug />
             </ApiHealthWrapper>
           } />
         </Routes>
