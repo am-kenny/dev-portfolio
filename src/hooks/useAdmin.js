@@ -5,7 +5,7 @@ import { usePortfolioData } from './usePortfolioData';
 
 export const useAdmin = () => {
   const navigate = useNavigate();
-  const { data, loading, error, sectionLoading, updateSection } = usePortfolioData();
+  const { data, loading, error, sectionLoading, updateSection, refreshData } = usePortfolioData();
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -38,6 +38,7 @@ export const useAdmin = () => {
     error,
     sectionLoading,
     handleLogout,
-    handleSectionSave
+    handleSectionSave,
+    refreshData
   };
 }; 

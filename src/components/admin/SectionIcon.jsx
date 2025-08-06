@@ -1,12 +1,12 @@
 import { FaUser, FaInfoCircle, FaBriefcase, FaProjectDiagram, FaEnvelope, FaTools } from 'react-icons/fa';
 
 const sectionIcons = {
-  personalInfo: <FaUser className="text-blue-500 w-7 h-7" />,
-  about: <FaInfoCircle className="text-green-500 w-7 h-7" />,
-  skills: <FaTools className="text-indigo-500 w-7 h-7" />,
-  experience: <FaBriefcase className="text-yellow-500 w-7 h-7" />,
-  projects: <FaProjectDiagram className="text-purple-500 w-7 h-7" />,
-  contact: <FaEnvelope className="text-pink-500 w-7 h-7" />,
+  personalInfo: <FaUser className="text-blue-600 w-6 h-6" />,
+  about: <FaInfoCircle className="text-green-600 w-6 h-6" />,
+  skills: <FaTools className="text-indigo-600 w-6 h-6" />,
+  experience: <FaBriefcase className="text-yellow-600 w-6 h-6" />,
+  projects: <FaProjectDiagram className="text-purple-600 w-6 h-6" />,
+  contact: <FaEnvelope className="text-pink-600 w-6 h-6" />,
 };
 
 const SectionIcon = ({ section }) => {

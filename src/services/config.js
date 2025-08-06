@@ -35,8 +35,6 @@ export const config = {
     login: '/api/login',
     portfolio: '/api/portfolio',
     linkedin: '/api/linkedin',
-    linkedinUrl: '/api/linkedin-url',
-    linkedinApi: '/api/linkedin-api',
     health: '/api/health',
     resetData: '/api/reset-data'
   },

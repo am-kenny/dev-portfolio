@@ -139,7 +139,7 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
             <input
               type="text"
               className="border rounded px-3 py-2 flex-1"
-              placeholder="Platform (e.g., GitHub, LinkedIn)"
+              placeholder="Platform (e.g., GitHub, Twitter)"
               value={newPlatform}
               onChange={e => setNewPlatform(e.target.value)}
               disabled={disabled}

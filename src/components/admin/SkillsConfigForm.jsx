@@ -14,7 +14,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
   // Notify parent on content change for resizing
   useEffect(() => {
     if (onContentChange) onContentChange();
-  }, [categories, onContentChange]);
+  }, [categories]); // Removed onContentChange from dependencies since it's now memoized
 
   const handleAddCategory = () => {
     if (newCategory && !categories[newCategory]) {
