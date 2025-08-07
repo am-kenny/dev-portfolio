@@ -17,6 +17,21 @@ const AnimatedSectionWrapper = ({
     }
   }, [isExpanded]);
 
+  // Recalculate height when content changes
+  useEffect(() => {
+    if (isExpanded && contentRef.current) {
+      const resizeObserver = new ResizeObserver(() => {
+        setContentHeight(contentRef.current.scrollHeight);
+      });
+      
+      resizeObserver.observe(contentRef.current);
+      
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
+  }, [isExpanded]);
+
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
       {/* Header */}

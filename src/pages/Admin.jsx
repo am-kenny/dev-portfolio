@@ -8,11 +8,13 @@ import SectionIcon from '../components/admin/SectionIcon';
 import EditableSectionCard from '../components/common/EditableSectionCard';
 import AnimatedSectionWrapper from '../components/common/AnimatedSectionWrapper';
 import LinkedInImport from '../components/admin/LinkedInImport';
-import { FaLinkedin, FaChevronRight } from 'react-icons/fa';
+import SkillsStructureManager from '../components/admin/SkillsStructureManager';
+import { FaLinkedin, FaChevronRight, FaCogs } from 'react-icons/fa';
 
 export const Admin = () => {
   const { data, loading, error, sectionLoading, handleLogout, handleSectionSave, refreshData } = useAdmin();
   const [showLinkedInImport, setShowLinkedInImport] = useState(false);
+  const [showSkillsStructure, setShowSkillsStructure] = useState(false);
 
   // Show loading or error state
   if (loading || error) {
@@ -48,6 +50,28 @@ export const Admin = () => {
             );
           })}
         </div>
+
+        {/* Skills Structure Management Section */}
+        <AnimatedSectionWrapper
+          isExpanded={showSkillsStructure}
+          onToggle={() => setShowSkillsStructure(!showSkillsStructure)}
+          header={
+            <>
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <FaCogs className="text-purple-600 w-6 h-6" />
+                  <h2 className="text-xl font-semibold text-gray-900">Skills Structure Management</h2>
+                </div>
+                <p className="text-sm text-gray-600">Configure skill categorization and LinkedIn import settings</p>
+              </div>
+              <div className={`transition-transform duration-200 ${showSkillsStructure ? 'rotate-90' : ''}`}>
+                <FaChevronRight className="text-gray-400" />
+              </div>
+            </>
+          }
+        >
+          <SkillsStructureManager />
+        </AnimatedSectionWrapper>
 
         {/* LinkedIn Import Section */}
         <AnimatedSectionWrapper

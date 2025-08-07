@@ -36,7 +36,11 @@ export const config = {
     portfolio: '/api/portfolio',
     linkedin: '/api/linkedin',
     health: '/api/health',
-    resetData: '/api/reset-data'
+    resetData: '/api/reset-data',
+    // New skills endpoints
+    skillsStructure: '/api/portfolio/skills/structure',
+    skillsFlat: '/api/portfolio/skills/flat',
+    skillsCategorization: '/api/linkedin/configure-categorization'
   },
   
   // Get full URL for an endpoint
