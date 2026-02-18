@@ -124,6 +124,7 @@ const SkillsStructureManager = () => {
   
   // Get predefined categories from structure
   const predefinedCategories = skillsStructure?.availableRoles || [];
+  const roleSubcategories = skillsStructure?.roleSubcategories || {};
   
   // Find categories that exist in predefined but not in current
   const missingPredefinedCategories = predefinedCategories.filter(
@@ -177,7 +178,7 @@ const SkillsStructureManager = () => {
                   <CategorySummaryCard
                     key={role}
                     category={role}
-                    categorySkills={skillsStructure.roleSubcategories[role]}
+                    categorySkills={roleSubcategories[role] || []}
                     variant="available"
                   />
                 ))}

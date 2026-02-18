@@ -20,16 +20,8 @@ export const useAdmin = () => {
   };
 
   const handleSectionSave = async (section, newData) => {
-    try {
-      const token = authService.getToken();
-      const success = await updateSection(section, newData, token);
-      
-      if (!success) {
-        throw new Error('Failed to save changes');
-      }
-    } catch (err) {
-      alert('Error saving changes: ' + err.message);
-    }
+    const token = authService.getToken();
+    await updateSection(section, newData, token);
   };
 
   return {

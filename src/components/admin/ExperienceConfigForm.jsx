@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import FadeButtonGroup from '../common/FadeButtonGroup';
 import { LocationTypes } from '../../constants/locationTypes';
 import { formatEnumValue } from '../../utils/formatters';
+import { getMaxMonth, isFutureMonth } from '../../utils/experienceDateValidation';
 
 const emptyJob = {
   title: '',
@@ -18,8 +19,29 @@ const emptyJob = {
   skills: [],
 };
 
+// Ensure date fields are always strings for API validation (backend expects string, not null)
+const normalizeJob = (job) => ({
+  ...job,
+  startDate: job.startDate != null ? String(job.startDate) : '',
+  endDate: job.isCurrent || job.endDate == null ? '' : String(job.endDate),
+  achievements: Array.isArray(job.achievements) ? job.achievements : [],
+  skills: Array.isArray(job.skills) ? job.skills : [],
+});
+
+// Validation aligned with backend: required fields + dates must not be in the future
+const validateJob = (job) => {
+  if (!job.title?.trim()) return 'Title is required.';
+  if (!job.company?.trim()) return 'Company is required.';
+  if (!job.startDate?.trim()) return 'Start date is required.';
+  if (isFutureMonth(job.startDate)) return 'Start date cannot be in the future.';
+  if (!job.country?.trim()) return 'Country is required.';
+  if (!job.city?.trim()) return 'City is required.';
+  if (!job.isCurrent && isFutureMonth(job.endDate)) return 'End date cannot be in the future.';
+  return null;
+};
+
 const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled, onEdit, onContentChange }) => {
-  const [jobs, setJobs] = useState(initialData?.jobs || []);
+  const [jobs, setJobs] = useState(() => (initialData?.jobs || []).map(normalizeJob));
   const [editingJob, setEditingJob] = useState(emptyJob);
   const [editingIndex, setEditingIndex] = useState(null);
   const [achievementInput, setAchievementInput] = useState('');
@@ -34,7 +56,11 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
   }, [jobs, editingJob, showAddForm, editingIndex, onContentChange]);
 
   const handleFieldChange = (field, value) => {
-    setEditingJob(prev => ({ ...prev, [field]: value }));
+    setEditingJob(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === 'isCurrent' && value) next.endDate = '';
+      return next;
+    });
   };
 
   const handleAddAchievement = () => {
@@ -59,7 +85,7 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
 
   const handleEditJob = (idx) => {
     setEditingIndex(idx);
-    setEditingJob(jobs[idx]);
+    setEditingJob(normalizeJob(jobs[idx]));
   };
 
   const handleDeleteJob = (idx) => {
@@ -71,8 +97,9 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
   };
 
   const handleSaveJob = () => {
-    if (!editingJob.title || !editingJob.company) {
-      setError('Title and company are required.');
+    const validationError = validateJob(editingJob);
+    if (validationError) {
+      setError(validationError);
       return;
     }
     setError('');
@@ -94,7 +121,7 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
   };
 
   const handleCancel = () => {
-    setJobs(initialData?.jobs || []);
+    setJobs((initialData?.jobs || []).map(normalizeJob));
     setEditingJob(emptyJob);
     setEditingIndex(null);
     setAchievementInput('');
@@ -106,12 +133,18 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
     setError('');
+    const normalizedJobs = jobs.map(normalizeJob);
+    const firstInvalid = normalizedJobs.findIndex((job) => validateJob(job));
+    if (firstInvalid !== -1) {
+      setError(validateJob(normalizedJobs[firstInvalid]));
+      return;
+    }
+    setSaving(true);
     try {
-      await onSave({ jobs });
+      await onSave({ jobs: normalizedJobs });
     } catch (err) {
-      setError('Failed to save.');
+      setError(err.message || 'Failed to save.');
     } finally {
       setSaving(false);
     }
@@ -123,10 +156,10 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">{editingIndex !== null ? 'Edit Job' : 'Add New Job'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-            <input type="text" className="border rounded px-3 py-2" placeholder="Title" value={editingJob.title} onChange={e => handleFieldChange('title', e.target.value)} />
-            <input type="text" className="border rounded px-3 py-2" placeholder="Company" value={editingJob.company} onChange={e => handleFieldChange('company', e.target.value)} />
-            <input type="month" className="border rounded px-3 py-2" placeholder="Start Date" value={editingJob.startDate} onChange={e => handleFieldChange('startDate', e.target.value)} />
-            <input type="month" className="border rounded px-3 py-2" placeholder="End Date" value={editingJob.endDate} onChange={e => handleFieldChange('endDate', e.target.value)} disabled={editingJob.isCurrent} />
+            <input type="text" className="border rounded px-3 py-2" placeholder="Title (required)" value={editingJob.title} onChange={e => handleFieldChange('title', e.target.value)} />
+            <input type="text" className="border rounded px-3 py-2" placeholder="Company (required)" value={editingJob.company} onChange={e => handleFieldChange('company', e.target.value)} />
+            <input type="month" className="border rounded px-3 py-2" placeholder="Start Date (required)" value={editingJob.startDate} max={getMaxMonth()} onChange={e => handleFieldChange('startDate', e.target.value)} />
+            <input type="month" className="border rounded px-3 py-2" placeholder="End Date" value={editingJob.endDate} max={getMaxMonth()} onChange={e => handleFieldChange('endDate', e.target.value)} disabled={editingJob.isCurrent} />
             <div className="flex items-center gap-2 col-span-2">
               <input type="checkbox" id="isCurrent" checked={editingJob.isCurrent} onChange={e => handleFieldChange('isCurrent', e.target.checked)} />
               <label htmlFor="isCurrent" className="text-sm">Current Position</label>
@@ -136,8 +169,8 @@ const ExperienceConfigForm = ({ initialData, onSave, onCancel, loading, disabled
               <option value={LocationTypes.ON_SITE}>On-Site</option>
               <option value={LocationTypes.HYBRID}>Hybrid</option>
             </select>
-            <input type="text" className="border rounded px-3 py-2" placeholder="Country" value={editingJob.country} onChange={e => handleFieldChange('country', e.target.value)} />
-            <input type="text" className="border rounded px-3 py-2" placeholder="City" value={editingJob.city} onChange={e => handleFieldChange('city', e.target.value)} />
+            <input type="text" className="border rounded px-3 py-2" placeholder="Country (required)" value={editingJob.country} onChange={e => handleFieldChange('country', e.target.value)} />
+            <input type="text" className="border rounded px-3 py-2" placeholder="City (required)" value={editingJob.city} onChange={e => handleFieldChange('city', e.target.value)} />
           </div>
           <textarea className="border rounded px-3 py-2 w-full mb-2" placeholder="Description" value={editingJob.description} onChange={e => handleFieldChange('description', e.target.value)} rows={2} />
           <div className="mb-2">

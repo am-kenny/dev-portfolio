@@ -98,7 +98,7 @@ export const usePortfolioData = () => {
       return true;
     } catch (err) {
       setError(err.message);
-      return false;
+      throw err;
     } finally {
       setSectionLoading(prev => ({ ...prev, [section]: false }));
     }
