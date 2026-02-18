@@ -10,6 +10,7 @@ import Skills from './components/portfolio/Skills'
 import Experience from './components/portfolio/Experience'
 import Projects from './components/portfolio/Projects'
 import Contact from './components/portfolio/Contact'
+import Footer from './components/portfolio/Footer'
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageTitles } from './constants/titleMap'
@@ -36,6 +37,7 @@ const Portfolio = () => {
       <Experience />
       <Projects />
       <Contact />
+      <Footer />
     </main>
   );
 };

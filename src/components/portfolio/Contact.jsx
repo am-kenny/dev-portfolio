@@ -1,4 +1,10 @@
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { usePortfolio } from '../../context/PortfolioContext';
+
+const platformIcons = {
+  github: FaGithub,
+  linkedin: FaLinkedin,
+};
 
 const Contact = () => {
   const { data, loading } = usePortfolio();
@@ -58,23 +64,22 @@ const Contact = () => {
                 )}
                 
                 {contact?.socialLinks?.length > 0 && (
-                  <div className="flex items-center">
-                    <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                    <div className="flex space-x-4">
-                      {contact.socialLinks.map((link, index) => (
-                        <a 
+                  <div className="flex items-center gap-4">
+                    {contact.socialLinks.map((link, index) => {
+                      const Icon = platformIcons[link.platform?.toLowerCase()];
+                      return (
+                        <a
                           key={index}
-                          href={link.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="hover:text-blue-400"
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:text-blue-400 transition-colors"
                         >
-                          {link.platform}
+                          {Icon ? <Icon className="w-6 h-6 flex-shrink-0" /> : null}
+                          <span>{link.platform}</span>
                         </a>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
