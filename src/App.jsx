@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Admin from './pages/Admin'
 import AdminLogin from './pages/AdminLogin'
 import Debug from './pages/Debug'
-import { PortfolioProvider } from './context/PortfolioContext'
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
 import ApiHealthWrapper from './components/common/ApiHealthWrapper'
 import ThemeToggle from './components/common/ThemeToggle'
 import Hero from './components/portfolio/Hero'
@@ -15,6 +15,20 @@ import Footer from './components/portfolio/Footer'
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageTitles } from './constants/titleMap'
+
+const PortfolioWithApiCheck = () => {
+  const { refreshData } = usePortfolio();
+  return (
+    <ApiHealthWrapper onApiRecovered={refreshData}>
+      <>
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
+        <Portfolio />
+      </>
+    </ApiHealthWrapper>
+  );
+};
 
 const PageTitle = () => {
   const location = useLocation();
@@ -49,16 +63,7 @@ function App() {
       <Router>
         <PageTitle />
         <Routes>
-          <Route path="/" element={
-            <ApiHealthWrapper>
-              <>
-                <div className="fixed top-4 right-4 z-50">
-                  <ThemeToggle />
-                </div>
-                <Portfolio />
-              </>
-            </ApiHealthWrapper>
-          } />
+          <Route path="/" element={<PortfolioWithApiCheck />} />
           <Route path="/admin/login" element={
             <ApiHealthWrapper>
               <AdminLogin />
