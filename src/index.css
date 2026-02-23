@@ -2,9 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme transition: single timing for consistency (matches Tailwind duration-300 + ease) */
+:root {
+  --theme-transition-duration: 0.3s;
+  --theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Your custom styles below */
 html {
   scroll-behavior: smooth;
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing);
+}
+
+html {
+  background-color: #ffffff;
+}
+
+html.dark {
+  background-color: #111827;
+}
+
+/* Smooth theme transition: animate color changes when light/dark is toggled */
+*, *::before, *::after {
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+    color var(--theme-transition-duration) var(--theme-transition-easing),
+    border-color var(--theme-transition-duration) var(--theme-transition-easing),
+    fill var(--theme-transition-duration) var(--theme-transition-easing);
+}
+
+/* Skills section: ensure background transitions smoothly (not overridden by Tailwind) */
+#skills {
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing) !important;
 }
 
 /* Custom animations */
@@ -59,14 +87,24 @@ html {
   background-size: 20px 20px;
 }
 
+.dark .bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(96, 165, 250, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 165, 250, 0.15) 1px, transparent 1px);
+}
+
 /* Smooth transitions for skill cards */
 .skill-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--theme-transition-duration) var(--theme-transition-easing);
 }
 
 .skill-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dark .skill-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Progress bar animation */
@@ -80,6 +118,11 @@ html {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dark .glass {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid rgba(75, 85, 99, 0.5);
 }
 
 /* Gradient text animation */

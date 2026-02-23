@@ -28,7 +28,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-900 text-white">
+    <section id="contact" className="py-20 bg-gray-900 dark:bg-gray-950 text-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Get In Touch</h2>
@@ -73,7 +73,7 @@ const Contact = () => {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 hover:text-blue-400 transition-colors"
+                          className="flex items-center gap-2 hover:text-blue-400 transition-colors duration-300"
                         >
                           {Icon ? <Icon className="w-6 h-6 flex-shrink-0" /> : null}
                           <span>{link.platform}</span>

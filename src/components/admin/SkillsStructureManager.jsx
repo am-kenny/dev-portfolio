@@ -92,13 +92,13 @@ const SkillsStructureManager = () => {
 
   if (loading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors duration-300">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4 transition-colors duration-300"></div>
           <div className="space-y-3">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded transition-colors duration-300"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6 transition-colors duration-300"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6 transition-colors duration-300"></div>
           </div>
         </div>
       </div>
@@ -107,11 +107,11 @@ const SkillsStructureManager = () => {
 
   if (error) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="text-red-600 mb-4">{error}</div>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors duration-300">
+        <div className="text-red-600 dark:text-red-400 mb-4 transition-colors duration-300">{error}</div>
         <button
           onClick={loadData}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
         >
           Retry
         </button>
@@ -137,12 +137,12 @@ const SkillsStructureManager = () => {
   );
 
   return (
-    <div className="bg-white">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Skills Structure Management</h3>
+    <div className="bg-white dark:bg-transparent transition-colors duration-300">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 transition-colors duration-300">Skills Structure Management</h3>
       
       {success && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
-          <p className="text-sm text-green-700">{success}</p>
+        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-md transition-colors duration-300">
+          <p className="text-sm text-green-700 dark:text-green-300">{success}</p>
         </div>
       )}
 
@@ -150,7 +150,7 @@ const SkillsStructureManager = () => {
         <div className="space-y-6">
           {/* Predefined Categories */}
           <div>
-            <h4 className="text-md font-medium text-gray-800 mb-3">Predefined Categories</h4>
+            <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-300">Predefined Categories</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {actualCategories
                 .filter(category => predefinedCategories.includes(category))
@@ -171,8 +171,8 @@ const SkillsStructureManager = () => {
           {/* Available Predefined Categories */}
           {missingPredefinedCategories.length > 0 && (
             <div>
-              <h4 className="text-md font-medium text-gray-800 mb-3">Available Predefined Categories</h4>
-              <p className="text-sm text-gray-600 mb-3">These predefined categories are available for LinkedIn imports but not currently used in your skills.</p>
+              <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-300">Available Predefined Categories</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-300">These predefined categories are available for LinkedIn imports but not currently used in your skills.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {missingPredefinedCategories.map((role) => (
                   <CategorySummaryCard
@@ -189,8 +189,8 @@ const SkillsStructureManager = () => {
           {/* Custom Categories */}
           {customCategories.length > 0 && (
             <div>
-              <h4 className="text-md font-medium text-gray-800 mb-3">Custom Categories</h4>
-              <p className="text-sm text-gray-600 mb-3">These are your custom categories that aren't part of the predefined set.</p>
+              <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-300">Custom Categories</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-300">These are your custom categories that aren't part of the predefined set.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {customCategories.map((category) => {
                   const categorySkills = currentSkills.skillCategories[category];
@@ -208,8 +208,8 @@ const SkillsStructureManager = () => {
           )}
 
           {/* Categorization Settings */}
-          <div className="border-t pt-6">
-            <h4 className="text-md font-medium text-gray-800 mb-3">Skills Categorization Settings</h4>
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-6 transition-colors duration-300">
+            <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-300">Skills Categorization Settings</h4>
             <div className="space-y-4">
               <div>
                 <label className="flex items-center">
@@ -225,13 +225,13 @@ const SkillsStructureManager = () => {
                   />
                   Use subcategories for better organization
                 </label>
-                <p className="text-sm text-gray-600 ml-6 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 ml-6 mt-1 transition-colors duration-300">
                   When enabled, skills will be organized into subcategories within each main category.
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Minimum skills for subcategory:
                 </label>
                 <input
@@ -242,30 +242,30 @@ const SkillsStructureManager = () => {
                     minSkillsForSubcategory: parseInt(e.target.value)
                   })}
                   disabled={!isEditing}
-                  className={`border border-gray-300 rounded px-3 py-2 w-20 ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}
+                  className={`border border-gray-300 dark:border-gray-600 rounded px-3 py-2 w-20 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${!isEditing ? 'bg-gray-100 dark:bg-gray-600 cursor-not-allowed' : 'bg-white dark:bg-gray-700'}`}
                   min="1"
                   max="10"
                 />
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 transition-colors duration-300">
                   Categories with fewer skills will be flattened automatically.
                 </p>
               </div>
 
               {/* Category Overrides */}
               <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-2">Category Overrides</h5>
-                <p className="text-sm text-gray-600 mb-3">Configure how specific predefined categories should be structured during LinkedIn imports.</p>
+                <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Category Overrides</h5>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-300">Configure how specific predefined categories should be structured during LinkedIn imports.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {actualCategories
                     .filter(category => predefinedCategories.includes(category))
                     .map((role) => (
-                    <div key={role} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                      <span className="text-sm font-medium text-gray-700">{role}</span>
+                    <div key={role} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded transition-colors duration-300">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">{role}</span>
                       <select
                         value={categorization.categoryOverrides[role] || 'auto'}
                         onChange={(e) => handleCategoryOverride(role, e.target.value)}
                         disabled={!isEditing}
-                        className={`text-sm border border-gray-300 rounded px-2 py-1 ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}
+                        className={`text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${!isEditing ? 'bg-gray-100 dark:bg-gray-600 cursor-not-allowed' : 'bg-white dark:bg-gray-700'}`}
                       >
                         <option value="auto">Auto (Default)</option>
                         <option value="flat">Always Flat</option>
@@ -285,7 +285,7 @@ const SkillsStructureManager = () => {
                 disabled={!isEditing}
                 saving={saving}
               />
-              {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
+              {error && <div className="text-red-600 dark:text-red-400 text-sm mt-2 transition-colors duration-300">{error}</div>}
             </div>
           </div>
 

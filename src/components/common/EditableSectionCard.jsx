@@ -49,9 +49,9 @@ const EditableSectionCard = ({
       header={
         <>
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-semibold capitalize text-gray-900">{section}</h2>
+            <h2 className="text-xl font-semibold capitalize text-gray-900 dark:text-gray-100">{section}</h2>
           </div>
-          <div className={`transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`}>
+          <div className={`transition-transform duration-300 ease ${expanded ? 'rotate-90' : ''}`}>
             <FaChevronRight className="text-gray-400" />
           </div>
         </>

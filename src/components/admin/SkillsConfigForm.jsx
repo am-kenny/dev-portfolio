@@ -187,19 +187,19 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                 type="text"
                 value={skill.name}
                 onChange={e => handleSkillChange(cat, idx, 'name', e.target.value)}
-                className="border border-gray-200 rounded px-3 py-2 flex-1"
+                className="border border-gray-200 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="Skill name"
                 disabled={disabled}
               />
               <select
                 value={skill.level}
                 onChange={e => handleSkillChange(cat, idx, 'level', e.target.value)}
-                className="border border-gray-200 rounded px-3 py-2"
+                className="border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 disabled={disabled}
               >
                 {defaultLevels.map(lvl => <option key={lvl} value={lvl}>{formatEnumValue(lvl)}</option>)}
               </select>
-              {!disabled && <button type="button" className="text-red-500" onClick={() => handleRemoveSkill(cat, idx)}>Remove</button>}
+              {!disabled && <button type="button" className="text-red-500 dark:text-red-400" onClick={() => handleRemoveSkill(cat, idx)}>Remove</button>}
             </div>
           ))}
           {!disabled && <button type="button" className="bg-green-500 text-white px-3 py-1 rounded mt-2" onClick={() => handleAddSkill(cat)}>Add Skill</button>}
@@ -208,7 +208,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
               <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => handleStartAddSubcategory(cat)}>
                 Convert to Subcategories
               </button>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Organize skills into subcategories for better structure
               </p>
             </div>
@@ -216,9 +216,9 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
           
           {/* Inline subcategory input */}
           {!disabled && addingSubcategoryFor === cat && (
-            <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md">
               <div className="flex items-center gap-2 mb-2">
-                <label className="text-sm font-medium text-blue-800">
+                <label className="text-sm font-medium text-blue-800 dark:text-blue-300">
                   Add subcategory to "{cat}":
                 </label>
               </div>
@@ -227,7 +227,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                   type="text"
                   value={newSubcategory}
                   onChange={e => setNewSubcategory(e.target.value)}
-                  className="border border-blue-300 rounded px-3 py-2 flex-1"
+                  className="border border-blue-300 dark:border-blue-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   placeholder="Enter subcategory name..."
                   onKeyPress={e => e.key === 'Enter' && handleConfirmAddSubcategory(cat)}
                   autoFocus
@@ -248,7 +248,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                   Cancel
                 </button>
               </div>
-              <div className="mt-2 text-xs text-blue-600">
+              <div className="mt-2 text-xs text-blue-600 dark:text-blue-400">
                 <span className="font-medium">Suggestions:</span> 
                 {cat === 'Other' ? ' General, Soft Skills, Certifications' :
                  cat === 'Frontend Development' ? ' Languages, Frameworks, Styling' :
@@ -265,10 +265,10 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
       return (
         <div>
           {Object.entries(skills).map(([subcat, subcatSkills]) => (
-            <div key={subcat} className="border-l-2 border-blue-200 pl-4 mb-4">
+            <div key={subcat} className="border-l-2 border-blue-200 dark:border-blue-700 pl-4 mb-4">
               <div className="flex justify-between items-center mb-2">
-                <h6 className="text-sm font-medium text-gray-600">{subcat}</h6>
-                {!disabled && <button type="button" className="text-red-500 text-xs" onClick={() => handleRemoveSubcategory(cat, subcat)}>Remove</button>}
+                <h6 className="text-sm font-medium text-gray-600 dark:text-gray-400">{subcat}</h6>
+                {!disabled && <button type="button" className="text-red-500 dark:text-red-400 text-xs" onClick={() => handleRemoveSubcategory(cat, subcat)}>Remove</button>}
               </div>
               {subcatSkills.map((skill, idx) => (
                 <div key={idx} className="flex gap-2 mb-2">
@@ -276,19 +276,19 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                     type="text"
                     value={skill.name}
                     onChange={e => handleHierarchicalSkillChange(cat, subcat, idx, 'name', e.target.value)}
-                    className="border border-gray-200 rounded px-3 py-2 flex-1"
+                    className="border border-gray-200 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Skill name"
                     disabled={disabled}
                   />
                   <select
                     value={skill.level}
                     onChange={e => handleHierarchicalSkillChange(cat, subcat, idx, 'level', e.target.value)}
-                    className="border border-gray-200 rounded px-3 py-2"
+                    className="border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     disabled={disabled}
                   >
                     {defaultLevels.map(lvl => <option key={lvl} value={lvl}>{formatEnumValue(lvl)}</option>)}
                   </select>
-                  {!disabled && <button type="button" className="text-red-500" onClick={() => handleRemoveHierarchicalSkill(cat, subcat, idx)}>Remove</button>}
+                  {!disabled && <button type="button" className="text-red-500 dark:text-red-400" onClick={() => handleRemoveHierarchicalSkill(cat, subcat, idx)}>Remove</button>}
                 </div>
               ))}
               {!disabled && <button type="button" className="bg-green-500 text-white px-3 py-1 rounded mt-2" onClick={() => handleAddHierarchicalSkill(cat, subcat)}>Add Skill</button>}
@@ -298,9 +298,9 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
           
           {/* Inline subcategory input for hierarchical structure */}
           {!disabled && addingSubcategoryFor === cat && (
-            <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md">
               <div className="flex items-center gap-2 mb-2">
-                <label className="text-sm font-medium text-blue-800">
+                <label className="text-sm font-medium text-blue-800 dark:text-blue-300">
                   Add subcategory to "{cat}":
                 </label>
               </div>
@@ -309,7 +309,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                   type="text"
                   value={newSubcategory}
                   onChange={e => setNewSubcategory(e.target.value)}
-                  className="border border-blue-300 rounded px-3 py-2 flex-1"
+                  className="border border-blue-300 dark:border-blue-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   placeholder="Enter subcategory name..."
                   onKeyPress={e => e.key === 'Enter' && handleConfirmAddSubcategory(cat)}
                   autoFocus
@@ -330,7 +330,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
                   Cancel
                 </button>
               </div>
-              <div className="mt-2 text-xs text-blue-600">
+              <div className="mt-2 text-xs text-blue-600 dark:text-blue-400">
                 <span className="font-medium">Suggestions:</span> 
                 {cat === 'Other' ? ' General, Soft Skills, Certifications' :
                  cat === 'Frontend Development' ? ' Languages, Frameworks, Styling' :
@@ -349,9 +349,9 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Helpful Guidance */}
       {!disabled && (
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
-          <h4 className="text-sm font-medium text-blue-800 mb-2">How to Organize Skills</h4>
-          <div className="text-sm text-blue-700 space-y-1">
+        <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md p-4 mb-4">
+          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">How to Organize Skills</h4>
+          <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
             <p>• <strong>Flat Structure:</strong> All skills listed together (good for small categories)</p>
             <p>• <strong>Hierarchical Structure:</strong> Skills organized into subcategories (better for large categories)</p>
             <p>• <strong>Any Category:</strong> You can add subcategories to any category, including "Other"</p>
@@ -363,17 +363,17 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
 
       {!disabled && (
         <div>
-          <label className="block text-sm font-medium mb-1">Add Category</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Add Category</label>
           <div className="flex gap-2 mb-2">
             <input
               type="text"
               value={newCategory}
               onChange={e => setNewCategory(e.target.value)}
-              className="border border-gray-200 rounded px-3 py-2 flex-1"
+              className="border border-gray-200 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
             <button
               type="button"
-              className={`px-4 py-2 rounded text-white ${!newCategory.trim() ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+              className={`px-4 py-2 rounded text-white ${!newCategory.trim() ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700'}`}
               onClick={handleAddCategory}
               disabled={!newCategory.trim()}
             >
@@ -384,10 +384,10 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
       )}
 
       {Object.entries(categories).map(([cat, skills]) => (
-        <div key={cat} className="border rounded p-4 mb-4 bg-gray-50">
+        <div key={cat} className="border border-gray-200 dark:border-gray-600 rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
           <div className="flex justify-between items-center mb-2">
-            <h4 className="text-lg font-semibold">{cat}</h4>
-            {!disabled && <button type="button" className="text-red-500" onClick={() => handleRemoveCategory(cat)}>Remove</button>}
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{cat}</h4>
+            {!disabled && <button type="button" className="text-red-500 dark:text-red-400" onClick={() => handleRemoveCategory(cat)}>Remove</button>}
           </div>
           {renderSkills(cat, skills)}
         </div>
@@ -402,7 +402,7 @@ const SkillsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, on
         disabled={disabled}
         saving={saving}
       />
-      {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
+      {error && <div className="text-red-600 dark:text-red-400 text-sm mt-2">{error}</div>}
     </form>
   );
 };

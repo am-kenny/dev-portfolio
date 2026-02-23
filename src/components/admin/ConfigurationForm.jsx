@@ -60,7 +60,7 @@ const ConfigurationForm = ({
             value={value || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
             rows={field.rows || 4}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
             placeholder={field.placeholder}
             required={field.required}
           />
@@ -71,7 +71,7 @@ const ConfigurationForm = ({
           <select
             value={value || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
             required={field.required}
           >
             {field.options.map(option => (
@@ -112,7 +112,7 @@ const ConfigurationForm = ({
             type={field.type}
             value={value || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
             placeholder={field.placeholder}
             required={field.required}
           />
@@ -130,11 +130,11 @@ const ConfigurationForm = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         {fields.map((field) => (
           <div key={field.name}>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {field.label}
             </label>
             {field.description && (
-              <p className="text-sm text-gray-500 mb-2">{field.description}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{field.description}</p>
             )}
             {renderField(field)}
           </div>
@@ -144,13 +144,13 @@ const ConfigurationForm = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
             Save Changes
           </button>
@@ -193,19 +193,19 @@ const SkillsEditor = ({ skills, onChange }) => {
           value={newSkill.category}
           onChange={(e) => setNewSkill(prev => ({ ...prev, category: e.target.value }))}
           placeholder="Category"
-          className="flex-1 px-3 py-2 border rounded-lg"
+          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
         <input
           type="text"
           value={newSkill.name}
           onChange={(e) => setNewSkill(prev => ({ ...prev, name: e.target.value }))}
           placeholder="Skill name"
-          className="flex-1 px-3 py-2 border rounded-lg"
+          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
         <select
           value={newSkill.level}
           onChange={(e) => setNewSkill(prev => ({ ...prev, level: e.target.value }))}
-          className="px-3 py-2 border rounded-lg"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
           <option value={SkillLevels.BEGINNER}>Beginner</option>
           <option value={SkillLevels.INTERMEDIATE}>Intermediate</option>
@@ -222,16 +222,16 @@ const SkillsEditor = ({ skills, onChange }) => {
       </div>
 
       {Object.entries(skills).map(([category, categorySkills]) => (
-        <div key={category} className="border rounded-lg p-4">
-          <h4 className="font-medium mb-2">{category}</h4>
+        <div key={category} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+          <h4 className="font-medium mb-2 text-gray-900 dark:text-gray-100">{category}</h4>
           <div className="space-y-2">
             {categorySkills.map((skill, index) => (
-              <div key={index} className="flex justify-between items-center bg-gray-50 p-2 rounded">
+              <div key={index} className="flex justify-between items-center bg-gray-50 dark:bg-gray-700 p-2 rounded text-gray-900 dark:text-gray-100">
                 <span>{skill.name} - {skill.level}</span>
                 <button
                   type="button"
                   onClick={() => handleRemoveSkill(category, skill.name)}
-                  className="text-red-500"
+                  className="text-red-500 dark:text-red-400"
                 >
                   Remove
                 </button>
@@ -273,19 +273,19 @@ const ProjectsEditor = ({ projects, onChange }) => {
 
   return (
     <div className="space-y-4">
-      <div className="border rounded-lg p-4 space-y-4">
+      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4">
         <input
           type="text"
           value={editingProject.title}
           onChange={(e) => setEditingProject(prev => ({ ...prev, title: e.target.value }))}
           placeholder="Project title"
-          className="w-full px-3 py-2 border rounded-lg"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
         <textarea
           value={editingProject.description}
           onChange={(e) => setEditingProject(prev => ({ ...prev, description: e.target.value }))}
           placeholder="Project description"
-          className="w-full px-3 py-2 border rounded-lg"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
         <button
           type="button"
@@ -297,18 +297,18 @@ const ProjectsEditor = ({ projects, onChange }) => {
       </div>
 
       {projects.map((project, index) => (
-        <div key={index} className="border rounded-lg p-4">
+        <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
           <div className="flex justify-between">
-            <h4 className="font-medium">{project.title}</h4>
+            <h4 className="font-medium text-gray-900 dark:text-gray-100">{project.title}</h4>
             <button
               type="button"
               onClick={() => handleRemoveProject(index)}
-              className="text-red-500"
+              className="text-red-500 dark:text-red-400"
             >
               Remove
             </button>
           </div>
-          <p className="text-gray-600">{project.description}</p>
+          <p className="text-gray-600 dark:text-gray-400">{project.description}</p>
         </div>
       ))}
     </div>
@@ -327,14 +327,14 @@ const SocialLinksEditor = ({ links, onChange }) => {
     <div className="space-y-4">
       {Object.entries(links).map(([platform, url]) => (
         <div key={platform}>
-          <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 capitalize">
             {platform}
           </label>
           <input
             type="url"
             value={url}
             onChange={(e) => handleChange(platform, e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder={`Enter your ${platform} URL`}
           />
         </div>

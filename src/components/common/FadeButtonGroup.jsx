@@ -33,7 +33,7 @@ const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading, disabled, sa
           {onEdit && mode === 'view' && (
             <button
               type="button"
-              className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700"
+              className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
               onClick={onEdit}
               disabled={visibleGroup === 'edit' && !fadingGroup ? false : true}
             >
@@ -47,7 +47,7 @@ const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading, disabled, sa
             <>
               <button
                 type="submit"
-                className={"bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"}
+                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 w-full sm:w-auto"
                 disabled={saving}
                 onClick={onSave}
               >
@@ -56,7 +56,7 @@ const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading, disabled, sa
               {onCancel && (
                 <button
                   type="button"
-                  className="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300 border border-gray-300 w-full sm:w-auto"
+                  className="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-6 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500 border border-gray-300 dark:border-gray-500 w-full sm:w-auto"
                   onClick={onCancel}
                   disabled={saving}
                 >

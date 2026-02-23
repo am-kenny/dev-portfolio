@@ -8,11 +8,11 @@ import ContactConfigForm from './ContactConfigForm';
 // Placeholder components for sections without specific forms
 const SectionView = ({ data, onEdit }) => (
   <div>
-    <pre className="bg-gray-50 p-4 rounded-md overflow-auto">{JSON.stringify(data, null, 2)}</pre>
+    <pre className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-md overflow-auto">{JSON.stringify(data, null, 2)}</pre>
     {onEdit && (
       <button
         type="button"
-        className="mt-4 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700"
+        className="mt-4 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
         onClick={onEdit}
       >
         Edit
@@ -23,8 +23,8 @@ const SectionView = ({ data, onEdit }) => (
 
 const SectionForm = ({ data, onSave, onCancel, loading }) => (
   <div>
-    <div className="mb-2 text-gray-500">Editing not implemented yet.</div>
-    <button className="bg-gray-300 px-4 py-2 rounded mr-2" onClick={onCancel}>Cancel</button>
+    <div className="mb-2 text-gray-500 dark:text-gray-400">Editing not implemented yet.</div>
+    <button className="bg-gray-300 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded mr-2" onClick={onCancel}>Cancel</button>
   </div>
 );
 

@@ -97,24 +97,24 @@ const ProjectsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, 
     <form className="space-y-6">
       {!disabled && (showAddForm || editingIndex !== null) && (
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">{editingIndex !== null ? 'Edit Project' : 'Add New Project'}</h3>
+          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">{editingIndex !== null ? 'Edit Project' : 'Add New Project'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-            <input type="text" className="border rounded px-3 py-2" placeholder="Project Name" value={editingProject.name} onChange={e => handleFieldChange('name', e.target.value)} />
-            <input type="url" className="border rounded px-3 py-2" placeholder="Live Demo URL" value={editingProject.link} onChange={e => handleFieldChange('link', e.target.value)} />
-            <input type="url" className="border rounded px-3 py-2" placeholder="GitHub URL" value={editingProject.github} onChange={e => handleFieldChange('github', e.target.value)} />
+            <input type="text" className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Project Name" value={editingProject.name} onChange={e => handleFieldChange('name', e.target.value)} />
+            <input type="url" className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Live Demo URL" value={editingProject.link} onChange={e => handleFieldChange('link', e.target.value)} />
+            <input type="url" className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="GitHub URL" value={editingProject.github} onChange={e => handleFieldChange('github', e.target.value)} />
           </div>
-          <textarea className="border rounded px-3 py-2 w-full mb-2" placeholder="Description" value={editingProject.description} onChange={e => handleFieldChange('description', e.target.value)} rows={3} />
+          <textarea className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 w-full mb-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Description" value={editingProject.description} onChange={e => handleFieldChange('description', e.target.value)} rows={3} />
           <div className="mb-2">
-            <label className="block text-sm font-medium mb-1">Technologies</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Technologies</label>
             <div className="flex gap-2 mb-2">
-              <input type="text" className="border rounded px-3 py-2 flex-1" placeholder="Add technology" value={techInput} onChange={e => setTechInput(e.target.value)} />
+              <input type="text" className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Add technology" value={techInput} onChange={e => setTechInput(e.target.value)} />
               <button type="button" className="bg-blue-500 text-white px-3 py-2 rounded" onClick={handleAddTech} disabled={!techInput}>Add</button>
             </div>
             <div className="flex flex-wrap gap-2">
               {editingProject.technologies?.map((tech, idx) => (
-                <span key={idx} className="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm flex items-center">
+                <span key={idx} className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full px-3 py-1 text-sm flex items-center">
                   {tech}
-                  <button type="button" className="ml-2 text-red-500" onClick={() => handleRemoveTech(idx)}>×</button>
+                  <button type="button" className="ml-2 text-red-500 dark:text-red-400" onClick={() => handleRemoveTech(idx)}>×</button>
                 </span>
               ))}
             </div>
@@ -123,9 +123,9 @@ const ProjectsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, 
             <button type="button" className="bg-green-600 text-white px-4 py-2 rounded" onClick={handleSaveProject} disabled={saving}>
               {saving ? 'Saving...' : (editingIndex !== null ? 'Update Project' : 'Add Project')}
             </button>
-            {(editingIndex !== null || showAddForm) && <button type="button" className="bg-gray-300 px-4 py-2 rounded" onClick={handleCancelEdit}>Cancel</button>}
+            {(editingIndex !== null || showAddForm) && <button type="button" className="bg-gray-300 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded" onClick={handleCancelEdit}>Cancel</button>}
           </div>
-          {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
+          {error && <div className="text-red-600 dark:text-red-400 text-sm mt-2">{error}</div>}
         </div>
       )}
       {!disabled && !showAddForm && editingIndex === null && (
@@ -140,29 +140,29 @@ const ProjectsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, 
         </div>
       )}
       <div>
-        <h3 className="text-lg font-semibold mb-2">Projects List</h3>
-        {projects.length === 0 && <div className="text-gray-500">No projects added yet.</div>}
+        <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Projects List</h3>
+        {projects.length === 0 && <div className="text-gray-500 dark:text-gray-400">No projects added yet.</div>}
         <ul className="space-y-4">
           {projects.map((project, idx) => (
-            <li key={idx} className="border rounded p-4 bg-gray-50">
+            <li key={idx} className="border border-gray-200 dark:border-gray-600 rounded p-4 bg-gray-50 dark:bg-gray-800">
               <div className="flex justify-between items-center mb-1">
                 <div>
-                  <span className="font-bold text-gray-800">{project.name}</span>
+                  <span className="font-bold text-gray-800 dark:text-gray-100">{project.name}</span>
                 </div>
                 <div className="flex gap-2">
-                  {!disabled && <button type="button" className="text-blue-500" onClick={() => handleEditProject(idx)}>Edit</button>}
-                  {!disabled && <button type="button" className="text-red-500" onClick={() => handleDeleteProject(idx)}>Delete</button>}
+                  {!disabled && <button type="button" className="text-blue-500 dark:text-blue-400" onClick={() => handleEditProject(idx)}>Edit</button>}
+                  {!disabled && <button type="button" className="text-red-500 dark:text-red-400" onClick={() => handleDeleteProject(idx)}>Delete</button>}
                 </div>
               </div>
-              <div className="text-gray-700 mb-1">{project.description}</div>
+              <div className="text-gray-700 dark:text-gray-300 mb-1">{project.description}</div>
               {project.technologies?.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-1">
-                  {project.technologies?.map((tech, i) => <span key={i} className="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm">{tech}</span>)}
+                  {project.technologies?.map((tech, i) => <span key={i} className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full px-3 py-1 text-sm">{tech}</span>)}
                 </div>
               )}
-              <div className="text-gray-600 text-sm">
-                {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline mr-4">Live Demo</a>}
-                {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a>}
+              <div className="text-gray-600 dark:text-gray-400 text-sm">
+                {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline mr-4">Live Demo</a>}
+                {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">GitHub</a>}
               </div>
             </li>
           ))}

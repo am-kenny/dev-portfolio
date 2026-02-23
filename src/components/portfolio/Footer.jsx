@@ -17,7 +17,7 @@ const Footer = () => {
   const linkedInUrl = getSocialUrl(socialLinks, 'LinkedIn');
 
   return (
-    <footer className="bg-gray-950 text-gray-500 py-8 border-t border-gray-800">
+    <footer className="bg-gray-950 dark:bg-black text-gray-500 py-8 border-t border-gray-800 dark:border-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center gap-4 text-sm">
           <div className="flex items-center justify-center gap-6">
@@ -26,7 +26,7 @@ const Footer = () => {
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors duration-300"
                 aria-label="GitHub"
               >
                 <FaGithub className="w-6 h-6" />
@@ -37,7 +37,7 @@ const Footer = () => {
                 href={linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors duration-300"
                 aria-label="LinkedIn"
               >
                 <FaLinkedin className="w-6 h-6" />
@@ -47,7 +47,7 @@ const Footer = () => {
           {email && (
             <a
               href={`mailto:${email}`}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-gray-400 hover:text-white transition-colors duration-300"
             >
               {email}
             </a>
@@ -55,7 +55,7 @@ const Footer = () => {
           <p className="text-gray-500">
             Built with React & Vite
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-500">
             © {new Date().getFullYear()} Andrii Prykhodko
           </p>
         </div>

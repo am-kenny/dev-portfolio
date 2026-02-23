@@ -33,7 +33,7 @@ const AnimatedSectionWrapper = ({
   }, [isExpanded]);
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
       {/* Header */}
       <div 
         className="flex items-center justify-between cursor-pointer select-none"
@@ -44,11 +44,11 @@ const AnimatedSectionWrapper = ({
       
       {/* Animated Content */}
       <div 
-        className="border-t border-gray-200 overflow-hidden"
+        className="border-t border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300"
         style={{
           maxHeight: isExpanded ? contentHeight : 0,
           opacity: isExpanded ? 1 : 0,
-          transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s cubic-bezier(0.4,0,0.2,1)',
+          transition: 'max-height var(--theme-transition-duration) var(--theme-transition-easing), opacity var(--theme-transition-duration) var(--theme-transition-easing), border-color var(--theme-transition-duration) var(--theme-transition-easing)',
           willChange: 'max-height, opacity',
         }}
       >

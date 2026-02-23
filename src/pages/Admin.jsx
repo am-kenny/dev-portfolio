@@ -27,7 +27,7 @@ export const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen relative pb-10">
+    <div className="min-h-screen relative pb-10 bg-gray-50 dark:bg-gray-900">
       <AdminBackground />
       
       <AdminHeader onLogout={handleLogout} />
@@ -60,11 +60,11 @@ export const Admin = () => {
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <FaCogs className="text-purple-600 w-6 h-6" />
-                  <h2 className="text-xl font-semibold text-gray-900">Skills Structure Management</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Skills Structure Management</h2>
                 </div>
-                <p className="text-sm text-gray-600">Configure skill categorization and LinkedIn import settings</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Configure skill categorization and LinkedIn import settings</p>
               </div>
-              <div className={`transition-transform duration-200 ${showSkillsStructure ? 'rotate-90' : ''}`}>
+              <div className={`transition-transform duration-300 ease ${showSkillsStructure ? 'rotate-90' : ''}`}>
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>
@@ -82,11 +82,11 @@ export const Admin = () => {
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <FaLinkedin className="text-blue-600 w-6 h-6" />
-                  <h2 className="text-xl font-semibold text-gray-900">LinkedIn Import</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">LinkedIn Import</h2>
                 </div>
-                <p className="text-sm text-gray-600">Import your LinkedIn data to automatically populate your portfolio</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Import your LinkedIn data to automatically populate your portfolio</p>
               </div>
-              <div className={`transition-transform duration-200 ${showLinkedInImport ? 'rotate-90' : ''}`}>
+              <div className={`transition-transform duration-300 ease ${showLinkedInImport ? 'rotate-90' : ''}`}>
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>

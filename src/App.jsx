@@ -4,6 +4,7 @@ import AdminLogin from './pages/AdminLogin'
 import Debug from './pages/Debug'
 import { PortfolioProvider } from './context/PortfolioContext'
 import ApiHealthWrapper from './components/common/ApiHealthWrapper'
+import ThemeToggle from './components/common/ThemeToggle'
 import Hero from './components/portfolio/Hero'
 import About from './components/portfolio/About'
 import Skills from './components/portfolio/Skills'
@@ -30,7 +31,7 @@ const PageTitle = () => {
 
 const Portfolio = () => {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
       <Hero />
       <About />
       <Skills />
@@ -50,7 +51,12 @@ function App() {
         <Routes>
           <Route path="/" element={
             <ApiHealthWrapper>
-              <Portfolio />
+              <>
+                <div className="fixed top-4 right-4 z-50">
+                  <ThemeToggle />
+                </div>
+                <Portfolio />
+              </>
             </ApiHealthWrapper>
           } />
           <Route path="/admin/login" element={

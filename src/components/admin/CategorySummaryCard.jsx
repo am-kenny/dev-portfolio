@@ -20,27 +20,27 @@ const CategorySummaryCard = ({ category, categorySkills, variant = 'predefined' 
     switch (variant) {
       case 'predefined':
         return {
-          container: 'bg-blue-50 p-2 rounded-md border border-blue-200',
-          title: 'font-medium text-gray-700 mb-1',
-          subcategory: 'inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs mr-1 flex-shrink-0'
+          container: 'bg-blue-50 dark:bg-blue-900/30 p-2 rounded-md border border-blue-200 dark:border-blue-700 transition-colors duration-300',
+          title: 'font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300',
+          subcategory: 'inline-block bg-blue-100 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-xs mr-1 flex-shrink-0 transition-colors duration-300'
         };
       case 'custom':
         return {
-          container: 'bg-yellow-50 p-2 rounded-md border border-yellow-200',
-          title: 'font-medium text-gray-700 mb-1',
-          subcategory: 'inline-block bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs mr-1 flex-shrink-0'
+          container: 'bg-yellow-50 dark:bg-yellow-900/30 p-2 rounded-md border border-yellow-200 dark:border-yellow-700 transition-colors duration-300',
+          title: 'font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300',
+          subcategory: 'inline-block bg-yellow-100 dark:bg-yellow-800/50 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded text-xs mr-1 flex-shrink-0 transition-colors duration-300'
         };
       case 'available':
         return {
-          container: 'bg-gray-50 p-2 rounded-md',
-          title: 'font-medium text-gray-700 mb-1',
-          subcategory: 'inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs mr-1 flex-shrink-0'
+          container: 'bg-gray-50 dark:bg-gray-800 p-2 rounded-md transition-colors duration-300',
+          title: 'font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300',
+          subcategory: 'inline-block bg-green-100 dark:bg-green-800/50 text-green-700 dark:text-green-300 px-2 py-1 rounded text-xs mr-1 flex-shrink-0 transition-colors duration-300'
         };
       default:
         return {
-          container: 'bg-blue-50 p-2 rounded-md border border-blue-200',
-          title: 'font-medium text-gray-700 mb-1',
-          subcategory: 'inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs mr-1 flex-shrink-0'
+          container: 'bg-blue-50 dark:bg-blue-900/30 p-2 rounded-md border border-blue-200 dark:border-blue-700 transition-colors duration-300',
+          title: 'font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300',
+          subcategory: 'inline-block bg-blue-100 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-xs mr-1 flex-shrink-0 transition-colors duration-300'
         };
     }
   };
@@ -99,15 +99,15 @@ const CategorySummaryCard = ({ category, categorySkills, variant = 'predefined' 
     <div className={styles.container}>
       <div className="flex justify-between items-start mb-2">
         <h5 className={styles.title}>{category}</h5>
-        <div className={`text-xs px-2 py-1 rounded font-medium ${
+        <div className={`text-xs px-2 py-1 rounded font-medium transition-colors duration-300 ${
           isHierarchical 
-            ? 'bg-purple-100 text-purple-700' 
-            : 'bg-gray-100 text-gray-700'
+            ? 'bg-purple-100 dark:bg-purple-800/50 text-purple-700 dark:text-purple-300' 
+            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
         }`}>
           {isHierarchical ? 'Hierarchical' : 'Flat'}
         </div>
       </div>
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
         <div className="mb-0.5">
           <span className="font-medium">Total Skills:</span> {totalSkills}
         </div>
@@ -124,7 +124,7 @@ const CategorySummaryCard = ({ category, categorySkills, variant = 'predefined' 
                 showAllSubcategories ? (
                   <button
                     onClick={() => setShowAllSubcategories(false)}
-                    className="text-xs text-blue-600 hover:text-blue-800 underline ml-1"
+                    className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline ml-1 transition-colors duration-300"
                   >
                     Show less
                   </button>
@@ -166,7 +166,7 @@ const CategorySummaryCard = ({ category, categorySkills, variant = 'predefined' 
           </div>
         ) : (
           <div className="mt-1">
-            <span className="text-xs text-gray-500 italic">No subcategories</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 italic transition-colors duration-300">No subcategories</span>
           </div>
         )}
       </div>

@@ -75,7 +75,7 @@ const ApiUnavailablePage = ({ onRetry }) => {
         </div>
 
         {/* Additional Info */}
-        <div className="mt-8 pt-8 border-t border-gray-700">
+        <div className="mt-8 pt-8 border-t border-gray-700 dark:border-gray-600 transition-colors duration-300">
           <p className="text-sm text-gray-500">
             If the problem persists, please try again later or contact the administrator.
           </p>

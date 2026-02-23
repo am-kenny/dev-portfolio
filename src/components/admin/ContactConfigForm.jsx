@@ -109,10 +109,10 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Email</label>
           <input
             type="email"
-            className="border rounded px-3 py-2 w-full"
+            className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="your@email.com"
             value={contact.email}
             onChange={e => handleFieldChange('email', e.target.value)}
@@ -122,10 +122,10 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
         </div>
         
         <div>
-          <label className="block text-sm font-medium mb-1">Phone</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Phone</label>
           <input
             type="tel"
-            className="border rounded px-3 py-2 w-full"
+            className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="123-456-7890"
             value={contact.phone}
             onChange={e => handleFieldChange('phone', e.target.value)}
@@ -134,11 +134,11 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
         </div>
         
         <div>
-          <label className="block text-sm font-medium mb-1">Social Links</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Social Links</label>
           <div className="flex gap-2 mb-2">
             <input
               type="text"
-              className="border rounded px-3 py-2 flex-1"
+              className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="Platform (e.g., GitHub, Twitter)"
               value={newPlatform}
               onChange={e => setNewPlatform(e.target.value)}
@@ -146,7 +146,7 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
             />
             <input
               type="url"
-              className="border rounded px-3 py-2 flex-1"
+              className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="URL"
               value={newUrl}
               onChange={e => setNewUrl(e.target.value)}
@@ -163,14 +163,14 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
           </div>
           <div className="space-y-2">
             {contact.socialLinks?.map((link, idx) => (
-              <div key={idx} className="bg-gray-50 p-3 rounded">
+              <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-transparent dark:border-gray-700">
                 {editingIndex === idx ? (
                   // Edit mode
                   <div className="space-y-2">
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        className="border rounded px-3 py-2 flex-1"
+                        className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         placeholder="Platform"
                         value={editingPlatform}
                         onChange={e => setEditingPlatform(e.target.value)}
@@ -178,7 +178,7 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
                       />
                       <input
                         type="url"
-                        className="border rounded px-3 py-2 flex-1"
+                        className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         placeholder="URL"
                         value={editingUrl}
                         onChange={e => setEditingUrl(e.target.value)}
@@ -208,21 +208,21 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
                   // View mode
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-medium">{link.platform}</span>
-                      <span className="text-gray-600 ml-2">{link.url}</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">{link.platform}</span>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">{link.url}</span>
                     </div>
                     {!disabled && (
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          className="text-blue-500 text-sm"
+                          className="text-blue-500 dark:text-blue-400 text-sm"
                           onClick={() => handleEditSocialLink(idx)}
                         >
                           Edit
                         </button>
                         <button
                           type="button"
-                          className="text-red-500 text-sm"
+                          className="text-red-500 dark:text-red-400 text-sm"
                           onClick={() => handleRemoveSocialLink(idx)}
                         >
                           Remove
@@ -237,7 +237,7 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
         </div>
       </div>
 
-      {error && <div className="text-red-600 text-sm">{error}</div>}
+      {error && <div className="text-red-600 dark:text-red-400 text-sm">{error}</div>}
 
       <FadeButtonGroup
         mode={disabled ? 'view' : 'edit'}

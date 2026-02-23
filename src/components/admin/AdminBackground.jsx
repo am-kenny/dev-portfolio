@@ -1,6 +1,6 @@
 const AdminBackground = () => {
   return (
-    <svg className="absolute inset-0 w-full h-full -z-10 opacity-40" aria-hidden="true">
+    <svg className="absolute inset-0 w-full h-full -z-10 opacity-40 dark:opacity-20" aria-hidden="true">
       <defs>
         <radialGradient id="bg-gradient" cx="50%" cy="50%" r="80%">
           <stop offset="0%" stopColor="#c7d2fe" />
