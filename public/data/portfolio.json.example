@@ -1,0 +1,65 @@
+{
+  "personalInfo": {
+    "name": "Your Name",
+    "title": "Software Developer",
+    "location": "Your City, Country",
+    "bio": "Short bio text."
+  },
+  "about": {
+    "content": "About section content."
+  },
+  "contact": {
+    "email": "your.email@example.com",
+    "phone": "+1 (555) 123-4567",
+    "socialLinks": [
+      { "platform": "github", "url": "https://github.com/yourusername" },
+      { "platform": "linkedin", "url": "https://www.linkedin.com/in/yourusername/" }
+    ]
+  },
+  "experience": {
+    "jobs": [
+      {
+        "title": "Job Title",
+        "company": "Company Name",
+        "startDate": "2023-01",
+        "endDate": "",
+        "isCurrent": true,
+        "location": "remote",
+        "country": "Country",
+        "city": "City",
+        "description": "Role description.",
+        "achievements": ["Achievement 1", "Achievement 2"],
+        "skills": ["Skill 1", "Skill 2"]
+      }
+    ]
+  },
+  "projects": {
+    "projects": [
+      {
+        "name": "Project Name",
+        "description": "Project description.",
+        "image": "https://example.com/image.jpg",
+        "github": "https://github.com/yourusername/repo",
+        "technologies": ["React", "Node.js"]
+      }
+    ]
+  },
+  "skills": {
+    "skillCategories": {
+      "Category Name": [
+        { "name": "Skill 1", "level": "advanced" },
+        { "name": "Skill 2", "level": "intermediate" }
+      ],
+      "Category With Subcategories": {
+        "Subcategory": [
+          { "name": "Skill A", "level": "advanced" }
+        ]
+      }
+    },
+    "categorization": {
+      "useSubcategories": true,
+      "minSkillsForSubcategory": 3,
+      "categoryOverrides": {}
+    }
+  }
+}

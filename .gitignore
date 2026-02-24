@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# Embedded portfolio data (keep example tracked)
+public/data/portfolio.json

@@ -1,43 +1,79 @@
 import { useState, useEffect } from 'react';
 import config from '../services/config.js';
+import { dataSource, getPortfolioDataUrl, getDataSourceConfigError } from '../services/dataSource.js';
+
+const isApi = () => dataSource === 'api';
+
+const fetchJson = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
+  return response.json();
+};
+
+const apiPut = async (url, body, token) => {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
+  const errorData = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const message = errorData.error === 'Validation failed'
+      ? `Validation errors: ${Object.values(errorData.details || {}).join(', ')}`
+      : errorData.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+  return errorData;
+};
 
 export const usePortfolioData = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errorKind, setErrorKind] = useState(null); // 'config' | 'unavailable'
   const [sectionLoading, setSectionLoading] = useState({});
+
+  const portfolioDataUrl = getPortfolioDataUrl();
 
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await fetch(config.getApiUrl('/api/portfolio'));
-      if (!response.ok) {
-        throw new Error('Failed to fetch portfolio data');
+      setErrorKind(null);
+
+      if (isApi()) {
+        setData(await fetchJson(config.getApiUrl('/api/portfolio')));
+      } else if (portfolioDataUrl) {
+        setData(await fetchJson(portfolioDataUrl));
+      } else {
+        setError(getDataSourceConfigError() || 'Data source misconfigured. Check .env and VITE_DATA_SOURCE, VITE_EMBEDDED_JSON_PATH, or VITE_EXTERNAL_JSON_URL.');
+        setErrorKind('config');
       }
-      const jsonData = await response.json();
-      setData(jsonData);
     } catch (err) {
-      setError(err.message);
+      setError('Data is not available.');
+      setErrorKind('unavailable');
     } finally {
       setLoading(false);
     }
   };
 
   const fetchSection = async (section) => {
+    if (!isApi()) {
+      return Promise.resolve(data?.[section] ?? null);
+    }
     try {
       setSectionLoading(prev => ({ ...prev, [section]: true }));
-      const response = await fetch(config.getApiUrl(`/api/portfolio/${section}`));
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${section} data`);
-      }
-      const sectionData = await response.json();
+      const sectionData = await fetchJson(config.getApiUrl(`/api/portfolio/${section}`));
       setData(prev => ({ ...prev, [section]: sectionData }));
       setError(null);
+      setErrorKind(null);
       return sectionData;
     } catch (err) {
       setError(err.message);
+      setErrorKind('unavailable');
       throw err;
     } finally {
       setSectionLoading(prev => ({ ...prev, [section]: false }));
@@ -45,27 +81,17 @@ export const usePortfolioData = () => {
   };
 
   const updateData = async (newData, token) => {
+    if (!isApi()) return false;
     try {
       setLoading(true);
-      const response = await fetch(config.getApiUrl('/api/portfolio'), {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(newData)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update portfolio data');
-      }
-
+      await apiPut(config.getApiUrl('/api/portfolio'), newData, token);
       setData(newData);
       setError(null);
+      setErrorKind(null);
       return true;
     } catch (err) {
       setError(err.message);
+      setErrorKind('unavailable');
       return false;
     } finally {
       setLoading(false);
@@ -73,31 +99,17 @@ export const usePortfolioData = () => {
   };
 
   const updateSection = async (section, newSectionData, token) => {
+    if (!isApi()) return true;
     try {
       setSectionLoading(prev => ({ ...prev, [section]: true }));
-      const response = await fetch(config.getApiUrl(`/api/portfolio/${section}`), {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(newSectionData)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error === 'Validation failed'
-            ? `Validation errors: ${Object.values(errorData.details).join(', ')}`
-            : errorData.error || `Failed to update ${section}`
-        );
-      }
-
+      await apiPut(config.getApiUrl(`/api/portfolio/${section}`), newSectionData, token);
       setData(prev => ({ ...prev, [section]: newSectionData }));
       setError(null);
+      setErrorKind(null);
       return true;
     } catch (err) {
       setError(err.message);
+      setErrorKind('unavailable');
       throw err;
     } finally {
       setSectionLoading(prev => ({ ...prev, [section]: false }));
@@ -112,6 +124,7 @@ export const usePortfolioData = () => {
     data,
     loading,
     error,
+    errorKind,
     sectionLoading,
     updateData,
     updateSection,
@@ -120,4 +133,4 @@ export const usePortfolioData = () => {
   };
 };
 
-export default usePortfolioData; 
+export default usePortfolioData;
