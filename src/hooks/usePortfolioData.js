@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import config from '../services/config.js';
-import { dataSource, getPortfolioDataUrl, getDataSourceConfigError } from '../services/dataSource.js';
-
-const isApi = () => dataSource === 'api';
+import { dataSource, getPortfolioDataUrl, getDataSourceConfigError, isAdminEnabled } from '../services/dataSource.js';
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
@@ -44,7 +42,7 @@ export const usePortfolioData = () => {
       setError(null);
       setErrorKind(null);
 
-      if (isApi()) {
+      if (isAdminEnabled()) {
         setData(await fetchJson(config.getApiUrl('/api/portfolio')));
       } else if (portfolioDataUrl) {
         setData(await fetchJson(portfolioDataUrl));
@@ -61,7 +59,7 @@ export const usePortfolioData = () => {
   };
 
   const fetchSection = async (section) => {
-    if (!isApi()) {
+    if (!isAdminEnabled()) {
       return Promise.resolve(data?.[section] ?? null);
     }
     try {
@@ -81,7 +79,7 @@ export const usePortfolioData = () => {
   };
 
   const updateData = async (newData, token) => {
-    if (!isApi()) return false;
+    if (!isAdminEnabled()) return false;
     try {
       setLoading(true);
       await apiPut(config.getApiUrl('/api/portfolio'), newData, token);
@@ -99,7 +97,7 @@ export const usePortfolioData = () => {
   };
 
   const updateSection = async (section, newSectionData, token) => {
-    if (!isApi()) return true;
+    if (!isAdminEnabled()) return true;
     try {
       setSectionLoading(prev => ({ ...prev, [section]: true }));
       await apiPut(config.getApiUrl(`/api/portfolio/${section}`), newSectionData, token);

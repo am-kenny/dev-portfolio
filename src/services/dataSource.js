@@ -1,15 +1,19 @@
 /**
  * Data source configuration for portfolio data.
- * Modes: api (backend API + admin), embedded (static JSON in app), external (e.g. S3 URL).
+ * Modes:
+ * - api: backend API + admin (read/write via API)
+ * - embedded: static JSON in the app
+ * - external: JSON stored at an external URL (e.g. S3, CDN)
+ *
  * Configure via environment variables.
  */
 
-const VALID_SOURCES = ['api', 'embedded', 'external'];
+import { VALID_DATA_SOURCES } from '../constants/dataSourceOptions.js';
 
 const getDataSource = () => {
   const raw = import.meta.env.VITE_DATA_SOURCE || 'api';
   const normalized = raw.toLowerCase().trim();
-  return VALID_SOURCES.includes(normalized) ? normalized : 'api';
+  return VALID_SOURCES.includes(normalized) ? normalized : 'embedded';
 };
 
 const getEmbeddedPath = () => {
