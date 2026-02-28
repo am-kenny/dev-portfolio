@@ -13,7 +13,7 @@ import { VALID_DATA_SOURCES } from '../constants/dataSourceOptions.js';
 const getDataSource = () => {
   const raw = import.meta.env.VITE_DATA_SOURCE || 'api';
   const normalized = raw.toLowerCase().trim();
-  return VALID_SOURCES.includes(normalized) ? normalized : 'embedded';
+  return VALID_DATA_SOURCES.includes(normalized) ? normalized : 'embedded';
 };
 
 const getEmbeddedPath = () => {
