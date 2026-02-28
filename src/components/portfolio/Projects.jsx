@@ -21,7 +21,7 @@ const Projects = () => {
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">My Projects</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects?.projects?.map((project, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 border border-transparent dark:border-gray-700">
+            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 border border-transparent dark:border-gray-700 flex flex-col">
               {project.image && (
                 <img
                   src={project.image}
@@ -29,7 +29,7 @@ const Projects = () => {
                   className="w-full h-48 object-cover"
                 />
               )}
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{project.name}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
                 {project.technologies?.length > 0 && (
@@ -44,7 +44,7 @@ const Projects = () => {
                     ))}
                   </div>
                 )}
-                <div className="flex gap-4">
+                <div className="flex gap-4 mt-auto">
                   {project.link && (
                     <a
                       href={project.link}
@@ -80,4 +80,4 @@ const Projects = () => {
   );
 };
 
-export default Projects; 
+export default Projects;
