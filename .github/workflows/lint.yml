@@ -2,9 +2,6 @@ name: Lint
 
 on:
   push:
-    branches: [main, master, ci/eslint]
-  pull_request:
-    branches: [main, master, ci/eslint]
 
 jobs:
   eslint:
