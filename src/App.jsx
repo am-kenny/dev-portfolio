@@ -16,6 +16,7 @@ import Footer from './components/portfolio/Footer';
 import { pageTitles } from './constants/titleMap';
 import { isAdminEnabled } from './services/dataSource';
 import DataErrorPage from './components/common/DataErrorPage';
+import NotFound from './pages/NotFound';
 
 const PortfolioLayout = () => (
   <>
@@ -99,6 +100,7 @@ function App() {
             </AdminRoute>
           } />
           <Route path="/debug" element={<DebugRoute />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </PortfolioProvider>
