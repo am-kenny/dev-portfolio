@@ -24,7 +24,7 @@ const AdminLogin = () => {
     try {
       await authService.login(password);
       navigate('/admin');
-    } catch (err) {
+    } catch {
       setError('Invalid password');
     } finally {
       setIsLoading(false);

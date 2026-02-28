@@ -42,7 +42,7 @@ export const authService = {
         return null;
       }
       return token;
-    } catch (e) {
+    } catch {
       // Invalid token
       this.logout();
       return null;
