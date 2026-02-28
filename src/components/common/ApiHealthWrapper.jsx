@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import apiHealthService from '../../services/apiHealth';
 import ApiUnavailablePage from './ApiUnavailablePage';
 
@@ -8,7 +8,7 @@ const ApiHealthWrapper = ({ children, fallback = null, onApiRecovered = null }) 
   const [error, setError] = useState(null);
   const wasUnavailableRef = useRef(false);
 
-  const checkApiHealth = async () => {
+  const checkApiHealth = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -25,18 +25,18 @@ const ApiHealthWrapper = ({ children, fallback = null, onApiRecovered = null }) 
           onApiRecovered();
         }
       }
-    } catch (err) {
+    } catch {
       setError('API_UNAVAILABLE');
       setApiAvailable(false);
       wasUnavailableRef.current = true;
     } finally {
       setLoading(false);
     }
-  };
+  }, [onApiRecovered]);
 
   useEffect(() => {
     checkApiHealth();
-  }, []);
+  }, [checkApiHealth]);
 
   // Show loading state
   if (loading) {

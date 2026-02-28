@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { retryManager } from '../../utils/retry';
 
 const OfflineIndicator = ({ onRetry, isOffline, retrying }) => {
   const [showBanner, setShowBanner] = useState(false);

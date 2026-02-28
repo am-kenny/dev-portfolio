@@ -21,7 +21,7 @@ const SectionView = ({ data, onEdit }) => (
   </div>
 );
 
-const SectionForm = ({ data, onSave, onCancel, loading }) => (
+const SectionForm = ({ data: _data, onSave: _onSave, onCancel, loading: _loading }) => (
   <div>
     <div className="mb-2 text-gray-500 dark:text-gray-400">Editing not implemented yet.</div>
     <button className="bg-gray-300 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded mr-2" onClick={onCancel}>Cancel</button>

@@ -12,7 +12,7 @@ const AboutConfigForm = ({ initialData, onSave, onCancel, loading, disabled, onE
     setError('');
     try {
       await onSave({ content });
-    } catch (err) {
+    } catch {
       setError('Failed to save.');
     } finally {
       setSaving(false);

@@ -70,7 +70,7 @@ const ProjectsConfigForm = ({ initialData, onSave, onCancel, loading, disabled, 
       setEditingIndex(null);
       setShowAddForm(false);
       setSaving(false);
-    }).catch((err) => {
+    }).catch(() => {
       setError('Failed to save project.');
       setSaving(false);
     });
