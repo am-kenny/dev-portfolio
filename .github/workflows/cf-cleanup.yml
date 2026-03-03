@@ -23,11 +23,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Record workflow start time
+        id: timing
+        run: echo "triggered_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+
       - name: Delete older deployments for this branch
         env:
           BRANCH: ${{ github.ref_name }}
           MODE: "keep-latest"
-          TRIGGERED_AT: ${{ github.event.head_commit.timestamp }}
+          TRIGGERED_AT: ${{ steps.timing.outputs.triggered_at }}
         run: bash .github/scripts/cf-cleanup-deployments.sh
 
   cleanup-deleted-branch:
