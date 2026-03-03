@@ -1,0 +1,46 @@
+# Cloudflare Pages Cleanup
+# Removes old preview deployments on push (keeps latest per branch) and all deployments when a branch is deleted.
+name: Cloudflare Pages Cleanup
+
+on:
+  push:
+  delete:
+
+env:
+  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
+
+jobs:
+  cleanup-old-deployments:
+    # Remove all branch deployments except the latest one
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cf-cleanup-${{ github.ref_name }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete older deployments for this branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+          MODE: "keep-latest"
+        run: bash .github/scripts/cf-cleanup-deployments.sh
+
+  cleanup-deleted-branch:
+    # Remove all deployments for deleted branch
+    if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cf-cleanup-deleted-${{ github.event.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete all deployments for deleted branch    
+        env:
+          BRANCH: ${{ github.event.ref }}
+        run: bash .github/scripts/cf-cleanup-deployments.sh
