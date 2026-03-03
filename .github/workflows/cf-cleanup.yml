@@ -25,7 +25,7 @@ jobs:
 
       - name: Record workflow start time
         id: timing
-        run: echo "triggered_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+        run: echo "triggered_at=$(date -u -d '30 seconds ago' +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
 
       - name: Delete older deployments for this branch
         env:

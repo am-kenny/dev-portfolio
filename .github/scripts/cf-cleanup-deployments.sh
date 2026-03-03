@@ -67,6 +67,8 @@ resolve_latest_deployment_id() {
 
     echo "Looking for deployments on branch: $BRANCH"
     echo "Filtering deployments created after: ${TRIGGERED_AT:-<not set>}"
+    echo "First deployment's deployment_trigger.metadata (to confirm commit field name):"
+    echo "$body" | jq -r '.result[0].deployment_trigger.metadata'
     echo "Raw API response deployments for branch:"
     echo "$body" | jq -r \
       --arg branch "$BRANCH" \
