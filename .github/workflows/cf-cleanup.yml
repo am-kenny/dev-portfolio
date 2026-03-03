@@ -27,6 +27,7 @@ jobs:
         env:
           BRANCH: ${{ github.ref_name }}
           MODE: "keep-latest"
+          TRIGGERED_AT: ${{ github.event.head_commit.timestamp }}
         run: bash .github/scripts/cf-cleanup-deployments.sh
 
   cleanup-deleted-branch:
