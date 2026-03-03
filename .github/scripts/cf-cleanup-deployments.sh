@@ -65,6 +65,13 @@ resolve_latest_deployment_id() {
         ] | sort_by(.created_on) | last | .id')
     fi
 
+    echo "Looking for deployments on branch: $BRANCH"
+    echo "Filtering deployments created after: ${TRIGGERED_AT:-<not set>}"
+    echo "Raw API response deployments for branch:"
+    echo "$body" | jq -r \
+      --arg branch "$BRANCH" \
+      '[.result[] | select(.deployment_trigger.metadata.branch == $branch) | {id, created_on, stage: .latest_stage.name, status: .latest_stage.status}]'
+
     if [ -z "$latest_id" ] || [ "$latest_id" = "null" ]; then
       echo "Waiting for deployment to appear (attempt $attempt/$max_attempts)..."
       sleep $sleep_sec
