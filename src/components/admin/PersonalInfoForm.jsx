@@ -24,7 +24,7 @@ const PersonalInfoForm = ({ initialData, onSave, onCancel, loading, disabled, on
     try {
       await onSave(form);
       setSuccess(true);
-    } catch (err) {
+    } catch {
       setError('Failed to save.');
     } finally {
       setSaving(false);

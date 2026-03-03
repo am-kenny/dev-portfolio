@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const BUTTON_TRANSITION = 250; // ms
 
-const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading, disabled, saving }) => {
+const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading: _loading, disabled: _disabled, saving }) => {
   const [visibleGroup, setVisibleGroup] = useState(mode === 'view' ? 'edit' : 'action');
   const [fadingGroup, setFadingGroup] = useState(null);
 

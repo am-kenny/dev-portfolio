@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import config from '../services/config.js';
-import { dataSource, getPortfolioDataUrl, getDataSourceConfigError, isAdminEnabled } from '../services/dataSource.js';
+import { getPortfolioDataUrl, getDataSourceConfigError, isAdminEnabled } from '../services/dataSource.js';
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
@@ -36,7 +36,7 @@ export const usePortfolioData = () => {
 
   const portfolioDataUrl = getPortfolioDataUrl();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -50,13 +50,13 @@ export const usePortfolioData = () => {
         setError(getDataSourceConfigError() || 'Data source misconfigured. Check .env and VITE_DATA_SOURCE, VITE_EMBEDDED_JSON_PATH, or VITE_EXTERNAL_JSON_URL.');
         setErrorKind('config');
       }
-    } catch (err) {
+    } catch {
       setError('Data is not available.');
       setErrorKind('unavailable');
     } finally {
       setLoading(false);
     }
-  };
+  }, [portfolioDataUrl]);
 
   const fetchSection = async (section) => {
     if (!isAdminEnabled()) {
@@ -116,7 +116,7 @@ export const usePortfolioData = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return {
     data,

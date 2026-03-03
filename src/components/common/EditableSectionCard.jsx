@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import { useState, useLayoutEffect, useCallback } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import AnimatedSectionWrapper from './AnimatedSectionWrapper.jsx';
 
@@ -16,8 +16,8 @@ const EditableSectionCard = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [contentChangeTrigger, setContentChangeTrigger] = useState(0);
-  const [showActionBtns, setShowActionBtns] = useState(false);
+  const [_contentChangeTrigger, setContentChangeTrigger] = useState(0);
+  const [_showActionBtns, setShowActionBtns] = useState(false);
 
   // Handle content changes from child components - memoized to prevent infinite loops
   const handleContentChange = useCallback(() => {

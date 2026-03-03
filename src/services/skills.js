@@ -145,7 +145,7 @@ export const isHierarchical = (skills) => {
 export const getAllSkills = (skillCategories) => {
   const allSkills = [];
   
-  Object.entries(skillCategories).forEach(([category, skills]) => {
+  Object.entries(skillCategories).forEach(([_category, skills]) => {
     if (Array.isArray(skills)) {
       // Flat structure
       allSkills.push(...skills);

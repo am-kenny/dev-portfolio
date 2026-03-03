@@ -99,7 +99,7 @@ const ContactConfigForm = ({ initialData, onSave, onCancel, loading, disabled, o
     try {
       await onSave(contact);
       setSaving(false);
-    } catch (err) {
+    } catch {
       setError('Failed to save contact information.');
       setSaving(false);
     }
