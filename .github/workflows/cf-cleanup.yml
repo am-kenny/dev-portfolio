@@ -1,0 +1,73 @@
+# Cloudflare Pages Cleanup
+# Removes old preview deployments on push (keeps latest per branch) and all deployments when a branch is deleted.
+name: Cloudflare Pages Cleanup
+
+on:
+  push:
+    branches-ignore:
+      - main
+  delete:
+
+jobs:
+  cleanup-old-deployments:
+    # Wait for the Cloudflare Pages deploy job so the new deployment exists before we resolve LATEST_ID.
+    # Set the job name below to match your deploy job in this workflow, or remove 'needs' if deploy runs in another workflow.
+    needs: [deploy]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cf-cleanup-${{ github.ref_name }}
+      cancel-in-progress: true
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
+      BRANCH: ${{ github.ref_name }}
+    steps:
+      - name: Validate required secrets
+        run: |
+          missing=""
+          [ -z "${CF_API_TOKEN:-}" ] && missing="${missing} CF_API_TOKEN"
+          [ -z "${CF_ACCOUNT_ID:-}" ] && missing="${missing} CF_ACCOUNT_ID"
+          [ -z "${CF_PAGES_PROJECT:-}" ] && missing="${missing} CF_PAGES_PROJECT"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required secrets:$missing. Add them in the repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete older deployments for this branch
+        env:
+          MODE: "keep-latest"
+        run: bash .github/scripts/cf-cleanup-deployments.sh
+
+  cleanup-deleted-branch:
+    if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cf-cleanup-deleted-${{ github.event.ref }}
+      cancel-in-progress: true
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
+      BRANCH: ${{ github.event.ref }}
+    steps:
+      - name: Validate required secrets
+        run: |
+          missing=""
+          [ -z "${CF_API_TOKEN:-}" ] && missing="${missing} CF_API_TOKEN"
+          [ -z "${CF_ACCOUNT_ID:-}" ] && missing="${missing} CF_ACCOUNT_ID"
+          [ -z "${CF_PAGES_PROJECT:-}" ] && missing="${missing} CF_PAGES_PROJECT"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required secrets:$missing. Add them in the repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete all deployments for deleted branch
+        run: bash .github/scripts/cf-cleanup-deployments.sh
