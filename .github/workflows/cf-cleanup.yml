@@ -27,6 +27,7 @@ jobs:
         env:
           BRANCH: ${{ github.ref_name }}
           MODE: "keep-latest"
+          COMMIT_SHA: ${{ github.sha }}
         run: bash .github/scripts/cf-cleanup-deployments.sh
 
   cleanup-deleted-branch:
@@ -40,7 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Delete all deployments for deleted branch    
+      - name: Delete all deployments for deleted branch
         env:
           BRANCH: ${{ github.event.ref }}
         run: bash .github/scripts/cf-cleanup-deployments.sh

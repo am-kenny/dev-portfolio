@@ -2,8 +2,8 @@
 #
 # Cloudflare Pages deployment cleanup script.
 # Uses env: BRANCH, CF_API_TOKEN, CF_ACCOUNT_ID, CF_PAGES_PROJECT.
-# Optional: KEEP_DEPLOYMENT_ID — if set, that deployment for BRANCH is kept; otherwise all for BRANCH are deleted.
-# Optional: MODE — "keep-latest" resolves the latest deployment for BRANCH (with retries) and keeps it; otherwise all for BRANCH are deleted.
+# Optional: MODE — "keep-latest" resolves the deployment for BRANCH+COMMIT_SHA (with retries) and keeps it; otherwise all for BRANCH are deleted.
+# Required when MODE=keep-latest: COMMIT_SHA (e.g. github.sha); the deployment for this commit is kept.
 #
 set -euo pipefail
 
@@ -12,23 +12,26 @@ set -euo pipefail
 : "${CF_ACCOUNT_ID:?CF_ACCOUNT_ID is required}"
 : "${CF_PAGES_PROJECT:?CF_PAGES_PROJECT is required}"
 : "${BRANCH:?BRANCH is required}"
+if [ "${MODE:-delete-all}" = "keep-latest" ]; then
+  : "${COMMIT_SHA:?COMMIT_SHA is required when MODE=keep-latest}"
+fi
 
 CF_API="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PAGES_PROJECT}/deployments"
 readonly CF_API
 
-# Resolves the latest deployment ID for BRANCH with retries (for use after a new deploy).
-# Relies on Cloudflare returning deployments in reverse-chronological order (newest first),
-# so page=1 always contains the most recent deployment.
-# Sets KEEP_DEPLOYMENT_ID (global) as a side effect and returns; exits 1 if the API fails
-# or the deployment never appears.
-resolve_latest_deployment_id() {
-  local max_attempts=5
-  local sleep_sec=10
+# Resolves the deployment ID for BRANCH + COMMIT_SHA, waits for it to finish, then echoes it to stdout.
+# Polls until the deployment reaches stage "deploy" with status "success" or "failure".
+# Exits 1 if the API fails or the deployment never completes within the allotted attempts.
+resolve_deployment_id() {
+  local max_attempts=30  # 30 × 15s = up to 7.5 minutes
+  local sleep_sec=15
   local attempt
   local tmp
   local http_code
   local body
   local latest_id
+  local stage_name
+  local stage_status
 
   tmp="$(mktemp)"
   trap 'rm -f "$tmp"' RETURN
@@ -37,23 +40,53 @@ resolve_latest_deployment_id() {
     http_code=$(curl -s -o "$tmp" -w "%{http_code}" -H "Authorization: Bearer ${CF_API_TOKEN}" \
       "${CF_API}?page=1&per_page=25")
     body="$(cat "$tmp")"
+
     if ! echo "$body" | jq -e '.success == true' >/dev/null 2>&1; then
       echo "::error::Cloudflare API error on attempt $attempt: $body" >&2
       exit 1
     fi
-    latest_id=$(echo "$body" | jq -r --arg branch "$BRANCH" \
-      '[.result[] | select(.deployment_trigger.metadata.branch == $branch)] | sort_by(.created_on) | last | .id')
-    if [ -n "$latest_id" ] && [ "$latest_id" != "null" ]; then
-      echo "Keeping deployment: $latest_id"
-      KEEP_DEPLOYMENT_ID=$latest_id
+
+    # Match deployment for this branch and commit SHA (when COMMIT_SHA is set).
+    latest_id=$(echo "$body" | jq -r \
+      --arg branch "$BRANCH" \
+      --arg sha "${COMMIT_SHA:-}" \
+      '.result[]
+        | select(.deployment_trigger.metadata.branch == $branch)
+        | select(.deployment_trigger.metadata.commit_hash == $sha)
+        | .id')
+
+    if [ -z "$latest_id" ] || [ "$latest_id" = "null" ]; then
+      echo "Waiting for deployment to appear (attempt $attempt/$max_attempts)..." >&2
+      sleep $sleep_sec
+      continue
+    fi
+
+    # Deployment exists — check whether it has finished.
+    stage_name=$(echo "$body" | jq -r \
+      --arg id "$latest_id" \
+      '.result[] | select(.id == $id) | .latest_stage.name')
+    stage_status=$(echo "$body" | jq -r \
+      --arg id "$latest_id" \
+      '.result[] | select(.id == $id) | .latest_stage.status')
+
+    echo "Deployment $latest_id — stage: $stage_name, status: $stage_status (attempt $attempt/$max_attempts)" >&2
+
+    if [ "$stage_name" = "deploy" ] && [ "$stage_status" = "success" ]; then
+      echo "Deployment finished successfully. Keeping: $latest_id" >&2
+      echo "$latest_id"
       return 0
     fi
-    if [ "$attempt" -lt "$max_attempts" ]; then
-      echo "Latest deployment for branch not found yet (attempt $attempt/$max_attempts), retrying in ${sleep_sec}s..."
-      sleep $sleep_sec
+
+    if [ "$stage_status" = "failure" ]; then
+      echo "::warning::Deployment $latest_id failed. Skipping cleanup to avoid data loss."
+      # Exit 0 so the cleanup job does not show as failed when the real issue is the build.
+      exit 0
     fi
+
+    sleep $sleep_sec
   done
-  echo "::error::Latest deployment for branch '$BRANCH' never appeared after $max_attempts attempts. Cloudflare may not have registered the new deployment in time." >&2
+
+  echo "::error::Deployment for branch '$BRANCH' did not complete after $((max_attempts * sleep_sec / 60)) minutes." >&2
   exit 1
 }
 
@@ -78,10 +111,10 @@ fetch_deployments_page() {
   echo "$body"
 }
 
-# Paginates through all deployments for BRANCH and deletes each one whose ID is not KEEP_DEPLOYMENT_ID.
-# If KEEP_DEPLOYMENT_ID is empty, deletes all deployments for BRANCH.
+# Paginates through all deployments for BRANCH and deletes each one whose ID is not the first argument (keep_id).
+# If the first argument is __none__ or empty, deletes all deployments for BRANCH.
 delete_old_deployments_for_branch() {
-  local keep_id="${KEEP_DEPLOYMENT_ID:-__none__}"
+  local keep_id="${1:-__none__}"
   local page=1
   local total_pages
   local response
@@ -125,11 +158,10 @@ delete_old_deployments_for_branch() {
 }
 
 # Entry: choose mode and run.
-# MODE=keep-latest resolves the latest deployment ID first (for push events),
+# MODE=keep-latest resolves the deployment ID for this push (for push events),
 # anything else deletes all deployments for BRANCH (for branch delete events).
-case "${MODE:-delete-all}" in
-  keep-latest)
-    resolve_latest_deployment_id
-    ;;
-esac
-delete_old_deployments_for_branch
+keep_id="__none__"
+if [ "${MODE:-delete-all}" = "keep-latest" ]; then
+  keep_id=$(resolve_deployment_id)
+fi
+delete_old_deployments_for_branch "$keep_id"
