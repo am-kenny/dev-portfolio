@@ -111,8 +111,8 @@ fetch_deployments_page() {
   echo "$body"
 }
 
-# Paginates through all deployments for BRANCH and deletes each one whose ID is not KEEP_DEPLOYMENT_ID.
-# If KEEP_DEPLOYMENT_ID is empty, deletes all deployments for BRANCH.
+# Paginates through all deployments for BRANCH and deletes each one whose ID is not the first argument (keep_id).
+# If the first argument is __none__ or empty, deletes all deployments for BRANCH.
 delete_old_deployments_for_branch() {
   local keep_id="${1:-__none__}"
   local page=1
