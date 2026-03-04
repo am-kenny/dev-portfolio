@@ -1,24 +1,24 @@
-import { createContext, useContext } from 'react';
-import usePortfolioData from '../hooks/usePortfolioData';
+import { createContext, useContext } from 'react'
+import usePortfolioData from '../hooks/usePortfolioData'
 
-const PortfolioContext = createContext(null);
+const PortfolioContext = createContext(null)
 
 export const PortfolioProvider = ({ children }) => {
-  const portfolioData = usePortfolioData();
+  const portfolioData = usePortfolioData()
 
   return (
     <PortfolioContext.Provider value={portfolioData}>
       {children}
     </PortfolioContext.Provider>
-  );
-};
+  )
+}
 
 export const usePortfolio = () => {
-  const context = useContext(PortfolioContext);
+  const context = useContext(PortfolioContext)
   if (!context) {
-    throw new Error('usePortfolio must be used within a PortfolioProvider');
+    throw new Error('usePortfolio must be used within a PortfolioProvider')
   }
-  return context;
-};
+  return context
+}
 
-export default PortfolioContext; 
+export default PortfolioContext

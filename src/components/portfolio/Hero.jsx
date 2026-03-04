@@ -1,18 +1,18 @@
-import { scrollToSection } from "../../utils/scroll";
-import { usePortfolio } from '../../context/PortfolioContext';
+import { scrollToSection } from '../../utils/scroll'
+import { usePortfolio } from '../../context/PortfolioContext'
 
 const Hero = () => {
-  const { data, loading } = usePortfolio();
-  
+  const { data, loading } = usePortfolio()
+
   if (loading || !data) {
     return (
       <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white">
         <div className="text-2xl">Loading...</div>
       </section>
-    );
+    )
   }
-  
-  const { personalInfo } = data;
+
+  const { personalInfo } = data
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white py-20">
@@ -43,7 +43,7 @@ const Hero = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Hero; 
+export default Hero

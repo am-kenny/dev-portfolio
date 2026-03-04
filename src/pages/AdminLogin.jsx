@@ -1,35 +1,35 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/auth';
-import ThemeToggle from '../components/common/ThemeToggle';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { authService } from '../services/auth'
+import ThemeToggle from '../components/common/ThemeToggle'
 
 const AdminLogin = () => {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   // Redirect if already authenticated
   useEffect(() => {
     if (authService.isAuthenticated()) {
-      navigate('/admin');
+      navigate('/admin')
     }
-  }, [navigate]);
+  }, [navigate])
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-    
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+
     try {
-      await authService.login(password);
-      navigate('/admin');
+      await authService.login(password)
+      navigate('/admin')
     } catch {
-      setError('Invalid password');
+      setError('Invalid password')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative">
@@ -45,7 +45,7 @@ const AdminLogin = () => {
             Enter your admin password to continue
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -62,9 +62,7 @@ const AdminLogin = () => {
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">
-              {error}
-            </div>
+            <div className="text-red-500 text-sm text-center">{error}</div>
           )}
 
           <div>
@@ -77,10 +75,10 @@ const AdminLogin = () => {
             </button>
           </div>
         </form>
-        
+
         <div className="text-center">
-          <a 
-            href="/" 
+          <a
+            href="/"
             className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
           >
             ← Back to Portfolio
@@ -88,7 +86,7 @@ const AdminLogin = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdminLogin; 
+export default AdminLogin

@@ -1,42 +1,46 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import apiHealthService from '../../services/apiHealth';
-import ApiUnavailablePage from './ApiUnavailablePage';
+import { useState, useEffect, useRef, useCallback } from 'react'
+import apiHealthService from '../../services/apiHealth'
+import ApiUnavailablePage from './ApiUnavailablePage'
 
-const ApiHealthWrapper = ({ children, fallback = null, onApiRecovered = null }) => {
-  const [apiAvailable, setApiAvailable] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const wasUnavailableRef = useRef(false);
+const ApiHealthWrapper = ({
+  children,
+  fallback = null,
+  onApiRecovered = null,
+}) => {
+  const [apiAvailable, setApiAvailable] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const wasUnavailableRef = useRef(false)
 
   const checkApiHealth = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
-      const isAvailable = await apiHealthService.checkApiHealth();
-      setApiAvailable(isAvailable);
+      const isAvailable = await apiHealthService.checkApiHealth()
+      setApiAvailable(isAvailable)
 
       if (!isAvailable) {
-        setError('API_UNAVAILABLE');
-        wasUnavailableRef.current = true;
+        setError('API_UNAVAILABLE')
+        wasUnavailableRef.current = true
       } else {
         if (wasUnavailableRef.current && onApiRecovered) {
-          wasUnavailableRef.current = false;
-          onApiRecovered();
+          wasUnavailableRef.current = false
+          onApiRecovered()
         }
       }
     } catch {
-      setError('API_UNAVAILABLE');
-      setApiAvailable(false);
-      wasUnavailableRef.current = true;
+      setError('API_UNAVAILABLE')
+      setApiAvailable(false)
+      wasUnavailableRef.current = true
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [onApiRecovered]);
+  }, [onApiRecovered])
 
   useEffect(() => {
-    checkApiHealth();
-  }, [checkApiHealth]);
+    checkApiHealth()
+  }, [checkApiHealth])
 
   // Show loading state
   if (loading) {
@@ -47,21 +51,21 @@ const ApiHealthWrapper = ({ children, fallback = null, onApiRecovered = null }) 
           <div className="text-xl">Checking connection...</div>
         </div>
       </div>
-    );
+    )
   }
 
   // Show API unavailable page
   if (error === 'API_UNAVAILABLE' || apiAvailable === false) {
-    return <ApiUnavailablePage onRetry={checkApiHealth} />;
+    return <ApiUnavailablePage onRetry={checkApiHealth} />
   }
 
   // Show fallback if provided and API is not available
   if (fallback && !apiAvailable) {
-    return fallback;
+    return fallback
   }
 
   // Show children when API is available
-  return children;
-};
+  return children
+}
 
-export default ApiHealthWrapper; 
+export default ApiHealthWrapper

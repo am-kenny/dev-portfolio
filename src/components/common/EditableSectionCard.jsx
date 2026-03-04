@@ -1,10 +1,8 @@
-import { useState, useLayoutEffect, useCallback } from 'react';
-import { FaChevronRight } from 'react-icons/fa';
-import AnimatedSectionWrapper from './AnimatedSectionWrapper.jsx';
+import { useState, useLayoutEffect, useCallback } from 'react'
+import { FaChevronRight } from 'react-icons/fa'
+import AnimatedSectionWrapper from './AnimatedSectionWrapper.jsx'
 
-const BUTTON_TRANSITION = 150;
-
-
+const BUTTON_TRANSITION = 150
 
 const EditableSectionCard = ({
   section,
@@ -12,35 +10,35 @@ const EditableSectionCard = ({
   renderView,
   renderForm,
   onSave,
-  loading
+  loading,
 }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [_contentChangeTrigger, setContentChangeTrigger] = useState(0);
-  const [_showActionBtns, setShowActionBtns] = useState(false);
+  const [expanded, setExpanded] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [_contentChangeTrigger, setContentChangeTrigger] = useState(0)
+  const [_showActionBtns, setShowActionBtns] = useState(false)
 
   // Handle content changes from child components - memoized to prevent infinite loops
   const handleContentChange = useCallback(() => {
-    setContentChangeTrigger(prev => prev + 1);
-  }, []);
+    setContentChangeTrigger((prev) => prev + 1)
+  }, [])
 
   // Cross-fade logic for Save/Cancel buttons
   useLayoutEffect(() => {
     if (editing) {
-      setTimeout(() => setShowActionBtns(true), BUTTON_TRANSITION);
+      setTimeout(() => setShowActionBtns(true), BUTTON_TRANSITION)
     } else {
-      setShowActionBtns(false);
+      setShowActionBtns(false)
     }
-  }, [editing]);
+  }, [editing])
 
-  const handleEdit = () => setEditing(true);
-  const handleCancel = () => setEditing(false);
-  const handleExpand = () => setExpanded((prev) => !prev);
+  const handleEdit = () => setEditing(true)
+  const handleCancel = () => setEditing(false)
+  const handleExpand = () => setExpanded((prev) => !prev)
 
   const handleSave = async (formData) => {
-    await onSave(formData);
-    setEditing(false);
-  };
+    await onSave(formData)
+    setEditing(false)
+  }
 
   return (
     <AnimatedSectionWrapper
@@ -49,9 +47,13 @@ const EditableSectionCard = ({
       header={
         <>
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-semibold capitalize text-gray-900 dark:text-gray-100">{section}</h2>
+            <h2 className="text-xl font-semibold capitalize text-gray-900 dark:text-gray-100">
+              {section}
+            </h2>
           </div>
-          <div className={`transition-transform duration-300 ease ${expanded ? 'rotate-90' : ''}`}>
+          <div
+            className={`transition-transform duration-300 ease ${expanded ? 'rotate-90' : ''}`}
+          >
             <FaChevronRight className="text-gray-400" />
           </div>
         </>
@@ -65,17 +67,21 @@ const EditableSectionCard = ({
               onSave: handleSave,
               onCancel: handleCancel,
               loading,
-              onContentChange: handleContentChange
+              onContentChange: handleContentChange,
             })}
           </>
         ) : (
           <>
-            {renderView({ data, onEdit: handleEdit, onContentChange: handleContentChange })}
+            {renderView({
+              data,
+              onEdit: handleEdit,
+              onContentChange: handleContentChange,
+            })}
           </>
         )}
       </div>
     </AnimatedSectionWrapper>
-  );
-};
+  )
+}
 
-export default EditableSectionCard; 
+export default EditableSectionCard

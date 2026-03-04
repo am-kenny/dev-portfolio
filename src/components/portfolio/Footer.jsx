@@ -1,20 +1,20 @@
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { usePortfolio } from '../../context/PortfolioContext';
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import { usePortfolio } from '../../context/PortfolioContext'
 
 const getSocialUrl = (socialLinks, platform) => {
-  if (!socialLinks?.length) return null;
+  if (!socialLinks?.length) return null
   const link = socialLinks.find(
     (l) => l.platform?.toLowerCase() === platform.toLowerCase()
-  );
-  return link?.url || null;
-};
+  )
+  return link?.url || null
+}
 
 const Footer = () => {
-  const { data } = usePortfolio();
-  const socialLinks = data?.contact?.socialLinks ?? [];
-  const email = data?.contact?.email || data?.personal?.email;
-  const githubUrl = getSocialUrl(socialLinks, 'GitHub');
-  const linkedInUrl = getSocialUrl(socialLinks, 'LinkedIn');
+  const { data } = usePortfolio()
+  const socialLinks = data?.contact?.socialLinks ?? []
+  const email = data?.contact?.email || data?.personal?.email
+  const githubUrl = getSocialUrl(socialLinks, 'GitHub')
+  const linkedInUrl = getSocialUrl(socialLinks, 'LinkedIn')
 
   return (
     <footer className="bg-gray-950 dark:bg-black text-gray-500 py-8 border-t border-gray-800 dark:border-gray-900 transition-colors duration-300">
@@ -52,16 +52,14 @@ const Footer = () => {
               {email}
             </a>
           )}
-          <p className="text-gray-500">
-            Built with React & Vite
-          </p>
+          <p className="text-gray-500">Built with React & Vite</p>
           <p className="text-gray-600 dark:text-gray-500">
             © {new Date().getFullYear()} Andrii Prykhodko
           </p>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

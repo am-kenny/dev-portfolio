@@ -4,6 +4,6 @@
  * @returns {string} - Pretty formatted location (e.g., 'Remote', 'On Site', 'Hybrid')
  */
 export const formatEnumValue = (location) => {
-  if (!location) return '';
-  return location.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
-}; 
+  if (!location) return ''
+  return location.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+}

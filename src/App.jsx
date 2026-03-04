@@ -1,23 +1,32 @@
-import { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Admin from './pages/Admin';
-import AdminLogin from './pages/AdminLogin';
+import { useEffect, lazy, Suspense } from 'react'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom'
+import Admin from './pages/Admin'
+import AdminLogin from './pages/AdminLogin'
 // Only load Debug when VITE_APP_DEBUG is 'true' so debug code is not shipped in production
-const Debug = import.meta.env.VITE_APP_DEBUG === 'true' ? lazy(() => import('./pages/Debug')) : null;
-import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
-import ApiHealthWrapper from './components/common/ApiHealthWrapper';
-import ThemeToggle from './components/common/ThemeToggle';
-import Hero from './components/portfolio/Hero';
-import About from './components/portfolio/About';
-import Skills from './components/portfolio/Skills';
-import Experience from './components/portfolio/Experience';
-import Projects from './components/portfolio/Projects';
-import Contact from './components/portfolio/Contact';
-import Footer from './components/portfolio/Footer';
-import { pageTitles } from './constants/titleMap';
-import { isAdminEnabled } from './services/dataSource';
-import DataErrorPage from './components/common/DataErrorPage';
-import NotFound from './pages/NotFound';
+const Debug =
+  import.meta.env.VITE_APP_DEBUG === 'true'
+    ? lazy(() => import('./pages/Debug'))
+    : null
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
+import ApiHealthWrapper from './components/common/ApiHealthWrapper'
+import ThemeToggle from './components/common/ThemeToggle'
+import Hero from './components/portfolio/Hero'
+import About from './components/portfolio/About'
+import Skills from './components/portfolio/Skills'
+import Experience from './components/portfolio/Experience'
+import Projects from './components/portfolio/Projects'
+import Contact from './components/portfolio/Contact'
+import Footer from './components/portfolio/Footer'
+import { pageTitles } from './constants/titleMap'
+import { isAdminEnabled } from './services/dataSource'
+import DataErrorPage from './components/common/DataErrorPage'
+import NotFound from './pages/NotFound'
 
 const PortfolioLayout = () => (
   <>
@@ -26,10 +35,10 @@ const PortfolioLayout = () => (
     </div>
     <Portfolio />
   </>
-);
+)
 
 const PortfolioWithDataCheck = () => {
-  const { loading, error, errorKind, refreshData } = usePortfolio();
+  const { loading, error, errorKind, refreshData } = usePortfolio()
   if (!loading && error) {
     return (
       <DataErrorPage
@@ -37,27 +46,29 @@ const PortfolioWithDataCheck = () => {
         isConfigError={errorKind === 'config'}
         onRetry={refreshData}
       />
-    );
+    )
   }
-  const content = <PortfolioLayout />;
+  const content = <PortfolioLayout />
   if (isAdminEnabled()) {
-    return <ApiHealthWrapper onApiRecovered={refreshData}>{content}</ApiHealthWrapper>;
+    return (
+      <ApiHealthWrapper onApiRecovered={refreshData}>
+        {content}
+      </ApiHealthWrapper>
+    )
   }
-  return content;
-};
+  return content
+}
 
 const PageTitle = () => {
-  const location = useLocation();
-  
+  const location = useLocation()
+
   useEffect(() => {
-    const title = pageTitles[location.pathname] || pageTitles['/'];
-    document.title = title;
-  }, [location.pathname]);
-  
-  return null;
-};
+    const title = pageTitles[location.pathname] || pageTitles['/']
+    document.title = title
+  }, [location.pathname])
 
-
+  return null
+}
 
 const Portfolio = () => (
   <main className="min-h-screen bg-white dark:bg-gray-900">
@@ -69,16 +80,28 @@ const Portfolio = () => (
     <Contact />
     <Footer />
   </main>
-);
+)
 
 const AdminRoute = ({ children }) =>
-  isAdminEnabled() ? <ApiHealthWrapper>{children}</ApiHealthWrapper> : <Navigate to="/" replace />;
+  isAdminEnabled() ? (
+    <ApiHealthWrapper>{children}</ApiHealthWrapper>
+  ) : (
+    <Navigate to="/" replace />
+  )
 
 const DebugRoute = () => {
-  if (!Debug) return <Navigate to="/" replace />;
-  const content = <Suspense fallback={null}><Debug /></Suspense>;
-  return isAdminEnabled() ? <ApiHealthWrapper>{content}</ApiHealthWrapper> : content;
-};
+  if (!Debug) return <Navigate to="/" replace />
+  const content = (
+    <Suspense fallback={null}>
+      <Debug />
+    </Suspense>
+  )
+  return isAdminEnabled() ? (
+    <ApiHealthWrapper>{content}</ApiHealthWrapper>
+  ) : (
+    content
+  )
+}
 
 function App() {
   return (
@@ -87,22 +110,31 @@ function App() {
         <PageTitle />
         <Routes>
           <Route path="/" element={<PortfolioWithDataCheck />} />
-          <Route path="/admin/login" element={
-            <AdminRoute>
-              <AdminLogin />
-            </AdminRoute>
-          } />
-          <Route path="/admin" element={
-            <AdminRoute>
-              <Admin />
-            </AdminRoute>
-          } />
-          <Route path="/debug" element={Debug ? <DebugRoute /> : <Navigate to="/" replace />} />
+          <Route
+            path="/admin/login"
+            element={
+              <AdminRoute>
+                <AdminLogin />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/debug"
+            element={Debug ? <DebugRoute /> : <Navigate to="/" replace />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </PortfolioProvider>
-  );
+  )
 }
 
 export default App

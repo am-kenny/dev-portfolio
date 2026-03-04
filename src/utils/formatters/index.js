@@ -1,1 +1,1 @@
-export { formatEnumValue } from './formatEnumValue.js'; 
+export { formatEnumValue } from './formatEnumValue.js'

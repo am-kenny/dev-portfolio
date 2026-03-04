@@ -12,7 +12,8 @@
 html {
   scroll-behavior: smooth;
   background-color: #ffffff;
-  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing);
+  transition: background-color var(--theme-transition-duration)
+    var(--theme-transition-easing);
 }
 
 html.dark {
@@ -20,8 +21,12 @@ html.dark {
 }
 
 /* Smooth theme transition: animate color changes when light/dark is toggled */
-*, *::before, *::after {
-  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--theme-transition-duration)
+      var(--theme-transition-easing),
     color var(--theme-transition-duration) var(--theme-transition-easing),
     border-color var(--theme-transition-duration) var(--theme-transition-easing),
     fill var(--theme-transition-duration) var(--theme-transition-easing);
@@ -29,7 +34,8 @@ html.dark {
 
 /* Skills section: ensure background transitions smoothly (not overridden by Tailwind) */
 #skills {
-  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing) !important;
+  transition: background-color var(--theme-transition-duration)
+    var(--theme-transition-easing) !important;
 }
 
 /* Custom animations */
@@ -78,30 +84,35 @@ html.dark {
 
 /* Grid pattern background */
 .bg-grid-pattern {
-  background-image: 
+  background-image:
     linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 .dark .bg-grid-pattern {
-  background-image: 
+  background-image:
     linear-gradient(rgba(96, 165, 250, 0.15) 1px, transparent 1px),
     linear-gradient(90deg, rgba(96, 165, 250, 0.15) 1px, transparent 1px);
 }
 
 /* Smooth transitions for skill cards */
 .skill-card {
-  transition: all var(--theme-transition-duration) var(--theme-transition-easing);
+  transition: all var(--theme-transition-duration)
+    var(--theme-transition-easing);
 }
 
 .skill-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .dark .skill-card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.4),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Progress bar animation */
