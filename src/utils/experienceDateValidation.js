@@ -12,15 +12,15 @@
  * @returns {string} e.g. "2025-02"
  */
 export const getMaxMonth = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-};
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
 
 /**
  * @param {string} dateStr - YYYY-MM
  * @returns {boolean} true if dateStr is in the future (after current month)
  */
 export const isFutureMonth = (dateStr) => {
-  if (!dateStr?.trim()) return false;
-  return dateStr > getMaxMonth();
-};
+  if (!dateStr?.trim()) return false
+  return dateStr > getMaxMonth()
+}

@@ -1,27 +1,34 @@
-import { usePortfolio } from '../../context/PortfolioContext';
+import { usePortfolio } from '../../context/PortfolioContext'
 
 const Projects = () => {
-  const { data, loading } = usePortfolio();
-  
+  const { data, loading } = usePortfolio()
+
   if (loading || !data) {
     return (
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="col-span-full text-center text-gray-400 dark:text-gray-500">Loading...</div>
+          <div className="col-span-full text-center text-gray-400 dark:text-gray-500">
+            Loading...
+          </div>
         </div>
       </section>
-    );
+    )
   }
-  
-  const { projects } = data;
+
+  const { projects } = data
 
   return (
     <section id="projects" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">My Projects</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
+          My Projects
+        </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects?.projects?.map((project, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 border border-transparent dark:border-gray-700 flex flex-col">
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 border border-transparent dark:border-gray-700 flex flex-col"
+            >
               {project.image && (
                 <img
                   src={project.image}
@@ -30,8 +37,12 @@ const Projects = () => {
                 />
               )}
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{project.name}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                  {project.name}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {project.description}
+                </p>
                 {project.technologies?.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, techIndex) => (
@@ -77,7 +88,7 @@ const Projects = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Projects;
+export default Projects

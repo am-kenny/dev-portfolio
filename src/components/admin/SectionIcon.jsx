@@ -1,4 +1,11 @@
-import { FaUser, FaInfoCircle, FaBriefcase, FaProjectDiagram, FaEnvelope, FaTools } from 'react-icons/fa';
+import {
+  FaUser,
+  FaInfoCircle,
+  FaBriefcase,
+  FaProjectDiagram,
+  FaEnvelope,
+  FaTools,
+} from 'react-icons/fa'
 
 const sectionIcons = {
   personalInfo: <FaUser className="text-blue-600 w-6 h-6" />,
@@ -7,19 +14,21 @@ const sectionIcons = {
   experience: <FaBriefcase className="text-yellow-600 w-6 h-6" />,
   projects: <FaProjectDiagram className="text-purple-600 w-6 h-6" />,
   contact: <FaEnvelope className="text-pink-600 w-6 h-6" />,
-};
+}
 
 const SectionIcon = ({ section }) => {
   const formatSectionName = (sectionName) => {
-    return sectionName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-  };
+    return sectionName
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (str) => str.toUpperCase())
+  }
 
   return (
     <span className="flex items-center gap-2">
       {sectionIcons[section] || ''}
       <span className="capitalize">{formatSectionName(section)}</span>
     </span>
-  );
-};
+  )
+}
 
-export default SectionIcon; 
+export default SectionIcon

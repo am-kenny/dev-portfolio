@@ -1,35 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-const BUTTON_TRANSITION = 250; // ms
+const BUTTON_TRANSITION = 250 // ms
 
-const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading: _loading, disabled: _disabled, saving }) => {
-  const [visibleGroup, setVisibleGroup] = useState(mode === 'view' ? 'edit' : 'action');
-  const [fadingGroup, setFadingGroup] = useState(null);
+const FadeButtonGroup = ({
+  mode,
+  onEdit,
+  onSave,
+  onCancel,
+  loading: _loading,
+  disabled: _disabled,
+  saving,
+}) => {
+  const [visibleGroup, setVisibleGroup] = useState(
+    mode === 'view' ? 'edit' : 'action'
+  )
+  const [fadingGroup, setFadingGroup] = useState(null)
 
   useEffect(() => {
     if (mode === 'view' && visibleGroup === 'action') {
-      setFadingGroup('action');
+      setFadingGroup('action')
       setTimeout(() => {
-        setVisibleGroup('edit');
-        setFadingGroup('edit');
-        setTimeout(() => setFadingGroup(null), BUTTON_TRANSITION);
-      }, BUTTON_TRANSITION);
+        setVisibleGroup('edit')
+        setFadingGroup('edit')
+        setTimeout(() => setFadingGroup(null), BUTTON_TRANSITION)
+      }, BUTTON_TRANSITION)
     } else if (mode === 'edit' && visibleGroup === 'edit') {
-      setFadingGroup('edit');
+      setFadingGroup('edit')
       setTimeout(() => {
-        setVisibleGroup('action');
-        setFadingGroup('action');
-        setTimeout(() => setFadingGroup(null), BUTTON_TRANSITION);
-      }, BUTTON_TRANSITION);
+        setVisibleGroup('action')
+        setFadingGroup('action')
+        setTimeout(() => setFadingGroup(null), BUTTON_TRANSITION)
+      }, BUTTON_TRANSITION)
     }
     // eslint-disable-next-line
-  }, [mode]);
+  }, [mode])
 
   return (
     <>
       <div>
         {/* Edit button (view mode) */}
-        <div className={`transition-opacity duration-300 ${visibleGroup === 'edit' && !fadingGroup ? 'opacity-100 pointer-events-auto' : (fadingGroup === 'edit' ? 'opacity-0 pointer-events-none' : 'opacity-0 pointer-events-none')}`}>
+        <div
+          className={`transition-opacity duration-300 ${visibleGroup === 'edit' && !fadingGroup ? 'opacity-100 pointer-events-auto' : fadingGroup === 'edit' ? 'opacity-0 pointer-events-none' : 'opacity-0 pointer-events-none'}`}
+        >
           {onEdit && mode === 'view' && (
             <button
               type="button"
@@ -42,7 +54,9 @@ const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading: _loading, di
           )}
         </div>
         {/* Save/Cancel buttons (edit mode) */}
-        <div className={`flex gap-2 flex-wrap transition-opacity duration-300 ${visibleGroup === 'action' && !fadingGroup ? 'opacity-100 pointer-events-auto' : (fadingGroup === 'action' ? 'opacity-0 pointer-events-none' : 'opacity-0 pointer-events-none')}`}>
+        <div
+          className={`flex gap-2 flex-wrap transition-opacity duration-300 ${visibleGroup === 'action' && !fadingGroup ? 'opacity-100 pointer-events-auto' : fadingGroup === 'action' ? 'opacity-0 pointer-events-none' : 'opacity-0 pointer-events-none'}`}
+        >
           {mode === 'edit' && (
             <>
               <button
@@ -68,7 +82,7 @@ const FadeButtonGroup = ({ mode, onEdit, onSave, onCancel, loading: _loading, di
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default FadeButtonGroup; 
+export default FadeButtonGroup

@@ -8,31 +8,31 @@
  * Configure via environment variables.
  */
 
-import { VALID_DATA_SOURCES } from '../constants/dataSourceOptions.js';
+import { VALID_DATA_SOURCES } from '../constants/dataSourceOptions.js'
 
 const getDataSource = () => {
-  const raw = import.meta.env.VITE_DATA_SOURCE || 'api';
-  const normalized = raw.toLowerCase().trim();
-  return VALID_DATA_SOURCES.includes(normalized) ? normalized : 'embedded';
-};
+  const raw = import.meta.env.VITE_DATA_SOURCE || 'api'
+  const normalized = raw.toLowerCase().trim()
+  return VALID_DATA_SOURCES.includes(normalized) ? normalized : 'embedded'
+}
 
 const getEmbeddedPath = () => {
-  return import.meta.env.VITE_EMBEDDED_JSON_PATH || '/data/portfolio.json';
-};
+  return import.meta.env.VITE_EMBEDDED_JSON_PATH || '/data/portfolio.json'
+}
 
 const getExternalUrl = () => {
-  return import.meta.env.VITE_EXTERNAL_JSON_URL || '';
-};
+  return import.meta.env.VITE_EXTERNAL_JSON_URL || ''
+}
 
 /**
  * Current data source: 'api' | 'embedded' | 'external'
  */
-export const dataSource = getDataSource();
+export const dataSource = getDataSource()
 
 /**
  * Whether the admin panel and API editing are available (only when source is 'api').
  */
-export const isAdminEnabled = () => dataSource === 'api';
+export const isAdminEnabled = () => dataSource === 'api'
 
 /**
  * URL to fetch portfolio JSON for read-only modes. Null for api or when misconfigured.
@@ -41,35 +41,42 @@ export const isAdminEnabled = () => dataSource === 'api';
  */
 export const getPortfolioDataUrl = () => {
   if (dataSource === 'embedded') {
-    const path = getEmbeddedPath();
+    const path = getEmbeddedPath()
     return path.startsWith('http')
       ? path
-      : `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
+      : `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`
   }
   if (dataSource === 'external') {
-    const url = getExternalUrl()?.trim();
-    return url || null;
+    const url = getExternalUrl()?.trim()
+    return url || null
   }
-  return null;
-};
+  return null
+}
 
 /**
  * Returns a user-facing error message if the data source is misconfigured, otherwise null.
  */
 export const getDataSourceConfigError = () => {
   if (dataSource === 'external') {
-    const url = getExternalUrl()?.trim();
+    const url = getExternalUrl()?.trim()
     if (!url) {
-      return 'External storage is selected but VITE_EXTERNAL_JSON_URL is not set or is empty. Set it in .env to the full URL of your portfolio JSON (e.g. S3 or CDN).';
+      return 'External storage is selected but VITE_EXTERNAL_JSON_URL is not set or is empty. Set it in .env to the full URL of your portfolio JSON (e.g. S3 or CDN).'
     }
   }
   if (dataSource === 'embedded') {
-    const path = getEmbeddedPath()?.trim();
+    const path = getEmbeddedPath()?.trim()
     if (!path) {
-      return 'Embedded storage is selected but VITE_EMBEDDED_JSON_PATH is not set or is empty. Set it in .env (e.g. /data/portfolio.json).';
+      return 'Embedded storage is selected but VITE_EMBEDDED_JSON_PATH is not set or is empty. Set it in .env (e.g. /data/portfolio.json).'
     }
   }
-  return null;
-};
+  return null
+}
 
-export default { dataSource, isAdminEnabled, getPortfolioDataUrl, getDataSourceConfigError, getEmbeddedPath, getExternalUrl };
+export default {
+  dataSource,
+  isAdminEnabled,
+  getPortfolioDataUrl,
+  getDataSourceConfigError,
+  getEmbeddedPath,
+  getExternalUrl,
+}

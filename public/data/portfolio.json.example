@@ -13,7 +13,10 @@
     "phone": "+1 (555) 123-4567",
     "socialLinks": [
       { "platform": "github", "url": "https://github.com/yourusername" },
-      { "platform": "linkedin", "url": "https://www.linkedin.com/in/yourusername/" }
+      {
+        "platform": "linkedin",
+        "url": "https://www.linkedin.com/in/yourusername/"
+      }
     ]
   },
   "experience": {
@@ -51,9 +54,7 @@
         { "name": "Skill 2", "level": "intermediate" }
       ],
       "Category With Subcategories": {
-        "Subcategory": [
-          { "name": "Skill A", "level": "advanced" }
-        ]
+        "Subcategory": [{ "name": "Skill A", "level": "advanced" }]
       }
     },
     "categorization": {

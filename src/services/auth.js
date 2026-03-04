@@ -1,7 +1,7 @@
-import { jwtDecode } from 'jwt-decode';
-import config from './config.js';
+import { jwtDecode } from 'jwt-decode'
+import config from './config.js'
 
-const TOKEN_KEY = 'adminToken';
+const TOKEN_KEY = 'adminToken'
 
 export const authService = {
   async login(password) {
@@ -9,47 +9,47 @@ export const authService = {
       const response = await fetch(config.getApiUrl('/api/login'), {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password })
-      });
+        body: JSON.stringify({ password }),
+      })
 
       if (!response.ok) {
-        throw new Error('Invalid password');
+        throw new Error('Invalid password')
       }
 
-      const { token } = await response.json();
-      localStorage.setItem(TOKEN_KEY, token);
-      return true;
+      const { token } = await response.json()
+      localStorage.setItem(TOKEN_KEY, token)
+      return true
     } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      console.error('Login error:', error)
+      throw error
     }
   },
 
   logout() {
-    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_KEY)
   },
 
   getToken() {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) return null;
+    const token = localStorage.getItem(TOKEN_KEY)
+    if (!token) return null
     try {
-      const decoded = jwtDecode(token);
+      const decoded = jwtDecode(token)
       if (decoded.exp && Date.now() >= decoded.exp * 1000) {
         // Token expired
-        this.logout();
-        return null;
+        this.logout()
+        return null
       }
-      return token;
+      return token
     } catch {
       // Invalid token
-      this.logout();
-      return null;
+      this.logout()
+      return null
     }
   },
 
   isAuthenticated() {
-    return !!this.getToken();
-  }
-}; 
+    return !!this.getToken()
+  },
+}

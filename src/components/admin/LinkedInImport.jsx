@@ -1,153 +1,178 @@
-import { useState } from 'react';
-import config from '../../services/config.js';
-import { authService } from '../../services/auth.js';
+import { useState } from 'react'
+import config from '../../services/config.js'
+import { authService } from '../../services/auth.js'
 
 const LinkedInImport = ({ onImport }) => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [previewData, setPreviewData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [step, setStep] = useState('upload'); // 'upload', 'preview', 'success'
-
-
+  const [selectedFiles, setSelectedFiles] = useState([])
+  const [previewData, setPreviewData] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [step, setStep] = useState('upload') // 'upload', 'preview', 'success'
 
   const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-    setError('');
-  };
+    const files = Array.from(event.target.files)
+    setSelectedFiles(files)
+    setError('')
+  }
 
   const handlePreview = async () => {
     if (selectedFiles.length === 0) {
-      setError('Please select CSV files');
-      return;
+      setError('Please select CSV files')
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      const token = authService.getToken();
-      const formData = new FormData();
-      
-      selectedFiles.forEach(file => {
-        formData.append('files', file);
-      });
+      const token = authService.getToken()
+      const formData = new FormData()
 
-      const response = await fetch(config.getApiUrl('/api/linkedin/preview-csv'), {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
+      selectedFiles.forEach((file) => {
+        formData.append('files', file)
+      })
+
+      const response = await fetch(
+        config.getApiUrl('/api/linkedin/preview-csv'),
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      )
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to preview CSV data');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to preview CSV data')
       }
 
-      const result = await response.json();
-      setPreviewData(result.portfolioData);
-      setStep('preview');
+      const result = await response.json()
+      setPreviewData(result.portfolioData)
+      setStep('preview')
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleImport = async () => {
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      const token = authService.getToken();
-      const formData = new FormData();
-      
-      selectedFiles.forEach(file => {
-        formData.append('files', file);
-      });
+      const token = authService.getToken()
+      const formData = new FormData()
 
-      const response = await fetch(config.getApiUrl('/api/linkedin/upload-csv'), {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
+      selectedFiles.forEach((file) => {
+        formData.append('files', file)
+      })
+
+      const response = await fetch(
+        config.getApiUrl('/api/linkedin/upload-csv'),
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      )
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to import CSV data');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to import CSV data')
       }
 
-      const result = await response.json();
-      setSuccess(`Successfully imported data from ${result.fileCount} files to ${result.sections.join(', ')} sections`);
-      setStep('success');
-      onImport && onImport();
+      const result = await response.json()
+      setSuccess(
+        `Successfully imported data from ${result.fileCount} files to ${result.sections.join(', ')} sections`
+      )
+      setStep('success')
+      onImport && onImport()
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-
+  }
 
   const resetForm = () => {
-    setSelectedFiles([]);
-    setPreviewData(null);
-    setError('');
-    setSuccess('');
-    setStep('upload');
-  };
+    setSelectedFiles([])
+    setPreviewData(null)
+    setError('')
+    setSuccess('')
+    setStep('upload')
+  }
 
   // Helper function to render skills preview
   const renderSkillsPreview = (skills) => {
-    if (!skills || !skills.skillCategories) return null;
+    if (!skills || !skills.skillCategories) return null
 
     return (
       <div className="space-y-2">
-        {Object.entries(skills.skillCategories).map(([category, categorySkills]) => (
-          <div key={category} className="border-l-2 border-blue-200 dark:border-blue-700 pl-3">
-            <h6 className="text-sm font-medium text-gray-700 dark:text-gray-300">{category}</h6>
-            {Array.isArray(categorySkills) ? (
-              // Flat structure
-              <div className="text-xs text-gray-600 dark:text-gray-400 ml-2">
-                {categorySkills.length} skills
-              </div>
-            ) : (
-              // Hierarchical structure
-              <div className="text-xs text-gray-600 dark:text-gray-400 ml-2">
-                {Object.entries(categorySkills).map(([subcategory, subcategorySkills]) => (
-                  <div key={subcategory}>
-                    {subcategory}: {subcategorySkills.length} skills
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+        {Object.entries(skills.skillCategories).map(
+          ([category, categorySkills]) => (
+            <div
+              key={category}
+              className="border-l-2 border-blue-200 dark:border-blue-700 pl-3"
+            >
+              <h6 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {category}
+              </h6>
+              {Array.isArray(categorySkills) ? (
+                // Flat structure
+                <div className="text-xs text-gray-600 dark:text-gray-400 ml-2">
+                  {categorySkills.length} skills
+                </div>
+              ) : (
+                // Hierarchical structure
+                <div className="text-xs text-gray-600 dark:text-gray-400 ml-2">
+                  {Object.entries(categorySkills).map(
+                    ([subcategory, subcategorySkills]) => (
+                      <div key={subcategory}>
+                        {subcategory}: {subcategorySkills.length} skills
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        )}
       </div>
-    );
-  };
+    )
+  }
 
   if (step === 'success') {
     return (
       <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg p-6">
         <div className="flex items-center mb-4">
           <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            <svg
+              className="h-5 w-5 text-green-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-green-800 dark:text-green-300">Import Successful!</h3>
+            <h3 className="text-sm font-medium text-green-800 dark:text-green-300">
+              Import Successful!
+            </h3>
           </div>
         </div>
-        <p className="text-sm text-green-700 dark:text-green-300 mb-4">{success}</p>
+        <p className="text-sm text-green-700 dark:text-green-300 mb-4">
+          {success}
+        </p>
         <button
           onClick={resetForm}
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
@@ -155,32 +180,48 @@ const LinkedInImport = ({ onImport }) => {
           Import More Files
         </button>
       </div>
-    );
+    )
   }
 
   return (
     <div>
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">LinkedIn CSV Import</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+          LinkedIn CSV Import
+        </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Upload your LinkedIn CSV export files. The system will automatically parse and import your data with smart skill categorization.
+          Upload your LinkedIn CSV export files. The system will automatically
+          parse and import your data with smart skill categorization.
         </p>
-        
+
         <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md p-4 mb-4">
-          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">Supported Files:</h4>
+          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
+            Supported Files:
+          </h4>
           <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• <strong>Profile.csv</strong> - Your basic profile information</li>
-            <li>• <strong>Positions.csv</strong> - Your work experience</li>
-            <li>• <strong>Skills.csv</strong> - Your skills and endorsements</li>
-            <li>• <strong>Education.csv</strong> - Your educational background</li>
+            <li>
+              • <strong>Profile.csv</strong> - Your basic profile information
+            </li>
+            <li>
+              • <strong>Positions.csv</strong> - Your work experience
+            </li>
+            <li>
+              • <strong>Skills.csv</strong> - Your skills and endorsements
+            </li>
+            <li>
+              • <strong>Education.csv</strong> - Your educational background
+            </li>
           </ul>
         </div>
 
         {/* Note about categorization settings */}
         <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md p-4 mb-4">
-          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">Import Settings</h4>
+          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
+            Import Settings
+          </h4>
           <p className="text-sm text-blue-700 dark:text-blue-300">
-            LinkedIn imports will use the categorization settings configured in the <strong>Skills Structure Management</strong> section above.
+            LinkedIn imports will use the categorization settings configured in
+            the <strong>Skills Structure Management</strong> section above.
           </p>
         </div>
       </div>
@@ -207,7 +248,9 @@ const LinkedInImport = ({ onImport }) => {
             />
             {selectedFiles.length > 0 && (
               <div className="mt-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Selected files:</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Selected files:
+                </p>
                 <ul className="text-sm text-gray-700 dark:text-gray-300 mt-1">
                   {selectedFiles.map((file, index) => (
                     <li key={index} className="flex items-center gap-2">
@@ -219,7 +262,7 @@ const LinkedInImport = ({ onImport }) => {
               </div>
             )}
           </div>
-          
+
           <div className="flex gap-2">
             <button
               onClick={handlePreview}
@@ -235,18 +278,29 @@ const LinkedInImport = ({ onImport }) => {
       {step === 'preview' && previewData && (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md p-4">
-            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">Preview - Portfolio Data</h4>
+            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
+              Preview - Portfolio Data
+            </h4>
             <div className="text-sm text-blue-700 dark:text-blue-300 space-y-2">
               {Object.entries(previewData).map(([section, data]) => (
-                <div key={section} className="border-b border-blue-100 dark:border-blue-800 pb-2">
+                <div
+                  key={section}
+                  className="border-b border-blue-100 dark:border-blue-800 pb-2"
+                >
                   <div className="flex items-center justify-between">
                     <span className="font-medium capitalize">{section}:</span>
                     <span>
                       {section === 'skills' ? (
-                        <span className="text-purple-600">Smart categorization applied</span>
-                      ) : Array.isArray(data) ? `${data.length} items` : 
-                         typeof data === 'object' ? Object.keys(data).length + ' fields' : 
-                         '1 field'}
+                        <span className="text-purple-600">
+                          Smart categorization applied
+                        </span>
+                      ) : Array.isArray(data) ? (
+                        `${data.length} items`
+                      ) : typeof data === 'object' ? (
+                        Object.keys(data).length + ' fields'
+                      ) : (
+                        '1 field'
+                      )}
                     </span>
                   </div>
                   {section === 'skills' && renderSkillsPreview(data)}
@@ -274,7 +328,7 @@ const LinkedInImport = ({ onImport }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LinkedInImport; 
+export default LinkedInImport

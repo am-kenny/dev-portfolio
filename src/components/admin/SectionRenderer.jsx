@@ -1,14 +1,16 @@
-import PersonalInfoForm from './PersonalInfoForm';
-import AboutConfigForm from './AboutConfigForm';
-import SkillsConfigForm from './SkillsConfigForm';
-import ExperienceConfigForm from './ExperienceConfigForm';
-import ProjectsConfigForm from './ProjectsConfigForm';
-import ContactConfigForm from './ContactConfigForm';
+import PersonalInfoForm from './PersonalInfoForm'
+import AboutConfigForm from './AboutConfigForm'
+import SkillsConfigForm from './SkillsConfigForm'
+import ExperienceConfigForm from './ExperienceConfigForm'
+import ProjectsConfigForm from './ProjectsConfigForm'
+import ContactConfigForm from './ContactConfigForm'
 
 // Placeholder components for sections without specific forms
 const SectionView = ({ data, onEdit }) => (
   <div>
-    <pre className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-md overflow-auto">{JSON.stringify(data, null, 2)}</pre>
+    <pre className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-md overflow-auto">
+      {JSON.stringify(data, null, 2)}
+    </pre>
     {onEdit && (
       <button
         type="button"
@@ -19,55 +21,157 @@ const SectionView = ({ data, onEdit }) => (
       </button>
     )}
   </div>
-);
+)
 
-const SectionForm = ({ data: _data, onSave: _onSave, onCancel, loading: _loading }) => (
+const SectionForm = ({
+  data: _data,
+  onSave: _onSave,
+  onCancel,
+  loading: _loading,
+}) => (
   <div>
-    <div className="mb-2 text-gray-500 dark:text-gray-400">Editing not implemented yet.</div>
-    <button className="bg-gray-300 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded mr-2" onClick={onCancel}>Cancel</button>
+    <div className="mb-2 text-gray-500 dark:text-gray-400">
+      Editing not implemented yet.
+    </div>
+    <button
+      className="bg-gray-300 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded mr-2"
+      onClick={onCancel}
+    >
+      Cancel
+    </button>
   </div>
-);
+)
 
 const SectionRenderer = ({ section }) => {
   const renderView = (props) => {
     switch (section) {
       case 'personalInfo':
-        return <PersonalInfoForm initialData={props.data} disabled={true} onEdit={props.onEdit} />;
+        return (
+          <PersonalInfoForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+          />
+        )
       case 'about':
-        return <AboutConfigForm initialData={props.data} disabled={true} onEdit={props.onEdit} />;
+        return (
+          <AboutConfigForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+          />
+        )
       case 'skills':
-        return <SkillsConfigForm initialData={props.data} disabled={true} onEdit={props.onEdit} onContentChange={props.onContentChange} />;
+        return (
+          <SkillsConfigForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+            onContentChange={props.onContentChange}
+          />
+        )
       case 'experience':
-        return <ExperienceConfigForm initialData={props.data} disabled={true} onEdit={props.onEdit} onContentChange={props.onContentChange} />;
+        return (
+          <ExperienceConfigForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+            onContentChange={props.onContentChange}
+          />
+        )
       case 'projects':
-        return <ProjectsConfigForm initialData={props.data} disabled={true} onEdit={props.onEdit} />;
+        return (
+          <ProjectsConfigForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+          />
+        )
       case 'contact':
-        return <ContactConfigForm initialData={props.data} disabled={true} onEdit={props.onEdit} onContentChange={props.onContentChange} />;
+        return (
+          <ContactConfigForm
+            initialData={props.data}
+            disabled={true}
+            onEdit={props.onEdit}
+            onContentChange={props.onContentChange}
+          />
+        )
       default:
-        return <SectionView {...props} />;
+        return <SectionView {...props} />
     }
-  };
+  }
 
   const renderForm = (props) => {
     switch (section) {
       case 'personalInfo':
-        return <PersonalInfoForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} />;
+        return (
+          <PersonalInfoForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+          />
+        )
       case 'about':
-        return <AboutConfigForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} />;
+        return (
+          <AboutConfigForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+          />
+        )
       case 'skills':
-        return <SkillsConfigForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} onContentChange={props.onContentChange} />;
+        return (
+          <SkillsConfigForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+            onContentChange={props.onContentChange}
+          />
+        )
       case 'experience':
-        return <ExperienceConfigForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} onContentChange={props.onContentChange} />;
+        return (
+          <ExperienceConfigForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+            onContentChange={props.onContentChange}
+          />
+        )
       case 'projects':
-        return <ProjectsConfigForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} />;
+        return (
+          <ProjectsConfigForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+          />
+        )
       case 'contact':
-        return <ContactConfigForm initialData={props.data} onSave={props.onSave} onCancel={props.onCancel} loading={props.loading} disabled={false} onContentChange={props.onContentChange} />;
+        return (
+          <ContactConfigForm
+            initialData={props.data}
+            onSave={props.onSave}
+            onCancel={props.onCancel}
+            loading={props.loading}
+            disabled={false}
+            onContentChange={props.onContentChange}
+          />
+        )
       default:
-        return <SectionForm {...props} />;
+        return <SectionForm {...props} />
     }
-  };
+  }
 
-  return { renderView, renderForm };
-};
+  return { renderView, renderForm }
+}
 
-export default SectionRenderer; 
+export default SectionRenderer

@@ -1,41 +1,49 @@
-import { useState } from 'react';
-import { useAdmin } from '../hooks/useAdmin';
-import AdminHeader from '../components/admin/AdminHeader';
-import AdminBackground from '../components/admin/AdminBackground';
-import AdminLoadingState from '../components/admin/AdminLoadingState';
-import SectionRenderer from '../components/admin/SectionRenderer';
-import SectionIcon from '../components/admin/SectionIcon';
-import EditableSectionCard from '../components/common/EditableSectionCard';
-import AnimatedSectionWrapper from '../components/common/AnimatedSectionWrapper';
-import LinkedInImport from '../components/admin/LinkedInImport';
-import SkillsStructureManager from '../components/admin/SkillsStructureManager';
-import { FaLinkedin, FaChevronRight, FaCogs } from 'react-icons/fa';
+import { useState } from 'react'
+import { useAdmin } from '../hooks/useAdmin'
+import AdminHeader from '../components/admin/AdminHeader'
+import AdminBackground from '../components/admin/AdminBackground'
+import AdminLoadingState from '../components/admin/AdminLoadingState'
+import SectionRenderer from '../components/admin/SectionRenderer'
+import SectionIcon from '../components/admin/SectionIcon'
+import EditableSectionCard from '../components/common/EditableSectionCard'
+import AnimatedSectionWrapper from '../components/common/AnimatedSectionWrapper'
+import LinkedInImport from '../components/admin/LinkedInImport'
+import SkillsStructureManager from '../components/admin/SkillsStructureManager'
+import { FaLinkedin, FaChevronRight, FaCogs } from 'react-icons/fa'
 
 export const Admin = () => {
-  const { data, loading, error, sectionLoading, handleLogout, handleSectionSave, refreshData } = useAdmin();
-  const [showLinkedInImport, setShowLinkedInImport] = useState(false);
-  const [showSkillsStructure, setShowSkillsStructure] = useState(false);
+  const {
+    data,
+    loading,
+    error,
+    sectionLoading,
+    handleLogout,
+    handleSectionSave,
+    refreshData,
+  } = useAdmin()
+  const [showLinkedInImport, setShowLinkedInImport] = useState(false)
+  const [showSkillsStructure, setShowSkillsStructure] = useState(false)
 
   // Show loading or error state
   if (loading || error) {
-    return <AdminLoadingState loading={loading} error={error} />;
+    return <AdminLoadingState loading={loading} error={error} />
   }
 
   const handleLinkedInImport = () => {
     // Refresh the data after successful import
-    refreshData && refreshData();
-  };
+    refreshData && refreshData()
+  }
 
   return (
     <div className="min-h-screen relative pb-10 bg-gray-50 dark:bg-gray-900">
       <AdminBackground />
-      
+
       <AdminHeader onLogout={handleLogout} />
-      
+
       <main className="max-w-6xl mx-auto px-4 sm:px-8 pt-8">
         <div className="flex flex-col gap-3 overflow-hidden mb-8">
           {Object.entries(data || {}).map(([section, sectionData]) => {
-            const { renderView, renderForm } = SectionRenderer({ section });
+            const { renderView, renderForm } = SectionRenderer({ section })
 
             return (
               <EditableSectionCard
@@ -47,7 +55,7 @@ export const Admin = () => {
                 renderView={renderView}
                 renderForm={renderForm}
               />
-            );
+            )
           })}
         </div>
 
@@ -60,11 +68,17 @@ export const Admin = () => {
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <FaCogs className="text-purple-600 w-6 h-6" />
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Skills Structure Management</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Skills Structure Management
+                  </h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Configure skill categorization and LinkedIn import settings</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Configure skill categorization and LinkedIn import settings
+                </p>
               </div>
-              <div className={`transition-transform duration-300 ease ${showSkillsStructure ? 'rotate-90' : ''}`}>
+              <div
+                className={`transition-transform duration-300 ease ${showSkillsStructure ? 'rotate-90' : ''}`}
+              >
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>
@@ -82,11 +96,18 @@ export const Admin = () => {
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <FaLinkedin className="text-blue-600 w-6 h-6" />
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">LinkedIn Import</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    LinkedIn Import
+                  </h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Import your LinkedIn data to automatically populate your portfolio</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Import your LinkedIn data to automatically populate your
+                  portfolio
+                </p>
               </div>
-              <div className={`transition-transform duration-300 ease ${showLinkedInImport ? 'rotate-90' : ''}`}>
+              <div
+                className={`transition-transform duration-300 ease ${showLinkedInImport ? 'rotate-90' : ''}`}
+              >
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>
@@ -96,7 +117,7 @@ export const Admin = () => {
         </AnimatedSectionWrapper>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Admin; 
+export default Admin

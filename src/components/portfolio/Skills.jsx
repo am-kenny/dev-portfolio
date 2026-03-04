@@ -1,9 +1,9 @@
-import { usePortfolio } from '../../context/PortfolioContext';
-import { formatEnumValue } from '../../utils/formatters';
+import { usePortfolio } from '../../context/PortfolioContext'
+import { formatEnumValue } from '../../utils/formatters'
 
 const Skills = () => {
-  const { data, loading } = usePortfolio();
-  
+  const { data, loading } = usePortfolio()
+
   if (loading || !data) {
     return (
       <section className="py-12 bg-slate-50 dark:bg-gray-900">
@@ -13,17 +13,20 @@ const Skills = () => {
               <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
               <div className="space-y-4">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                  <div
+                    key={i}
+                    className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"
+                  ></div>
                 ))}
               </div>
             </div>
           </div>
         </div>
       </section>
-    );
+    )
   }
-  
-  const { skills } = data;
+
+  const { skills } = data
 
   // Helper function to get level color
   const getLevelStyles = (level) => {
@@ -32,34 +35,34 @@ const Skills = () => {
         return {
           color: 'text-purple-700 dark:text-purple-300',
           bg: 'bg-purple-100 dark:bg-purple-900/50',
-          border: 'border-purple-200 dark:border-purple-700'
-        };
+          border: 'border-purple-200 dark:border-purple-700',
+        }
       case 'advanced':
         return {
           color: 'text-green-700 dark:text-green-300',
           bg: 'bg-green-100 dark:bg-green-900/50',
-          border: 'border-green-200 dark:border-green-700'
-        };
+          border: 'border-green-200 dark:border-green-700',
+        }
       case 'intermediate':
         return {
           color: 'text-blue-700 dark:text-blue-300',
           bg: 'bg-blue-100 dark:bg-blue-900/50',
-          border: 'border-blue-200 dark:border-blue-700'
-        };
+          border: 'border-blue-200 dark:border-blue-700',
+        }
       case 'beginner':
         return {
           color: 'text-gray-700 dark:text-gray-300',
           bg: 'bg-gray-100 dark:bg-gray-700',
-          border: 'border-gray-200 dark:border-gray-600'
-        };
+          border: 'border-gray-200 dark:border-gray-600',
+        }
       default:
         return {
           color: 'text-gray-700 dark:text-gray-300',
           bg: 'bg-gray-100 dark:bg-gray-700',
-          border: 'border-gray-200 dark:border-gray-600'
-        };
+          border: 'border-gray-200 dark:border-gray-600',
+        }
     }
-  };
+  }
 
   // Helper function to render skills as tags
   const renderSkillTags = (skills) => {
@@ -68,21 +71,23 @@ const Skills = () => {
       return (
         <div className="flex flex-wrap gap-2">
           {skills.map((skill, index) => {
-            const levelStyles = getLevelStyles(skill.level);
+            const levelStyles = getLevelStyles(skill.level)
             return (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 transition-all duration-300 cursor-pointer`}
               >
-                <span className="transition-all duration-300">{skill.name}</span>
-                                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
-                    {formatEnumValue(skill.level)}
-                  </span>
+                <span className="transition-all duration-300">
+                  {skill.name}
+                </span>
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
+                  {formatEnumValue(skill.level)}
+                </span>
               </div>
-            );
+            )
           })}
         </div>
-      );
+      )
     } else {
       // Hierarchical structure with subcategories
       return Object.entries(skills).map(([subcategory, subcategorySkills]) => (
@@ -92,24 +97,26 @@ const Skills = () => {
           </h5>
           <div className="flex flex-wrap gap-2">
             {subcategorySkills.map((skill, index) => {
-              const levelStyles = getLevelStyles(skill.level);
+              const levelStyles = getLevelStyles(skill.level)
               return (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 transition-all duration-300 cursor-pointer`}
                 >
-                  <span className="transition-all duration-300">{skill.name}</span>
+                  <span className="transition-all duration-300">
+                    {skill.name}
+                  </span>
                   <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
                     {formatEnumValue(skill.level)}
                   </span>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
-      ));
+      ))
     }
-  };
+  }
 
   return (
     <section id="skills" className="py-12 bg-slate-50 dark:bg-gray-900">
@@ -127,66 +134,72 @@ const Skills = () => {
 
           {/* Skills - Single column with flexible sizing */}
           <div className="space-y-4">
-            {Object.entries(skills?.skillCategories || {}).map(([category, categorySkills]) => (
-              <div 
-                key={category} 
-                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-white/20 dark:border-gray-700"
-              >
-                {/* Category header */}
-                <div className="mb-3">
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
-                    {category}
-                  </h4>
-                  <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full transition-colors duration-300"></div>
+            {Object.entries(skills?.skillCategories || {}).map(
+              ([category, categorySkills]) => (
+                <div
+                  key={category}
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-white/20 dark:border-gray-700"
+                >
+                  {/* Category header */}
+                  <div className="mb-3">
+                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                      {category}
+                    </h4>
+                    <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full transition-colors duration-300"></div>
+                  </div>
+
+                  {/* Skills tags */}
+                  <div>{renderSkillTags(categorySkills)}</div>
                 </div>
-                
-                {/* Skills tags */}
-                <div>
-                  {renderSkillTags(categorySkills)}
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
 
           {/* Legend */}
           <div className="mt-6 text-center">
             <div className="inline-flex items-center space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm border border-transparent dark:border-gray-700">
-              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Proficiency:</span>
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Proficiency:
+              </span>
               <div className="flex items-center space-x-2">
-                {['expert', 'advanced', 'intermediate', 'beginner'].map((level) => {
-                  let legendColor;
-                  switch (level) {
-                    case 'expert':
-                      legendColor = 'bg-purple-400 border-purple-500';
-                      break;
-                    case 'advanced':
-                      legendColor = 'bg-green-400 border-green-500';
-                      break;
-                    case 'intermediate':
-                      legendColor = 'bg-blue-400 border-blue-500';
-                      break;
-                    case 'beginner':
-                      legendColor = 'bg-gray-400 border-gray-500';
-                      break;
-                    default:
-                      legendColor = 'bg-gray-400 border-gray-500';
+                {['expert', 'advanced', 'intermediate', 'beginner'].map(
+                  (level) => {
+                    let legendColor
+                    switch (level) {
+                      case 'expert':
+                        legendColor = 'bg-purple-400 border-purple-500'
+                        break
+                      case 'advanced':
+                        legendColor = 'bg-green-400 border-green-500'
+                        break
+                      case 'intermediate':
+                        legendColor = 'bg-blue-400 border-blue-500'
+                        break
+                      case 'beginner':
+                        legendColor = 'bg-gray-400 border-gray-500'
+                        break
+                      default:
+                        legendColor = 'bg-gray-400 border-gray-500'
+                    }
+                    return (
+                      <div key={level} className="flex items-center space-x-1">
+                        <div
+                          className={`w-2 h-2 rounded-full ${legendColor}`}
+                        ></div>
+                        <span className="text-xs font-medium text-gray-600 dark:text-gray-400 capitalize">
+                          {formatEnumValue(level)}
+                        </span>
+                      </div>
+                    )
                   }
-                  return (
-                    <div key={level} className="flex items-center space-x-1">
-                      <div className={`w-2 h-2 rounded-full ${legendColor}`}></div>
-                      <span className="text-xs font-medium text-gray-600 dark:text-gray-400 capitalize">
-                        {formatEnumValue(level)}
-                      </span>
-                    </div>
-                  );
-                })}
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Skills; 
+export default Skills

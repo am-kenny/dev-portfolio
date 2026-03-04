@@ -5,31 +5,31 @@
 
 const getApiBaseUrl = () => {
   // Check for environment variables
-  const apiHostname = import.meta.env.VITE_API_HOSTNAME;
-  const apiPort = import.meta.env.VITE_API_PORT;
+  const apiHostname = import.meta.env.VITE_API_HOSTNAME
+  const apiPort = import.meta.env.VITE_API_PORT
 
   // If both hostname and port are provided, use them
   if (apiHostname && apiPort) {
-    return `http://${apiHostname}:${apiPort}`;
+    return `http://${apiHostname}:${apiPort}`
   }
-  
+
   // If only hostname is provided, assume default port 3001
   if (apiHostname) {
-    return `http://${apiHostname}:3001`;
+    return `http://${apiHostname}:3001`
   }
-  
+
   // If only port is provided, assume localhost
   if (apiPort) {
-    return `http://localhost:${apiPort}`;
+    return `http://localhost:${apiPort}`
   }
-  
+
   // Default fallback for development
-  return 'http://localhost:3001';
-};
+  return 'http://localhost:3001'
+}
 
 export const config = {
   apiBaseUrl: getApiBaseUrl(),
-  
+
   // API endpoints
   endpoints: {
     login: '/api/login',
@@ -40,22 +40,22 @@ export const config = {
     // New skills endpoints
     skillsStructure: '/api/portfolio/skills/structure',
     skillsFlat: '/api/portfolio/skills/flat',
-    skillsCategorization: '/api/linkedin/configure-categorization'
+    skillsCategorization: '/api/linkedin/configure-categorization',
   },
-  
+
   // Get full URL for an endpoint
   getApiUrl(endpoint) {
-    return `${this.apiBaseUrl}${endpoint}`;
+    return `${this.apiBaseUrl}${endpoint}`
   },
-  
+
   // Get all API URLs
   getApiUrls() {
-    const urls = {};
+    const urls = {}
     Object.entries(this.endpoints).forEach(([key, endpoint]) => {
-      urls[key] = this.getApiUrl(endpoint);
-    });
-    return urls;
-  }
-};
+      urls[key] = this.getApiUrl(endpoint)
+    })
+    return urls
+  },
+}
 
-export default config; 
+export default config

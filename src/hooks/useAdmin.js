@@ -1,28 +1,29 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/auth';
-import { usePortfolioData } from './usePortfolioData';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { authService } from '../services/auth'
+import { usePortfolioData } from './usePortfolioData'
 
 export const useAdmin = () => {
-  const navigate = useNavigate();
-  const { data, loading, error, sectionLoading, updateSection, refreshData } = usePortfolioData();
+  const navigate = useNavigate()
+  const { data, loading, error, sectionLoading, updateSection, refreshData } =
+    usePortfolioData()
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authService.isAuthenticated()) {
-      navigate('/admin/login');
+      navigate('/admin/login')
     }
-  }, [navigate]);
+  }, [navigate])
 
   const handleLogout = () => {
-    authService.logout();
-    navigate('/admin/login');
-  };
+    authService.logout()
+    navigate('/admin/login')
+  }
 
   const handleSectionSave = async (section, newData) => {
-    const token = authService.getToken();
-    await updateSection(section, newData, token);
-  };
+    const token = authService.getToken()
+    await updateSection(section, newData, token)
+  }
 
   return {
     data,
@@ -31,6 +32,6 @@ export const useAdmin = () => {
     sectionLoading,
     handleLogout,
     handleSectionSave,
-    refreshData
-  };
-}; 
+    refreshData,
+  }
+}
