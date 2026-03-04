@@ -2,7 +2,6 @@
 #
 # Cloudflare Pages deployment cleanup script.
 # Uses env: BRANCH, CF_API_TOKEN, CF_ACCOUNT_ID, CF_PAGES_PROJECT.
-# Optional: KEEP_DEPLOYMENT_ID — if set, that deployment for BRANCH is kept; otherwise all for BRANCH are deleted.
 # Optional: MODE — "keep-latest" resolves the deployment for BRANCH+COMMIT_SHA (with retries) and keeps it; otherwise all for BRANCH are deleted.
 # Required when MODE=keep-latest: COMMIT_SHA (e.g. github.sha); the deployment for this commit is kept.
 #
@@ -20,7 +19,7 @@ fi
 CF_API="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PAGES_PROJECT}/deployments"
 readonly CF_API
 
-# Resolves the deployment ID for BRANCH + COMMIT_SHA, waits for it to finish, then sets KEEP_DEPLOYMENT_ID.
+# Resolves the deployment ID for BRANCH + COMMIT_SHA, waits for it to finish, then echoes it to stdout.
 # Polls until the deployment reaches stage "deploy" with status "success" or "failure".
 # Exits 1 if the API fails or the deployment never completes within the allotted attempts.
 resolve_deployment_id() {
@@ -57,7 +56,7 @@ resolve_deployment_id() {
         | .id')
 
     if [ -z "$latest_id" ] || [ "$latest_id" = "null" ]; then
-      echo "Waiting for deployment to appear (attempt $attempt/$max_attempts)..."
+      echo "Waiting for deployment to appear (attempt $attempt/$max_attempts)..." >&2
       sleep $sleep_sec
       continue
     fi
@@ -70,11 +69,11 @@ resolve_deployment_id() {
       --arg id "$latest_id" \
       '.result[] | select(.id == $id) | .latest_stage.status')
 
-    echo "Deployment $latest_id — stage: $stage_name, status: $stage_status (attempt $attempt/$max_attempts)"
+    echo "Deployment $latest_id — stage: $stage_name, status: $stage_status (attempt $attempt/$max_attempts)" >&2
 
     if [ "$stage_name" = "deploy" ] && [ "$stage_status" = "success" ]; then
-      echo "Deployment finished successfully. Keeping: $latest_id"
-      KEEP_DEPLOYMENT_ID=$latest_id
+      echo "Deployment finished successfully. Keeping: $latest_id" >&2
+      echo "$latest_id"
       return 0
     fi
 
@@ -115,7 +114,7 @@ fetch_deployments_page() {
 # Paginates through all deployments for BRANCH and deletes each one whose ID is not KEEP_DEPLOYMENT_ID.
 # If KEEP_DEPLOYMENT_ID is empty, deletes all deployments for BRANCH.
 delete_old_deployments_for_branch() {
-  local keep_id="${KEEP_DEPLOYMENT_ID:-__none__}"
+  local keep_id="${1:-__none__}"
   local page=1
   local total_pages
   local response
@@ -161,9 +160,8 @@ delete_old_deployments_for_branch() {
 # Entry: choose mode and run.
 # MODE=keep-latest resolves the deployment ID for this push (for push events),
 # anything else deletes all deployments for BRANCH (for branch delete events).
-case "${MODE:-delete-all}" in
-  keep-latest)
-    resolve_deployment_id
-    ;;
-esac
-delete_old_deployments_for_branch
+keep_id="__none__"
+if [ "${MODE:-delete-all}" = "keep-latest" ]; then
+  keep_id=$(resolve_deployment_id)
+fi
+delete_old_deployments_for_branch "$keep_id"
