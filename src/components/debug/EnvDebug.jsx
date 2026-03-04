@@ -49,9 +49,7 @@ VITE_EMBEDDED_JSON_PATH: ${import.meta.env.VITE_EMBEDDED_JSON_PATH || 'NOT SET'}
 VITE_EXTERNAL_JSON_URL: ${import.meta.env.VITE_EXTERNAL_JSON_URL || 'NOT SET'}
 VITE_API_HOSTNAME: ${import.meta.env.VITE_API_HOSTNAME || 'NOT SET'}
 VITE_API_PORT: ${import.meta.env.VITE_API_PORT || 'NOT SET'}
-VITE_APP_DEBUG: ${import.meta.env.VITE_APP_DEBUG || 'NOT SET'}
-API_HOSTNAME: ${import.meta.env.API_HOSTNAME || 'NOT SET'}
-API_PORT: ${import.meta.env.API_PORT || 'NOT SET'}`}
+VITE_APP_DEBUG: ${import.meta.env.VITE_APP_DEBUG || 'NOT SET'}`}
             </pre>
           </div>
         </div>

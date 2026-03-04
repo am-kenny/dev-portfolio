@@ -4,9 +4,9 @@
  */
 
 const getApiBaseUrl = () => {
-  // Check for environment variables first
-  const apiHostname = import.meta.env.VITE_API_HOSTNAME || import.meta.env.API_HOSTNAME;
-  const apiPort = import.meta.env.VITE_API_PORT || import.meta.env.API_PORT;
+  // Check for environment variables
+  const apiHostname = import.meta.env.VITE_API_HOSTNAME;
+  const apiPort = import.meta.env.VITE_API_PORT;
 
   // If both hostname and port are provided, use them
   if (apiHostname && apiPort) {
