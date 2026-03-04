@@ -11,11 +11,8 @@
 /* Your custom styles below */
 html {
   scroll-behavior: smooth;
-  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing);
-}
-
-html {
   background-color: #ffffff;
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing);
 }
 
 html.dark {
