@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
-import Debug from './pages/Debug';
+// Only load Debug when VITE_APP_DEBUG is 'true' so debug code is not shipped in production
+const Debug = import.meta.env.VITE_APP_DEBUG === 'true' ? lazy(() => import('./pages/Debug')) : null;
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import ApiHealthWrapper from './components/common/ApiHealthWrapper';
 import ThemeToggle from './components/common/ThemeToggle';
@@ -73,14 +74,11 @@ const Portfolio = () => (
 const AdminRoute = ({ children }) =>
   isAdminEnabled() ? <ApiHealthWrapper>{children}</ApiHealthWrapper> : <Navigate to="/" replace />;
 
-const DebugRoute = () =>
-  isAdminEnabled() ? (
-    <ApiHealthWrapper>
-      <Debug />
-    </ApiHealthWrapper>
-  ) : (
-    <Debug />
-  );
+const DebugRoute = () => {
+  if (!Debug) return <Navigate to="/" replace />;
+  const content = <Suspense fallback={null}><Debug /></Suspense>;
+  return isAdminEnabled() ? <ApiHealthWrapper>{content}</ApiHealthWrapper> : content;
+};
 
 function App() {
   return (
@@ -99,7 +97,7 @@ function App() {
               <Admin />
             </AdminRoute>
           } />
-          <Route path="/debug" element={<DebugRoute />} />
+          <Route path="/debug" element={Debug ? <DebugRoute /> : <Navigate to="/" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
