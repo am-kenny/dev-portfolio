@@ -26,7 +26,7 @@ jobs:
       - name: Delete older deployments for this branch
         env:
           BRANCH: ${{ github.ref_name }}
-          MODE: "keep-latest"
+          MODE: 'keep-latest'
           COMMIT_SHA: ${{ github.sha }}
         run: bash .github/scripts/cf-cleanup-deployments.sh
 
