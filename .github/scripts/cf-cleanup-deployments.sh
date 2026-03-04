@@ -3,9 +3,8 @@
 # Cloudflare Pages deployment cleanup script.
 # Uses env: BRANCH, CF_API_TOKEN, CF_ACCOUNT_ID, CF_PAGES_PROJECT.
 # Optional: KEEP_DEPLOYMENT_ID — if set, that deployment for BRANCH is kept; otherwise all for BRANCH are deleted.
-# Optional: MODE — "keep-latest" resolves the latest deployment for BRANCH (with retries) and keeps it; otherwise all for BRANCH are deleted.
-# Optional: TRIGGERED_AT — ISO 8601 timestamp (e.g. from github.event.head_commit.timestamp); when set, only
-#           deployments created after this time are considered, preventing stale deployments from being kept.
+# Optional: MODE — "keep-latest" resolves the deployment for BRANCH+COMMIT_SHA (with retries) and keeps it; otherwise all for BRANCH are deleted.
+# Required when MODE=keep-latest: COMMIT_SHA (e.g. github.sha); the deployment for this commit is kept.
 #
 set -euo pipefail
 
@@ -14,16 +13,17 @@ set -euo pipefail
 : "${CF_ACCOUNT_ID:?CF_ACCOUNT_ID is required}"
 : "${CF_PAGES_PROJECT:?CF_PAGES_PROJECT is required}"
 : "${BRANCH:?BRANCH is required}"
+if [ "${MODE:-delete-all}" = "keep-latest" ]; then
+  : "${COMMIT_SHA:?COMMIT_SHA is required when MODE=keep-latest}"
+fi
 
 CF_API="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PAGES_PROJECT}/deployments"
 readonly CF_API
 
-# Resolves the latest deployment ID for BRANCH, waits for it to finish, then sets KEEP_DEPLOYMENT_ID.
-# When TRIGGERED_AT is set, only deployments created after that timestamp are considered, which prevents
-# accidentally keeping a stale pre-push deployment.
+# Resolves the deployment ID for BRANCH + COMMIT_SHA, waits for it to finish, then sets KEEP_DEPLOYMENT_ID.
 # Polls until the deployment reaches stage "deploy" with status "success" or "failure".
 # Exits 1 if the API fails or the deployment never completes within the allotted attempts.
-resolve_latest_deployment_id() {
+resolve_deployment_id() {
   local max_attempts=30  # 30 × 15s = up to 7.5 minutes
   local sleep_sec=15
   local attempt
@@ -47,32 +47,14 @@ resolve_latest_deployment_id() {
       exit 1
     fi
 
-    # If TRIGGERED_AT is provided, only consider deployments created after that timestamp.
-    # Otherwise fall back to the most recent deployment for the branch.
-    if [ -n "${TRIGGERED_AT:-}" ]; then
-      latest_id=$(echo "$body" | jq -r \
-        --arg branch "$BRANCH" \
-        --arg since "$TRIGGERED_AT" \
-        '[.result[]
-          | select(.deployment_trigger.metadata.branch == $branch)
-          | select(.created_on > $since)
-        ] | sort_by(.created_on) | last | .id')
-    else
-      latest_id=$(echo "$body" | jq -r \
-        --arg branch "$BRANCH" \
-        '[.result[]
-          | select(.deployment_trigger.metadata.branch == $branch)
-        ] | sort_by(.created_on) | last | .id')
-    fi
-
-    echo "Looking for deployments on branch: $BRANCH"
-    echo "Filtering deployments created after: ${TRIGGERED_AT:-<not set>}"
-    echo "First deployment's deployment_trigger.metadata (to confirm commit field name):"
-    echo "$body" | jq -r '.result[0].deployment_trigger.metadata'
-    echo "Raw API response deployments for branch:"
-    echo "$body" | jq -r \
+    # Match deployment for this branch and commit SHA (when COMMIT_SHA is set).
+    latest_id=$(echo "$body" | jq -r \
       --arg branch "$BRANCH" \
-      '[.result[] | select(.deployment_trigger.metadata.branch == $branch) | {id, created_on, stage: .latest_stage.name, status: .latest_stage.status}]'
+      --arg sha "${COMMIT_SHA:-}" \
+      '.result[]
+        | select(.deployment_trigger.metadata.branch == $branch)
+        | select(.deployment_trigger.metadata.commit_hash == $sha)
+        | .id')
 
     if [ -z "$latest_id" ] || [ "$latest_id" = "null" ]; then
       echo "Waiting for deployment to appear (attempt $attempt/$max_attempts)..."
@@ -177,11 +159,11 @@ delete_old_deployments_for_branch() {
 }
 
 # Entry: choose mode and run.
-# MODE=keep-latest resolves the latest deployment ID first (for push events),
+# MODE=keep-latest resolves the deployment ID for this push (for push events),
 # anything else deletes all deployments for BRANCH (for branch delete events).
 case "${MODE:-delete-all}" in
   keep-latest)
-    resolve_latest_deployment_id
+    resolve_deployment_id
     ;;
 esac
 delete_old_deployments_for_branch
