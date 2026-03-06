@@ -515,6 +515,7 @@ const ExperienceConfigForm = ({
           ))}
         </ul>
       </div>
+      {/* Save button has type="submit", so form onSubmit handles submission */}
       <FadeButtonGroup
         mode={disabled ? 'view' : 'edit'}
         onEdit={onEdit}

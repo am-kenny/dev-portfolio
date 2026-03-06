@@ -44,7 +44,9 @@ const FadeButtonGroup = ({
         window.setTimeout(() => setFadingGroup(null), BUTTON_TRANSITION)
       }, BUTTON_TRANSITION)
     }
-  }, [mode, visibleGroup])
+    // Intentionally only run when mode changes to avoid double transition
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- visibleGroup omitted on purpose
+  }, [mode])
 
   return (
     <div>

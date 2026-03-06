@@ -295,6 +295,7 @@ const ContactConfigForm = ({
         <div className="text-red-600 dark:text-red-400 text-sm">{error}</div>
       )}
 
+      {/* Save button has type="submit", so form onSubmit handles submission */}
       <FadeButtonGroup
         mode={disabled ? 'view' : 'edit'}
         onEdit={onEdit}

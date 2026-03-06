@@ -18,6 +18,8 @@ export interface EditableSectionRenderFormProps<TData> {
   onContentChange: () => void
 }
 
+// TODO: Tighten generics so SectionRenderer (and other callers) can pass typed
+// onSave without casting; renderForm currently uses TData=unknown at call sites.
 export interface EditableSectionCardProps<TData = unknown> {
   section: ReactNode
   data: TData

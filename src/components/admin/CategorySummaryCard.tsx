@@ -91,7 +91,8 @@ const CategorySummaryCard = ({
     let totalWidth = 0
     let fitCount = 0
 
-    subcategoryElements.forEach((element) => {
+    for (let i = 0; i < subcategoryElements.length; i++) {
+      const element = subcategoryElements[i]
       const elementWidth = element.offsetWidth
       if (
         totalWidth + elementWidth + margin + moreIndicatorWidth <=
@@ -99,8 +100,10 @@ const CategorySummaryCard = ({
       ) {
         totalWidth += elementWidth + margin
         fitCount += 1
+      } else {
+        break
       }
-    })
+    }
 
     if (fitCount !== lastCalculatedCountRef.current) {
       setVisibleCount(fitCount)
