@@ -150,3 +150,12 @@ html.dark {
   background-size: 200% 200%;
   animation: gradient-shift 3s ease infinite;
 }
+
+/* Hide scrollbar for horizontal carousels */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
