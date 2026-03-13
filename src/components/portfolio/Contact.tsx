@@ -10,6 +10,17 @@ const platformIcons: Record<string, typeof FaGithub> = {
   linkedin: FaLinkedin,
 }
 
+const platformLabels: Record<string, string> = {
+  github: 'GitHub',
+  linkedin: 'LinkedIn',
+}
+
+function getPlatformLabel(platform: string | undefined): string {
+  if (!platform) return ''
+  const key = platform.toLowerCase()
+  return platformLabels[key] ?? platform
+}
+
 const iconEmail = (
   <svg
     className="w-5 h-5 flex-shrink-0"
@@ -93,7 +104,7 @@ function ContactLinks({
                 className="inline-flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors duration-300"
               >
                 {Icon ? <Icon className="w-5 h-5 flex-shrink-0" /> : null}
-                <span>{link.platform}</span>
+                <span>{getPlatformLabel(link.platform)}</span>
               </a>
             )
           })
@@ -407,7 +418,7 @@ const Contact = (): JSX.Element => {
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-700/80 hover:bg-blue-600 text-gray-200 hover:text-white border border-gray-600 hover:border-blue-500 transition-all duration-300"
                       >
                         {Icon ? <Icon className="w-5 h-5" /> : null}
-                        <span>{link.platform}</span>
+                        <span>{getPlatformLabel(link.platform)}</span>
                       </a>
                     )
                   })}
