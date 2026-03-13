@@ -9,7 +9,7 @@ const Experience = (): JSX.Element => {
     return (
       <section className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-lg text-gray-400 dark:text-gray-500">
+          <div className="max-w-5xl mx-auto text-center text-lg text-gray-400 dark:text-gray-500">
             Loading...
           </div>
         </div>
@@ -25,7 +25,7 @@ const Experience = (): JSX.Element => {
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
           Experience
         </h2>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           {experience?.jobs?.map((job, index) => (
             <div
               key={index}
