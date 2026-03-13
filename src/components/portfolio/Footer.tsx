@@ -60,7 +60,7 @@ const Footer = (): JSX.Element => {
             </a>
           )}
           <p className="text-gray-500">Built with React &amp; Vite</p>
-          <p className="text-gray-600 dark:text-gray-500">
+          <p className="text-gray-500">
             © {new Date().getFullYear()} Andrii Prykhodko
           </p>
         </div>

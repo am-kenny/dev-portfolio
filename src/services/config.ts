@@ -27,6 +27,7 @@ export interface ConfigEndpoints {
   portfolio: string
   linkedin: string
   health: string
+  contact: string
   resetData: string
   skillsStructure: string
   skillsFlat: string
@@ -48,6 +49,7 @@ export const config: AppConfig = {
     portfolio: '/api/portfolio',
     linkedin: '/api/linkedin',
     health: '/api/health',
+    contact: '/api/contact',
     resetData: '/api/reset-data',
     skillsStructure: '/api/portfolio/skills/structure',
     skillsFlat: '/api/portfolio/skills/flat',
