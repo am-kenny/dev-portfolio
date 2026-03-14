@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
 
@@ -121,10 +122,10 @@ const Projects = (): JSX.Element => {
     <>
       <div id="projects" className="scroll-mt-20" aria-hidden="true" />
       <section
-        className="py-16 bg-gray-50 dark:bg-gray-900"
+        className="py-20 bg-gray-50 dark:bg-gray-900"
         aria-labelledby="projects-heading"
       >
-        <div className="container mx-auto px-4 max-w-5xl">
+        <SectionContent maxWidth="5xl">
           <h2
             id="projects-heading"
             className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100"
@@ -195,13 +196,15 @@ const Projects = (): JSX.Element => {
               No projects to show.
             </p>
           )}
-        </div>
+        </SectionContent>
       </section>
       {!hasProjects && (
-        <section className="py-8 bg-white dark:bg-gray-900">
-          <div className="container mx-auto px-4 text-center text-gray-500 dark:text-gray-400">
-            No projects added yet. Add some from the admin panel!
-          </div>
+        <section className="py-20 bg-white dark:bg-gray-900">
+          <SectionContent maxWidth="5xl">
+            <div className="text-center text-gray-500 dark:text-gray-400">
+              No projects added yet. Add some from the admin panel!
+            </div>
+          </SectionContent>
         </section>
       )}
     </>

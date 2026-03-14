@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { dataSource } from '../../services/dataSource'
 import config from '../../services/config'
@@ -210,11 +211,9 @@ const Contact = (): JSX.Element => {
   if (loading || !data) {
     return (
       <section className="py-20 bg-gray-900 dark:bg-gray-950 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-lg text-gray-400">
-            Loading...
-          </div>
-        </div>
+        <SectionContent maxWidth="4xl">
+          <div className="text-center text-lg text-gray-400">Loading...</div>
+        </SectionContent>
       </section>
     )
   }
@@ -270,52 +269,48 @@ const Contact = (): JSX.Element => {
   return (
     <div id="contact">
       {/* Bento: mobile only */}
-      <section className="md:hidden py-24 bg-gray-900/95 dark:bg-gray-950 text-white overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-4">
-              Get in touch
-            </h2>
-            <p className="text-gray-400 text-center mb-12 max-w-xl mx-auto">
-              {tagline}
-            </p>
-            <div
-              className={`grid gap-6 ${apiAvailable ? 'md:grid-cols-2' : 'max-w-md mx-auto'}`}
-            >
-              <div className="rounded-2xl border border-gray-700/80 dark:border-gray-700 bg-gray-800/40 dark:bg-gray-800/30 p-8 shadow-xl hover:border-gray-600/80 transition-colors duration-300">
-                <h3 className="text-lg font-semibold text-blue-400 mb-4">
-                  Contact
-                </h3>
-                <div className="flex flex-col gap-3">
-                  <ContactLinks contact={contact} personal={personal} />
-                </div>
+      <section className="md:hidden py-20 bg-gray-900/95 dark:bg-gray-950 text-white overflow-hidden">
+        <SectionContent maxWidth="4xl">
+          <h2 className="text-4xl font-bold text-center mb-4">Get in touch</h2>
+          <p className="text-gray-400 text-center mb-12 max-w-xl mx-auto">
+            {tagline}
+          </p>
+          <div
+            className={`grid gap-6 ${apiAvailable ? 'md:grid-cols-2' : 'max-w-md mx-auto'}`}
+          >
+            <div className="rounded-2xl border border-gray-700/80 dark:border-gray-700 bg-gray-800/40 dark:bg-gray-800/30 p-8 shadow-xl hover:border-gray-600/80 transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-blue-400 mb-4">
+                Contact
+              </h3>
+              <div className="flex flex-col gap-3">
+                <ContactLinks contact={contact} personal={personal} />
               </div>
-              {apiAvailable && (
-                <div className="rounded-2xl border border-gray-700/80 dark:border-gray-700 bg-gray-800/40 dark:bg-gray-800/30 p-8 shadow-xl hover:border-gray-600/80 transition-colors duration-300">
-                  <h3 className="text-lg font-semibold text-blue-400 mb-5">
-                    Send a message
-                  </h3>
-                  <ContactFormBlock
-                    onSubmit={handleSubmit}
-                    submitting={submitting}
-                    submitStatus={submitStatus}
-                    submitError={submitError}
-                    inputClass={inputBase}
-                    buttonClass={buttonBase}
-                    formIdPrefix="1"
-                  />
-                </div>
-              )}
             </div>
+            {apiAvailable && (
+              <div className="rounded-2xl border border-gray-700/80 dark:border-gray-700 bg-gray-800/40 dark:bg-gray-800/30 p-8 shadow-xl hover:border-gray-600/80 transition-colors duration-300">
+                <h3 className="text-lg font-semibold text-blue-400 mb-5">
+                  Send a message
+                </h3>
+                <ContactFormBlock
+                  onSubmit={handleSubmit}
+                  submitting={submitting}
+                  submitStatus={submitStatus}
+                  submitError={submitError}
+                  inputClass={inputBase}
+                  buttonClass={buttonBase}
+                  formIdPrefix="1"
+                />
+              </div>
+            )}
           </div>
-        </div>
+        </SectionContent>
       </section>
 
       {/* Desktop: Bento two-card layout when API, else centered pills */}
-      <section className="hidden md:block py-24 bg-gray-900/95 dark:bg-gray-950 text-white overflow-hidden">
-        <div className="container mx-auto px-4">
+      <section className="hidden md:block py-20 bg-gray-900/95 dark:bg-gray-950 text-white overflow-hidden">
+        <SectionContent maxWidth="4xl">
           {apiAvailable ? (
-            <div className="max-w-4xl mx-auto">
+            <>
               <h2 className="text-4xl font-bold text-center mb-12">
                 Get in touch
               </h2>
@@ -381,7 +376,7 @@ const Contact = (): JSX.Element => {
                   />
                 </div>
               </div>
-            </div>
+            </>
           ) : (
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-4xl font-bold mb-3">Get in touch</h2>
@@ -426,7 +421,7 @@ const Contact = (): JSX.Element => {
               )}
             </div>
           )}
-        </div>
+        </SectionContent>
       </section>
     </div>
   )
