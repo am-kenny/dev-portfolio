@@ -2,8 +2,7 @@
   "personalInfo": {
     "name": "Your Name",
     "title": "Software Developer",
-    "location": "Your City, Country",
-    "bio": "Short bio text."
+    "location": "Your City, Country"
   },
   "about": {
     "content": "About section content."
@@ -56,11 +55,6 @@
       "Category With Subcategories": {
         "Subcategory": [{ "name": "Skill A", "level": "advanced" }]
       }
-    },
-    "categorization": {
-      "useSubcategories": true,
-      "minSkillsForSubcategory": 3,
-      "categoryOverrides": {}
     }
   }
 }

@@ -15,7 +15,6 @@ export interface PersonalSection {
   name: string
   title?: string
   location?: string
-  bio?: string
   email?: string
 }
 

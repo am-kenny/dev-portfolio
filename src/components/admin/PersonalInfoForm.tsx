@@ -5,7 +5,6 @@ export interface PersonalInfo {
   name: string
   title?: string
   location?: string
-  bio?: string
 }
 
 export interface PersonalInfoFormProps {
@@ -29,7 +28,6 @@ const PersonalInfoForm = ({
     name: initialData?.name || '',
     title: initialData?.title || '',
     location: initialData?.location || '',
-    bio: initialData?.bio || '',
   })
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -108,21 +106,6 @@ const PersonalInfoForm = ({
           value={form.location ?? ''}
           onChange={handleChange}
           className={inputClass}
-          disabled={disabled}
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-          Bio
-        </label>
-        <textarea
-          name="bio"
-          value={form.bio ?? ''}
-          onChange={handleChange}
-          className={inputClass}
-          minLength={10}
-          maxLength={500}
-          rows={disabled ? 2 : 4}
           disabled={disabled}
         />
       </div>
