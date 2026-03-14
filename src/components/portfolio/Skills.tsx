@@ -29,6 +29,16 @@ const Skills = (): JSX.Element => {
 
   const { skills } = data as PortfolioData
 
+  const proficiencyOrder: Record<string, number> = {
+    expert: 0,
+    advanced: 1,
+    intermediate: 2,
+    beginner: 3,
+  }
+
+  const sortByProficiency = (a: SkillEntry, b: SkillEntry): number =>
+    (proficiencyOrder[a.level] ?? 4) - (proficiencyOrder[b.level] ?? 4)
+
   const getLevelStyles = (
     level: string
   ): { color: string; bg: string; border: string } => {
@@ -41,15 +51,15 @@ const Skills = (): JSX.Element => {
         }
       case 'advanced':
         return {
-          color: 'text-green-700 dark:text-green-300',
-          bg: 'bg-green-100 dark:bg-green-900/50',
-          border: 'border-green-200 dark:border-green-700',
-        }
-      case 'intermediate':
-        return {
           color: 'text-blue-700 dark:text-blue-300',
           bg: 'bg-blue-100 dark:bg-blue-900/50',
           border: 'border-blue-200 dark:border-blue-700',
+        }
+      case 'intermediate':
+        return {
+          color: 'text-green-700 dark:text-green-300',
+          bg: 'bg-green-100 dark:bg-green-900/50',
+          border: 'border-green-200 dark:border-green-700',
         }
       case 'beginner':
       default:
@@ -63,9 +73,10 @@ const Skills = (): JSX.Element => {
 
   const renderSkillTags = (categorySkills: SkillCategoryValue): JSX.Element => {
     if (Array.isArray(categorySkills)) {
+      const sorted = [...categorySkills].sort(sortByProficiency)
       return (
         <div className="flex flex-wrap gap-2">
-          {categorySkills.map((skill: SkillEntry) => {
+          {sorted.map((skill: SkillEntry) => {
             const levelStyles = getLevelStyles(skill.level)
             return (
               <div
@@ -94,7 +105,7 @@ const Skills = (): JSX.Element => {
                 {subcategory}
               </h5>
               <div className="flex flex-wrap gap-2">
-                {subcategorySkills.map((skill) => {
+                {[...subcategorySkills].sort(sortByProficiency).map((skill) => {
                   const levelStyles = getLevelStyles(skill.level)
                   return (
                     <div
@@ -166,10 +177,10 @@ const Skills = (): JSX.Element => {
                       legendColor = 'bg-purple-400 border-purple-500'
                       break
                     case 'advanced':
-                      legendColor = 'bg-green-400 border-green-500'
+                      legendColor = 'bg-blue-400 border-blue-500'
                       break
                     case 'intermediate':
-                      legendColor = 'bg-blue-400 border-blue-500'
+                      legendColor = 'bg-green-400 border-green-500'
                       break
                     case 'beginner':
                     default:
