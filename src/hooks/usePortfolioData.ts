@@ -9,7 +9,7 @@ import type { PortfolioData, ErrorKind, SectionLoadingState } from '../types'
 import type { UsePortfolioDataResult } from '../types/portfolioHooks'
 
 const fetchJson = async <T>(url: string): Promise<T> => {
-  const response = await fetch(url)
+  const response = await fetch(url, { cache: 'no-cache' })
   if (!response.ok) {
     throw new Error(`Failed to fetch: ${response.status}`)
   }
