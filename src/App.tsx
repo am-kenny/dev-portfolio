@@ -64,7 +64,7 @@ const PageTitle = (): null => {
   const location = useLocation()
 
   useEffect(() => {
-    const title = pageTitles[location.pathname] || pageTitles['/']
+    const title = pageTitles[location.pathname] ?? pageTitles['*']
     document.title = title
   }, [location.pathname])
 
