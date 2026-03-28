@@ -78,11 +78,7 @@ export const Admin = (): JSX.Element => {
                   Configure skill categorization and LinkedIn import settings
                 </p>
               </div>
-              <div
-                className={`transition-transform duration-300 ease ${
-                  showSkillsStructure ? 'rotate-90' : ''
-                }`}
-              >
+              <div className={showSkillsStructure ? 'rotate-90' : ''}>
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>
@@ -108,11 +104,7 @@ export const Admin = (): JSX.Element => {
                   portfolio
                 </p>
               </div>
-              <div
-                className={`transition-transform duration-300 ease ${
-                  showLinkedInImport ? 'rotate-90' : ''
-                }`}
-              >
+              <div className={showLinkedInImport ? 'rotate-90' : ''}>
                 <FaChevronRight className="text-gray-400" />
               </div>
             </>

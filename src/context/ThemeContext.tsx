@@ -1,10 +1,11 @@
 import {
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from 'react'
+import { flushSync } from 'react-dom'
 
 export type Theme = 'light' | 'dark'
 
@@ -33,7 +34,7 @@ export const ThemeProvider = ({
     return 'light'
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = window.document.documentElement
     if (theme === 'dark') {
       root.classList.add('dark')
@@ -44,7 +45,23 @@ export const ThemeProvider = ({
   }, [theme])
 
   const toggleTheme = (): void => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
+    const next: Theme = theme === 'light' ? 'dark' : 'light'
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const doc = typeof document !== 'undefined' ? document : null
+    const vt = doc?.startViewTransition
+
+    if (reduceMotion || typeof vt !== 'function') {
+      setTheme(next)
+      return
+    }
+
+    vt.call(doc, () => {
+      flushSync(() => {
+        setTheme(next)
+      })
+    })
   }
 
   return (

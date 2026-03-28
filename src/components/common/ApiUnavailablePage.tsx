@@ -63,7 +63,7 @@ const ApiUnavailablePage = ({
           <button
             onClick={handleRetry}
             disabled={isRetrying}
-            className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center"
+            className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center"
           >
             {isRetrying ? (
               <>
@@ -96,13 +96,13 @@ const ApiUnavailablePage = ({
 
           <button
             onClick={() => window.location.reload()}
-            className="w-full border-2 border-white hover:bg-white hover:text-black text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+            className="w-full border-2 border-white hover:bg-white hover:text-black text-white font-semibold py-3 px-6 rounded-lg"
           >
             Refresh Page
           </button>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-700 dark:border-gray-600 transition-colors duration-300">
+        <div className="mt-8 pt-8 border-t border-gray-700 dark:border-gray-600">
           <p className="text-sm text-gray-500">
             If the problem persists, please try again later or contact the
             administrator.

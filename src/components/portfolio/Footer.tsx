@@ -24,19 +24,22 @@ const Footer = (): JSX.Element => {
   const linkedInUrl = getSocialUrl(socialLinks, 'LinkedIn')
 
   return (
-    <footer className="bg-gray-950 dark:bg-black text-gray-500 py-8 border-t border-gray-800 dark:border-gray-900 transition-colors duration-300">
+    <footer
+      className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-white/20 dark:border-gray-700 shadow-sm text-gray-900 dark:text-gray-100 py-8"
+      role="contentinfo"
+    >
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center gap-4 text-sm">
+        <div className="flex flex-col items-center gap-4 text-sm font-normal">
           <div className="flex items-center justify-center gap-6">
             {githubUrl && (
               <a
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-300"
+                className="text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-sky-300"
                 aria-label="GitHub"
               >
-                <FaGithub className="w-6 h-6" />
+                <FaGithub className="w-6 h-6" aria-hidden />
               </a>
             )}
             {linkedInUrl && (
@@ -44,23 +47,25 @@ const Footer = (): JSX.Element => {
                 href={linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-300"
+                className="text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-sky-300"
                 aria-label="LinkedIn"
               >
-                <FaLinkedin className="w-6 h-6" />
+                <FaLinkedin className="w-6 h-6" aria-hidden />
               </a>
             )}
           </div>
           {email && (
             <a
               href={`mailto:${email}`}
-              className="text-gray-400 hover:text-white transition-colors duration-300"
+              className="text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-sky-300"
             >
               {email}
             </a>
           )}
-          <p className="text-gray-500">Built with React &amp; Vite</p>
-          <p className="text-gray-500">
+          <p className="text-gray-700 dark:text-gray-300">
+            Built with React &amp; Vite
+          </p>
+          <p className="text-gray-700 dark:text-gray-300">
             © {new Date().getFullYear()} Andrii Prykhodko
           </p>
         </div>

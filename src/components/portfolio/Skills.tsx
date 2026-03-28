@@ -8,7 +8,7 @@ const Skills = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="py-20 bg-slate-50 dark:bg-gray-900">
+      <section className="py-20">
         <SectionContent maxWidth="5xl">
           <div className="text-center">
             <div className="animate-pulse">
@@ -82,12 +82,10 @@ const Skills = (): JSX.Element => {
             return (
               <div
                 key={skill.name}
-                className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 transition-all duration-300 cursor-pointer`}
+                className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 cursor-pointer`}
               >
-                <span className="transition-all duration-300">
-                  {skill.name}
-                </span>
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
+                <span>{skill.name}</span>
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
                   {formatEnumValue(skill.level)}
                 </span>
               </div>
@@ -111,12 +109,10 @@ const Skills = (): JSX.Element => {
                   return (
                     <div
                       key={`${subcategory}-${skill.name}`}
-                      className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 transition-all duration-300 cursor-pointer`}
+                      className={`group relative inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${levelStyles.bg} ${levelStyles.color} ${levelStyles.border} hover:scale-105 cursor-pointer`}
                     >
-                      <span className="transition-all duration-300">
-                        {skill.name}
-                      </span>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
+                      <span>{skill.name}</span>
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none bg-white dark:bg-gray-800 shadow-lg rounded-lg px-2 py-1 text-xs border dark:border-gray-600">
                         {formatEnumValue(skill.level)}
                       </span>
                     </div>
@@ -131,10 +127,10 @@ const Skills = (): JSX.Element => {
   }
 
   return (
-    <section id="skills" className="py-20 bg-slate-50 dark:bg-gray-900">
+    <section id="skills" className="py-20">
       <SectionContent maxWidth="5xl">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 drop-shadow-[0_4px_22px_rgba(56,189,248,0.16),0_2px_10px_rgba(139,92,246,0.06)] dark:drop-shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
             Skills &amp; Technologies
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -153,7 +149,7 @@ const Skills = (): JSX.Element => {
                   <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
                     {category}
                   </h4>
-                  <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full transition-colors duration-300"></div>
+                  <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full"></div>
                 </div>
 
                 <div>{renderSkillTags(categorySkills)}</div>

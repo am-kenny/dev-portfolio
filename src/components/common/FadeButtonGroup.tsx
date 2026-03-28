@@ -51,7 +51,7 @@ const FadeButtonGroup = ({
   return (
     <div>
       <div
-        className={`transition-opacity duration-300 ${
+        className={`transition-opacity duration-[250ms] ease-out ${
           visibleGroup === 'edit' && !fadingGroup
             ? 'opacity-100 pointer-events-auto'
             : fadingGroup === 'edit'
@@ -72,7 +72,7 @@ const FadeButtonGroup = ({
       </div>
 
       <div
-        className={`flex gap-2 flex-wrap transition-opacity duration-300 ${
+        className={`flex gap-2 flex-wrap transition-opacity duration-[250ms] ease-out ${
           visibleGroup === 'action' && !fadingGroup
             ? 'opacity-100 pointer-events-auto'
             : fadingGroup === 'action'

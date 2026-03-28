@@ -52,7 +52,7 @@ const AnimatedSectionWrapper = ({
       </div>
 
       <div
-        className="border-t border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300"
+        className="border-t border-gray-200 dark:border-gray-700 overflow-hidden"
         style={{
           maxHeight: isExpanded ? contentHeight : 0,
           opacity: isExpanded ? 1 : 0,

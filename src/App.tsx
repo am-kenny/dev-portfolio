@@ -21,6 +21,7 @@ import Footer from './components/portfolio/Footer'
 import { pageTitles } from './constants/titleMap'
 import { isAdminEnabled } from './services/dataSource'
 import DataErrorPage from './components/common/DataErrorPage'
+import CanvasBackground from './components/common/CanvasBackground'
 import NotFound from './pages/NotFound'
 import type { ReactNode } from 'react'
 
@@ -72,14 +73,17 @@ const PageTitle = (): null => {
 }
 
 const Portfolio = (): JSX.Element => (
-  <main className="min-h-screen bg-white dark:bg-gray-900">
-    <Hero />
-    <About />
-    <Skills />
-    <Experience />
-    <Projects />
-    <Contact />
-    <Footer />
+  <main className="relative min-h-screen overflow-x-hidden text-slate-900 dark:text-slate-100">
+    <CanvasBackground />
+    <div className="relative z-10">
+      <Hero />
+      <About />
+      <Skills />
+      <Experience />
+      <Projects />
+      <Contact />
+      <Footer />
+    </div>
   </main>
 )
 

@@ -8,7 +8,7 @@ const Experience = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20">
         <SectionContent maxWidth="5xl">
           <div className="text-center text-lg text-gray-400 dark:text-gray-500">
             Loading...
@@ -21,9 +21,9 @@ const Experience = (): JSX.Element => {
   const { experience } = data as PortfolioData
 
   return (
-    <section id="experience" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="experience" className="py-20">
       <SectionContent maxWidth="5xl">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
+        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_26px_rgba(56,189,248,0.16),0_2px_12px_rgba(59,130,246,0.08)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.32)]">
           Experience
         </h2>
         {experience?.jobs?.map((job, index) => (
@@ -39,15 +39,16 @@ const Experience = (): JSX.Element => {
 
             <div className="absolute left-0 top-2 w-5 h-5 rounded-full border-4 border-blue-500 bg-white dark:bg-gray-900"></div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <div className="flex flex-wrap justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm border border-white/20 dark:border-gray-700">
+              <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+                <div className="mb-1 min-w-0">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                     {job.title}
                   </h3>
-                  <div className="text-blue-600 dark:text-blue-400 font-semibold">
+                  <div className="text-blue-600 dark:text-blue-400 font-semibold mt-0.5">
                     {job.company}
                   </div>
+                  <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full mt-2" />
                 </div>
                 <div className="text-right">
                   <div className="text-gray-600 dark:text-gray-400">
