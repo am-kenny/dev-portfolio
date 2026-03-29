@@ -530,7 +530,14 @@ export default function CanvasBackground(): JSX.Element {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const bufferLight = document.createElement('canvas')
+    const bufferDark = document.createElement('canvas')
+    const ctxLight = bufferLight.getContext('2d')
+    const ctxDark = bufferDark.getContext('2d')
+    if (!ctxLight || !ctxDark) return
+
     let time = 0
+    let lastFrameMs = performance.now()
 
     const setSize = (): void => {
       if (!container.parentElement) return
@@ -540,6 +547,10 @@ export default function CanvasBackground(): JSX.Element {
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w
         canvas.height = h
+        bufferLight.width = w
+        bufferLight.height = h
+        bufferDark.width = w
+        bufferDark.height = h
         initNetwork(w, h)
       }
     }
@@ -559,8 +570,12 @@ export default function CanvasBackground(): JSX.Element {
 
     const tick = (): void => {
       setSize()
-      const delta = 16
-      time += delta
+      const nowMs = performance.now()
+      // Wall-clock delta so motion keeps pace when Chrome drops frames (e.g. theme style flush).
+      const rawDt = nowMs - lastFrameMs
+      lastFrameMs = nowMs
+      const dt = Math.min(64, Math.max(0, rawDt))
+      time += dt > 0 ? dt : 16
       const width = canvas.width
       const height = canvas.height
       if (width <= 0 || height <= 0) {
@@ -607,6 +622,12 @@ export default function CanvasBackground(): JSX.Element {
         }
       }
 
+      /*
+       * Theme crossfade: render light + dark at full opacity into offscreen buffers, then
+       * composite onto the main canvas. Drawing twice with globalAlpha on the *same* context
+       * composites over the previous frame incorrectly; buffers keep the blend correct.
+       * Steady-state uses a single draw to the main canvas (no extra copies).
+       */
       const EPS = 0.002
       if (blend <= EPS) {
         drawNeuralNetwork(
@@ -635,10 +656,8 @@ export default function CanvasBackground(): JSX.Element {
           true
         )
       } else {
-        ctx.save()
-        ctx.globalAlpha = 1 - blend
         drawNeuralNetwork(
-          ctx,
+          ctxLight,
           width,
           height,
           nodes,
@@ -649,11 +668,8 @@ export default function CanvasBackground(): JSX.Element {
           scrollParallax,
           false
         )
-        ctx.restore()
-        ctx.save()
-        ctx.globalAlpha = blend
         drawNeuralNetwork(
-          ctx,
+          ctxDark,
           width,
           height,
           nodes,
@@ -664,7 +680,12 @@ export default function CanvasBackground(): JSX.Element {
           scrollParallax,
           true
         )
-        ctx.restore()
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.clearRect(0, 0, width, height)
+        ctx.drawImage(bufferLight, 0, 0)
+        ctx.globalAlpha = blend
+        ctx.drawImage(bufferDark, 0, 0)
+        ctx.globalAlpha = 1
       }
 
       frameRef.current = requestAnimationFrame(tick)

@@ -4,15 +4,12 @@
 
 /*
  * Theme toggle — single source of truth for duration + easing.
- * Used by: global `*` (paint only), `html` background, View Transitions, `.theme-glow-crossfade`,
+ * Used by: global `*` (paint only), `html` background, `.theme-glow-crossfade`,
  * canvas blend (`CanvasBackground.tsx` THEME_BLEND_MS), and Tailwind `duration-theme` / `ease-theme`.
  */
 :root {
   --theme-transition-duration: 0.45s;
   --theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  /* Aliases: same timing everywhere (page bg, root crossfade, UI) */
-  --theme-bg-transition-duration: var(--theme-transition-duration);
-  --theme-bg-easing: var(--theme-transition-easing);
 }
 
 /* Your custom styles below */
@@ -44,15 +41,6 @@ html.dark {
     radial-gradient(circle at bottom, #000000 0, #020617 65%);
 }
 
-/* Theme toggle: smooth root crossfade where View Transitions are supported */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: var(--theme-bg-transition-duration);
-    animation-timing-function: var(--theme-bg-easing);
-  }
-}
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -65,28 +53,32 @@ html.dark body {
 }
 
 /*
- * Theme / mode paint only (single timing). Motion (transform, opacity) stays local —
- * e.g. `.skill-card`, `.theme-glow-crossfade`, or Tailwind utilities on specific nodes.
+ * Theme / mode paint only (single timing). Omit box-shadow, filter, backdrop-filter here —
+ * transitioning those on every node tanks Chrome when `html.dark` toggles.
+ * Motion (transform, opacity) stays local — `.skill-card`, `.theme-glow-crossfade`, etc.
  */
 *,
 *::before,
 *::after {
   transition-property:
-    background-color,
-    background-image,
-    background-size,
-    color,
-    border-color,
-    fill,
-    stroke,
-    box-shadow,
-    filter,
-    backdrop-filter,
-    -webkit-backdrop-filter,
-    text-decoration-color,
-    outline-color;
+    background-color, background-image, background-size, color, border-color,
+    fill, stroke, text-decoration-color, outline-color;
   transition-duration: var(--theme-transition-duration);
   transition-timing-function: var(--theme-transition-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  html {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .theme-glow-crossfade {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Light/dark stacks behind copy (Hero, Projects): opacity only, same tokens */
