@@ -76,13 +76,13 @@ const Portfolio = (): JSX.Element => (
   <main className="relative min-h-screen overflow-x-hidden text-slate-900 dark:text-slate-100">
     <CanvasBackground />
     <div className="relative z-10">
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Projects />
-      <Contact />
-      <Footer />
+      <Hero /> {/* Cauising lag on theme change */}
+      <About /> {/* Cauising lag on theme change */}
+      <Skills /> {/* OK */}
+      <Experience /> {/* OK */}
+      <Projects /> {/* Cauising lag on theme change */}
+      <Contact /> {/* Cauising lag on theme change */}
+      <Footer /> {/* OK */}
     </div>
   </main>
 )

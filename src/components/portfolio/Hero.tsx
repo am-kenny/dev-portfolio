@@ -35,15 +35,10 @@ const Hero = (): JSX.Element => {
                 </span>
                 <span className="sr-only">{personalInfo?.name}</span>
                 <span
-                  className="relative inline-grid place-items-start [grid-template-areas:'stack'] drop-shadow-[0_5px_30px_rgba(56,189,248,0.22),0_2px_14px_rgba(139,92,246,0.1)] dark:drop-shadow-[0_10px_40px_rgba(15,23,42,0.9)] [transition-property:none]"
+                  className="relative inline-block bg-gradient-to-r from-sky-600 via-cyan-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:via-cyan-200 dark:to-indigo-300 [@media(hover:hover)_and_(pointer:fine)]:drop-shadow-[0_5px_30px_rgba(56,189,248,0.22),0_2px_14px_rgba(139,92,246,0.1)] dark:[@media(hover:hover)_and_(pointer:fine)]:drop-shadow-[0_10px_40px_rgba(15,23,42,0.9)]"
                   aria-hidden
                 >
-                  <span className="[grid-area:stack] bg-gradient-to-r from-sky-600 via-cyan-600 to-indigo-600 bg-clip-text text-transparent opacity-100 dark:opacity-0 theme-glow-crossfade">
-                    {personalInfo?.name}
-                  </span>
-                  <span className="[grid-area:stack] bg-gradient-to-r from-sky-300 via-cyan-200 to-indigo-300 bg-clip-text text-transparent opacity-0 dark:opacity-100 theme-glow-crossfade">
-                    {personalInfo?.name}
-                  </span>
+                  {personalInfo?.name}
                 </span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-200/95 max-w-2xl mx-auto drop-shadow-[0_1px_14px_rgba(148,163,184,0.2)] dark:drop-shadow-[0_2px_12px_rgba(0,0,0,0.25)]">

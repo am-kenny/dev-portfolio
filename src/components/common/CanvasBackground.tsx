@@ -496,6 +496,8 @@ export default function CanvasBackground(): JSX.Element {
   const connectionsRef = useRef<Connection[]>([])
   // store raw scroll position for parallax
   const scrollRef = useRef(0)
+  /** Backing-store size (fixed for session); displayed 1:1 in CSS px, top-left in container (no % / object-fit). */
+  const canvasBufferRef = useRef({ w: 0, h: 0 })
 
   const initNetwork = useCallback((width: number, height: number) => {
     if (width <= 0 || height <= 0) return
@@ -509,14 +511,17 @@ export default function CanvasBackground(): JSX.Element {
   /** Full-viewport background is behind content (`-z-10`), so div `pointermove` never fires over the page — track on `window`. */
   const updatePointerFromClient = useCallback(
     (clientX: number, clientY: number) => {
-      const el = containerRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const w = Math.max(rect.width, 1)
-      const h = Math.max(rect.height, 1)
+      const canvas = canvasRef.current
+      const { w: bw, h: bh } = canvasBufferRef.current
+      if (!canvas || bw <= 0 || bh <= 0) return
+      const rect = canvas.getBoundingClientRect()
+      const rw = Math.max(rect.width, 1)
+      const rh = Math.max(rect.height, 1)
+      const bx = clientX - rect.left
+      const by = clientY - rect.top
       pointerRef.current = {
-        x: (clientX - rect.left) / w,
-        y: (clientY - rect.top) / h,
+        x: Math.min(1, Math.max(0, bx / rw)),
+        y: Math.min(1, Math.max(0, by / rh)),
       }
     },
     []
@@ -527,33 +532,19 @@ export default function CanvasBackground(): JSX.Element {
     const container = containerRef.current
     if (!canvas || !container) return
 
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
-    const bufferLight = document.createElement('canvas')
-    const bufferDark = document.createElement('canvas')
-    const ctxLight = bufferLight.getContext('2d')
-    const ctxDark = bufferDark.getContext('2d')
-    if (!ctxLight || !ctxDark) return
+    /** Fixed backing store for the session — avoids iOS URL-bar resize clearing the buffer and re-running init. */
+    const W = Math.max(1, window.innerWidth)
+    const H = Math.round(Math.max(1, window.innerHeight) * 1.5)
+    canvas.width = W
+    canvas.height = H
+    canvasBufferRef.current = { w: W, h: H }
+    initNetwork(W, H)
 
     let time = 0
     let lastFrameMs = performance.now()
-
-    const setSize = (): void => {
-      if (!container.parentElement) return
-      const rect = container.getBoundingClientRect()
-      const w = Math.max(rect.width, 1)
-      const h = Math.max(rect.height, 1)
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w
-        canvas.height = h
-        bufferLight.width = w
-        bufferLight.height = h
-        bufferDark.width = w
-        bufferDark.height = h
-        initNetwork(w, h)
-      }
-    }
 
     const onScroll = (): void => {
       scrollRef.current = window.scrollY || 0
@@ -569,7 +560,6 @@ export default function CanvasBackground(): JSX.Element {
     })
 
     const tick = (): void => {
-      setSize()
       const nowMs = performance.now()
       // Wall-clock delta so motion keeps pace when Chrome drops frames (e.g. theme style flush).
       const rawDt = nowMs - lastFrameMs
@@ -623,82 +613,46 @@ export default function CanvasBackground(): JSX.Element {
       }
 
       /*
-       * Theme crossfade: render light + dark at full opacity into offscreen buffers, then
-       * composite onto the main canvas. Drawing twice with globalAlpha on the *same* context
-       * composites over the previous frame incorrectly; buffers keep the blend correct.
-       * Steady-state uses a single draw to the main canvas (no extra copies).
+       * Settled: one draw. Mid theme-blend: light + dark stacked with alpha (smooth crossfade).
+       * Wall-clock `time` (above) keeps motion alive if frames drop during the heavier blend pass.
        */
       const EPS = 0.002
+      const draw = (isDark: boolean): void =>
+        drawNeuralNetwork(
+          ctx,
+          width,
+          height,
+          nodes,
+          connections,
+          time,
+          px,
+          py,
+          scrollParallax,
+          isDark
+        )
+
       if (blend <= EPS) {
-        drawNeuralNetwork(
-          ctx,
-          width,
-          height,
-          nodes,
-          connections,
-          time,
-          px,
-          py,
-          scrollParallax,
-          false
-        )
+        draw(false)
       } else if (blend >= 1 - EPS) {
-        drawNeuralNetwork(
-          ctx,
-          width,
-          height,
-          nodes,
-          connections,
-          time,
-          px,
-          py,
-          scrollParallax,
-          true
-        )
+        draw(true)
       } else {
-        drawNeuralNetwork(
-          ctxLight,
-          width,
-          height,
-          nodes,
-          connections,
-          time,
-          px,
-          py,
-          scrollParallax,
-          false
-        )
-        drawNeuralNetwork(
-          ctxDark,
-          width,
-          height,
-          nodes,
-          connections,
-          time,
-          px,
-          py,
-          scrollParallax,
-          true
-        )
-        ctx.setTransform(1, 0, 0, 1, 0, 0)
-        ctx.clearRect(0, 0, width, height)
-        ctx.drawImage(bufferLight, 0, 0)
+        ctx.save()
+        ctx.globalAlpha = 1 - blend
+        draw(false)
+        ctx.restore()
+        ctx.save()
         ctx.globalAlpha = blend
-        ctx.drawImage(bufferDark, 0, 0)
-        ctx.globalAlpha = 1
+        draw(true)
+        ctx.restore()
       }
 
       frameRef.current = requestAnimationFrame(tick)
     }
 
-    setSize()
+    scrollRef.current = window.scrollY || 0
     frameRef.current = requestAnimationFrame(tick)
 
-    const resizeObserver = new ResizeObserver(() => setSize())
-    resizeObserver.observe(container)
-
     return () => {
-      resizeObserver.disconnect()
       cancelAnimationFrame(frameRef.current)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('pointermove', onWindowPointerMove)
@@ -706,15 +660,11 @@ export default function CanvasBackground(): JSX.Element {
   }, [initNetwork, updatePointerFromClient])
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 -z-10 overflow-hidden"
-      aria-hidden
-    >
+    <div ref={containerRef} className="fixed inset-0 -z-10" aria-hidden>
       <canvas
         ref={canvasRef}
-        className="block w-full h-full"
-        style={{ width: '100%', height: '100%', display: 'block' }}
+        className="absolute left-1/2 -top-[40px] block h-auto max-h-none max-w-none min-h-[150vh] min-w-full -translate-x-1/2"
+        style={{ display: 'block', width: 'auto' }}
       />
     </div>
   )
