@@ -34,7 +34,7 @@ const Experience = (): JSX.Element => {
             }`}
           >
             {index !== experience.jobs.length - 1 && (
-              <div className="absolute left-[11px] top-6 w-0.5 h-full bg-blue-200 dark:bg-blue-800"></div>
+              <div className="absolute left-[9px] top-6 w-0.5 h-full bg-blue-200 dark:bg-blue-800"></div>
             )}
 
             <div className="absolute left-0 top-2 w-5 h-5 rounded-full border-4 border-blue-500 bg-white dark:bg-gray-900"></div>
