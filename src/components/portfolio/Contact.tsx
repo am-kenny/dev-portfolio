@@ -1,6 +1,9 @@
+/**
+ * Contact: `#contact`. When `dataSource === 'api'`, POSTs the form to `config.endpoints.contact` and shows a two-column layout on desktop;
+ * otherwise mailto/tel/social only (desktop: centered link row; mobile: card stack).
+ */
 import { useState, type FormEvent } from 'react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import HeroStyleGlow from '../common/HeroStyleGlow'
 import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { dataSource } from '../../services/dataSource'
@@ -275,7 +278,6 @@ const Contact = (): JSX.Element => {
       <section className="md:hidden py-20 text-slate-900 dark:text-white overflow-visible">
         <SectionContent maxWidth="4xl">
           <div className="relative overflow-visible px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-14">
-            <HeroStyleGlow />
             <div className="relative z-10">
               <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
                 Get in touch
@@ -316,11 +318,9 @@ const Contact = (): JSX.Element => {
         </SectionContent>
       </section>
 
-      {/* Desktop: Bento two-card layout when API, else centered pills */}
       <section className="hidden md:block py-20 text-slate-900 dark:text-white overflow-visible">
         <SectionContent maxWidth="4xl">
           <div className="relative overflow-visible px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-14">
-            <HeroStyleGlow />
             <div className="relative z-10">
               {apiAvailable ? (
                 <>

@@ -1,18 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 
-/** Must match `index.css` `--theme-transition-duration` (0.45s → 450ms) */
+/** Matches `index.css` `--theme-transition-duration` (0.45s → 450ms). */
 const THEME_BLEND_MS = 450
 
-/**
- * Light theme neural network colors (edges + nodes + pulses).
- * Change this one line to try another look:
- * - **darklite** — same cyan / blue / violet family as dark theme (default)
- * - **honey** — rich gold & amber (warm paper)
- * - **coral** — peach & soft rose (sunset warmth)
- * - **seaglass** — aqua & mint (fresh, calm)
- * - **lavender** — lilac & periwinkle (soft, premium)
- */
+/** Light-mode palette for edges/links/nodes: `darklite` (default) mirrors dark hues; others shift hues in `lightNeuralDisplayHue`. */
 export type LightNeuralTheme =
   | 'darklite'
   | 'honey'
@@ -31,8 +23,7 @@ function lightNeuralDisplayHue(
     case 'darklite':
       return ((nodeHue % 360) + 360) % 360
     case 'honey':
-      // ~43–54° = true gold (less orange), still varied per node
-      return 43 + t * 11
+      return 43 + t * 11 // gold band ~43–54°
     case 'coral':
       return 6 + t * 26
     case 'seaglass':
@@ -85,8 +76,7 @@ function createNodes(count: number, width: number, height: number): Node[] {
 
     nodes.push({
       x: width * (0.18 + Math.random() * 0.64),
-      // allow nodes to live well above and below the viewport
-      // so parallax scrolling never reveals an empty band of plain background
+      // Wider Y range keeps content visible when parallax moves the graph
       y: height * (-0.4 + Math.random() * 2.2),
       vx: (Math.random() - 0.5) * 0.08,
       vy: (Math.random() - 0.5) * 0.08,
@@ -157,7 +147,6 @@ function drawNeuralNetwork(
     ctx.fillStyle = glowGradient
     ctx.fillRect(-width, -height, width * 3, height * 3)
   } else if (LIGHT_NEURAL_THEME === 'darklite') {
-    // Warm neutral paper — no blue/slate cast; neon graph provides the cool colors
     const verticalGradient = ctx.createLinearGradient(0, -height, 0, height * 2)
     verticalGradient.addColorStop(0, '#fffdfb')
     verticalGradient.addColorStop(0.45, '#faf7f3')
@@ -175,14 +164,11 @@ function drawNeuralNetwork(
     mistGlow.addColorStop(0.42, 'rgba(254, 215, 170, 0.12)')
     mistGlow.addColorStop(1, 'rgba(255, 253, 251, 0)')
 
-    // No gray “corner depth” here — stone tints read as dirty on warm paper
-
     ctx.fillStyle = verticalGradient
     ctx.fillRect(-width, -height, width * 3, height * 3)
     ctx.fillStyle = mistGlow
     ctx.fillRect(-width, -height, width * 3, height * 3)
   } else {
-    // Warm golden paper + honey atmosphere
     const verticalGradient = ctx.createLinearGradient(0, -height, 0, height * 2)
     verticalGradient.addColorStop(0, '#fffbf5')
     verticalGradient.addColorStop(0.42, '#fff5e8')
@@ -223,7 +209,7 @@ function drawNeuralNetwork(
   const px = pointerX * width
   const py = pointerY * height - scrollParallax * 0.4
 
-  // `lighter` only works on dark pixels; on warm paper it washes neon out — use source-over for light darklite
+  // Dark: additive glow; light `darklite`: `lighter` dulls on warm paper — use normal blend
   ctx.globalCompositeOperation = isDark ? 'lighter' : 'source-over'
   ctx.lineCap = 'round'
 
@@ -410,7 +396,7 @@ function drawNeuralNetwork(
       const bh = lightNeuralDisplayHue(baseHue, LIGHT_NEURAL_THEME)
       const glowCore = 0.55 + (hubBoost - 1) * 0.15
       const glowMid = 0.38 + (hubBoost - 1) * 0.1
-      // Fade to paper (#fffdfb) — never use `transparent` (interpolates via gray/black and looks muddy)
+      // Match paper tint at edge; `transparent` interpolates muddy with hsla stops
       gradient.addColorStop(0, `hsla(${bh}, 100%, 58%, ${glowCore})`)
       gradient.addColorStop(0.3, `hsla(${bh + 10}, 92%, 70%, ${glowMid * 0.9})`)
       gradient.addColorStop(0.52, `hsla(${bh + 6}, 78%, 86%, ${glowMid * 0.5})`)
@@ -468,9 +454,13 @@ function drawNeuralNetwork(
   ctx.restore()
 }
 
+/**
+ * Site background: fixed canvas with neural animation, light/dark fills, scroll parallax,
+ * pointer highlight, and eased crossfade when `theme` changes (see `THEME_BLEND_MS`).
+ */
 export default function CanvasBackground(): JSX.Element {
   const { theme } = useTheme()
-  /** 0 = light scene, 1 = dark scene — used for crossfading canvas draws */
+  /** 0 = light draw weight, 1 = dark; eases during theme change */
   const themeBlendRef = useRef(theme === 'dark' ? 1 : 0)
   const themeTransitionRef = useRef<ThemeTransition | null>(null)
 
@@ -494,10 +484,10 @@ export default function CanvasBackground(): JSX.Element {
   const pointerRef = useRef({ x: 0.5, y: 0.5 })
   const nodesRef = useRef<Node[]>([])
   const connectionsRef = useRef<Connection[]>([])
-  // store raw scroll position for parallax
   const scrollRef = useRef(0)
-  /** Backing-store size (fixed for session); displayed 1:1 in CSS px, top-left in container (no % / object-fit). */
+  /** Logical canvas CSS px; backing store = size × `dprRef`. Resize policy differs by pointer/hover (see effect). */
   const canvasBufferRef = useRef({ w: 0, h: 0 })
+  const dprRef = useRef(1)
 
   const initNetwork = useCallback((width: number, height: number) => {
     if (width <= 0 || height <= 0) return
@@ -508,7 +498,7 @@ export default function CanvasBackground(): JSX.Element {
     connectionsRef.current = connections
   }, [])
 
-  /** Full-viewport background is behind content (`-z-10`), so div `pointermove` never fires over the page — track on `window`. */
+  /** Canvas is behind content (`-z-10`); pointer normalized from `window` events. */
   const updatePointerFromClient = useCallback(
     (clientX: number, clientY: number) => {
       const canvas = canvasRef.current
@@ -535,13 +525,62 @@ export default function CanvasBackground(): JSX.Element {
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
-    /** Fixed backing store for the session — avoids iOS URL-bar resize clearing the buffer and re-running init. */
-    const W = Math.max(1, window.innerWidth)
-    const H = Math.round(Math.max(1, window.innerHeight) * 1.5)
-    canvas.width = W
-    canvas.height = H
-    canvasBufferRef.current = { w: W, h: H }
-    initNetwork(W, H)
+    /** Width/height from viewport metrics; extra height for `-top-[40px]` and parallax. */
+    const readLogicalSize = (): { w: number; h: number } => {
+      const vv = window.visualViewport
+      const de = document.documentElement
+      const iw = Math.max(1, window.innerWidth)
+      const ih = Math.max(1, window.innerHeight)
+      const cw = de?.clientWidth ? Math.max(1, de.clientWidth) : iw
+      const ch = de?.clientHeight ? Math.max(1, de.clientHeight) : ih
+      const vvW = vv && vv.width > 0 ? vv.width : 0
+      const vvH = vv && vv.height > 0 ? vv.height : 0
+      const W = Math.round(Math.max(iw, cw, vvW))
+      const topLiftPx = 40
+      const hBase = Math.max(ih, ch, vvH, 1)
+      const H = Math.round(Math.max(hBase * 1.5, hBase + topLiftPx + 48))
+      return { w: W, h: H }
+    }
+
+    const applyLogicalSize = (reinitNetwork: boolean): void => {
+      const { w: W, h: H } = readLogicalSize()
+      const dpr = Math.min(window.devicePixelRatio || 1, 3)
+      const prev = canvasBufferRef.current
+      if (
+        prev.w === W &&
+        prev.h === H &&
+        dprRef.current === dpr &&
+        canvas.width > 0
+      ) {
+        return
+      }
+
+      canvasBufferRef.current = { w: W, h: H }
+      dprRef.current = dpr
+      canvas.width = Math.max(1, Math.round(W * dpr))
+      canvas.height = Math.max(1, Math.round(H * dpr))
+      canvas.style.width = `${W}px`
+      canvas.style.height = `${H}px`
+      if (reinitNetwork) initNetwork(W, H)
+    }
+
+    applyLogicalSize(true)
+
+    // Fine-pointer + hover: resize redraw; otherwise iOS-friendly single init for the session
+    const shouldReactToWindowResize = window.matchMedia(
+      '(hover: hover) and (pointer: fine)'
+    ).matches
+    let resizeDebounce: ReturnType<typeof setTimeout> | undefined
+    const onResize = (): void => {
+      if (resizeDebounce !== undefined) clearTimeout(resizeDebounce)
+      resizeDebounce = setTimeout(() => {
+        resizeDebounce = undefined
+        applyLogicalSize(true)
+      }, 160)
+    }
+    if (shouldReactToWindowResize) {
+      window.addEventListener('resize', onResize, { passive: true })
+    }
 
     let time = 0
     let lastFrameMs = performance.now()
@@ -561,27 +600,24 @@ export default function CanvasBackground(): JSX.Element {
 
     const tick = (): void => {
       const nowMs = performance.now()
-      // Wall-clock delta so motion keeps pace when Chrome drops frames (e.g. theme style flush).
       const rawDt = nowMs - lastFrameMs
       lastFrameMs = nowMs
       const dt = Math.min(64, Math.max(0, rawDt))
+      // Wall clock: stable motion when frames drop (e.g. theme transition)
       time += dt > 0 ? dt : 16
-      const width = canvas.width
-      const height = canvas.height
+      const { w: width, h: height } = canvasBufferRef.current
       if (width <= 0 || height <= 0) {
         frameRef.current = requestAnimationFrame(tick)
         return
       }
       const { x: px, y: py } = pointerRef.current
       const scrollAmount = scrollRef.current
-      // smaller, clamped parallax factor, since nodes now span far beyond viewport
       let scrollParallax = (scrollAmount / Math.max(height, 1)) * 24
       scrollParallax = Math.max(-120, Math.min(120, scrollParallax))
 
       const nodes = nodesRef.current
       const connections = connectionsRef.current
 
-      // drift nodes very subtly for a living feel
       nodes.forEach((node) => {
         const t = time * 0.00012 + node.pulseOffset
         node.vx += Math.sin(t * 1.7) * 0.002
@@ -612,10 +648,7 @@ export default function CanvasBackground(): JSX.Element {
         }
       }
 
-      /*
-       * Settled: one draw. Mid theme-blend: light + dark stacked with alpha (smooth crossfade).
-       * Wall-clock `time` (above) keeps motion alive if frames drop during the heavier blend pass.
-       */
+      // Single pass when blend ~0|1; else stack light/dark with alpha. `time` already wall-clock.
       const EPS = 0.002
       const draw = (isDark: boolean): void =>
         drawNeuralNetwork(
@@ -630,6 +663,8 @@ export default function CanvasBackground(): JSX.Element {
           scrollParallax,
           isDark
         )
+
+      ctx.setTransform(dprRef.current, 0, 0, dprRef.current, 0, 0)
 
       if (blend <= EPS) {
         draw(false)
@@ -654,6 +689,10 @@ export default function CanvasBackground(): JSX.Element {
 
     return () => {
       cancelAnimationFrame(frameRef.current)
+      if (resizeDebounce !== undefined) clearTimeout(resizeDebounce)
+      if (shouldReactToWindowResize) {
+        window.removeEventListener('resize', onResize)
+      }
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('pointermove', onWindowPointerMove)
     }
@@ -663,8 +702,7 @@ export default function CanvasBackground(): JSX.Element {
     <div ref={containerRef} className="fixed inset-0 -z-10" aria-hidden>
       <canvas
         ref={canvasRef}
-        className="absolute left-1/2 -top-[40px] block h-auto max-h-none max-w-none min-h-[150vh] min-w-full -translate-x-1/2"
-        style={{ display: 'block', width: 'auto' }}
+        className="absolute left-1/2 -top-[40px] block max-h-none max-w-none -translate-x-1/2"
       />
     </div>
   )

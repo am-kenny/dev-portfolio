@@ -1,4 +1,6 @@
-import HeroStyleGlow from '../common/HeroStyleGlow'
+/**
+ * Above-the-fold intro: name and title from `personalInfo`, CTAs to `#projects` and `#contact`.
+ */
 import { scrollToSection } from '../../utils/scroll'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
@@ -23,8 +25,6 @@ const Hero = (): JSX.Element => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-visible px-6 py-10 sm:px-10 sm:py-14 md:px-14 md:py-16">
-            <HeroStyleGlow />
-
             <div className="relative z-10 text-center space-y-6 md:space-y-7">
               <p className="text-xs uppercase tracking-[0.35em] text-sky-600 dark:text-sky-300/80 drop-shadow-[0_1px_12px_rgba(14,165,233,0.2)] dark:drop-shadow-none">
                 Portfolio
