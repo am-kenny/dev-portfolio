@@ -3,7 +3,7 @@
  * otherwise mailto/tel/social only (desktop: centered link row; mobile: card stack).
  */
 import { useState, type FormEvent } from 'react'
-import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import { FaDownload, FaGithub, FaLinkedin } from 'react-icons/fa'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
@@ -19,6 +19,59 @@ const platformIcons: Record<string, typeof FaGithub> = {
 const platformLabels: Record<string, string> = {
   github: 'GitHub',
   linkedin: 'LinkedIn',
+}
+
+const downloadCvSeparatorWrap =
+  'mt-8 w-full border-t border-slate-200/50 pt-8 dark:border-gray-600/45'
+
+const downloadCvSeparatorWrapPills =
+  'mt-10 w-full max-w-2xl border-t border-slate-200/50 pt-10 dark:border-gray-600/45 flex justify-center'
+
+const downloadCvButtonClass =
+  'inline-flex items-center justify-center gap-2 rounded-full border border-slate-300/90 bg-white/70 px-6 py-2.5 text-sm font-medium text-slate-800 shadow-[0_4px_20px_rgba(15,23,42,0.06)] transition-colors hover:bg-white/95 hover:border-slate-400 dark:border-slate-500/70 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-800/80 dark:shadow-none'
+
+function downloadCvLinkProps(
+  href: string
+):
+  | { target: '_blank'; rel: 'noopener noreferrer' }
+  | { download: string | true } {
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return { target: '_blank', rel: 'noopener noreferrer' }
+  }
+  const pathOnly = href.split('?')[0] ?? href
+  const segment = pathOnly.split('/').filter(Boolean).pop()
+  if (segment?.includes('.')) {
+    return { download: segment }
+  }
+  return { download: true }
+}
+
+function DownloadCvLink({
+  href,
+  fullWidth,
+}: {
+  href: string
+  fullWidth?: boolean
+}): JSX.Element {
+  return (
+    <a
+      href={href}
+      {...downloadCvLinkProps(href)}
+      className={`${downloadCvButtonClass}${fullWidth ? ' w-full' : ''}`}
+      aria-label="Download CV"
+    >
+      <FaDownload className="h-4 w-4 flex-shrink-0 opacity-80" aria-hidden />
+      <span>Download CV</span>
+    </a>
+  )
+}
+
+function getCvUrl(
+  contact: PortfolioData['contact'] | undefined
+): string | undefined {
+  const raw =
+    contact && typeof contact.cvUrl === 'string' ? contact.cvUrl.trim() : ''
+  return raw || undefined
 }
 
 function getPlatformLabel(platform: string | undefined): string {
@@ -215,7 +268,10 @@ const Contact = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="py-20 text-slate-900 dark:text-white">
+      <section
+        id="contact"
+        className="pt-20 pb-36 md:pb-44 text-slate-900 dark:text-white"
+      >
         <SectionContent maxWidth="4xl">
           <div className="text-center text-lg text-slate-500 dark:text-gray-400">
             Loading...
@@ -272,9 +328,10 @@ const Contact = (): JSX.Element => {
   const hasPhone = contact?.phone
   const hasSocial = contact?.socialLinks?.length
   const hasAnyLink = hasEmail || hasPhone || hasSocial
+  const cvUrl = getCvUrl(contact)
 
   return (
-    <div id="contact">
+    <div id="contact" className="pb-16 md:pb-24">
       {/* Bento: mobile only */}
       <section className="md:hidden py-20 text-slate-900 dark:text-white overflow-visible">
         <SectionContent maxWidth="4xl">
@@ -299,6 +356,11 @@ const Contact = (): JSX.Element => {
                     <div className="flex flex-col gap-3">
                       <ContactLinks contact={contact} personal={personal} />
                     </div>
+                    {cvUrl && (
+                      <div className={downloadCvSeparatorWrap}>
+                        <DownloadCvLink href={cvUrl} fullWidth />
+                      </div>
+                    )}
                   </div>
                 </ScrollReveal>
                 {apiAvailable && (
@@ -389,6 +451,11 @@ const Contact = (): JSX.Element => {
                             })}
                           </div>
                         ) : null}
+                        {cvUrl && (
+                          <div className={downloadCvSeparatorWrap}>
+                            <DownloadCvLink href={cvUrl} />
+                          </div>
+                        )}
                       </div>
                     </ScrollReveal>
                     <ScrollReveal index={2} className="w-full">
@@ -416,44 +483,60 @@ const Contact = (): JSX.Element => {
                       {tagline}
                     </p>
                   </ScrollReveal>
-                  {hasAnyLink && (
+                  {(hasAnyLink || cvUrl) && (
                     <ScrollReveal index={1} className="w-full">
-                      <div className="flex flex-wrap justify-center gap-3">
-                        {hasEmail && (
-                          <a
-                            href={`mailto:${contact?.email || personal?.email}`}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
-                          >
-                            {iconEmail}
-                            <span>Email</span>
-                          </a>
+                      <div className="flex flex-col items-center gap-4">
+                        {hasAnyLink && (
+                          <div className="flex flex-wrap justify-center gap-3 w-full">
+                            {hasEmail && (
+                              <a
+                                href={`mailto:${contact?.email || personal?.email}`}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                              >
+                                {iconEmail}
+                                <span>Email</span>
+                              </a>
+                            )}
+                            {hasPhone && (
+                              <a
+                                href={`tel:${contact!.phone}`}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                              >
+                                {iconPhone}
+                                <span>Phone</span>
+                              </a>
+                            )}
+                            {contact?.socialLinks?.map((link) => {
+                              const Icon =
+                                platformIcons[
+                                  link.platform?.toLowerCase() ?? ''
+                                ] ?? null
+                              return (
+                                <a
+                                  key={link.platform ?? link.url}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                                >
+                                  {Icon ? <Icon className="w-5 h-5" /> : null}
+                                  <span>{getPlatformLabel(link.platform)}</span>
+                                </a>
+                              )
+                            })}
+                          </div>
                         )}
-                        {hasPhone && (
-                          <a
-                            href={`tel:${contact!.phone}`}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                        {cvUrl && (
+                          <div
+                            className={
+                              hasAnyLink
+                                ? downloadCvSeparatorWrapPills
+                                : 'flex justify-center'
+                            }
                           >
-                            {iconPhone}
-                            <span>Phone</span>
-                          </a>
+                            <DownloadCvLink href={cvUrl} />
+                          </div>
                         )}
-                        {contact?.socialLinks?.map((link) => {
-                          const Icon =
-                            platformIcons[link.platform?.toLowerCase() ?? ''] ??
-                            null
-                          return (
-                            <a
-                              key={link.platform ?? link.url}
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
-                            >
-                              {Icon ? <Icon className="w-5 h-5" /> : null}
-                              <span>{getPlatformLabel(link.platform)}</span>
-                            </a>
-                          )
-                        })}
                       </div>
                     </ScrollReveal>
                   )}

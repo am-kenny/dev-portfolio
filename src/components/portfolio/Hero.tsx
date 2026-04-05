@@ -10,7 +10,10 @@ const Hero = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="min-h-screen flex items-center justify-center text-slate-600 dark:text-slate-400 py-24">
+      <section
+        id="hero"
+        className="min-h-screen flex items-center justify-center text-slate-600 dark:text-slate-400 py-24"
+      >
         <p className="text-lg md:text-2xl tracking-wide">Loading portfolio…</p>
       </section>
     )
@@ -21,7 +24,10 @@ const Hero = (): JSX.Element => {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center text-slate-900 dark:text-slate-100 py-24">
+    <section
+      id="hero"
+      className="min-h-screen flex items-center justify-center text-slate-900 dark:text-slate-100 py-24"
+    >
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-visible px-6 py-10 sm:px-10 sm:py-14 md:px-14 md:py-16">

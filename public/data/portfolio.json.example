@@ -11,6 +11,7 @@
   "contact": {
     "email": "your.email@example.com",
     "phone": "+1 (555) 123-4567",
+    "cvUrl": "/cv.pdf",
     "socialLinks": [
       { "platform": "github", "url": "https://github.com/yourusername" },
       {

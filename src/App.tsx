@@ -22,6 +22,7 @@ import { pageTitles } from './constants/titleMap'
 import { isAdminEnabled } from './services/dataSource'
 import DataErrorPage from './components/common/DataErrorPage'
 import CanvasBackground from './components/common/CanvasBackground'
+import SectionNav from './components/common/SectionNav'
 import NotFound from './pages/NotFound'
 import type { ReactNode } from 'react'
 
@@ -35,6 +36,7 @@ const PortfolioLayout = (): JSX.Element => (
     <div className="fixed top-4 right-4 z-50">
       <ThemeToggle />
     </div>
+    <SectionNav />
     <Portfolio />
   </>
 )

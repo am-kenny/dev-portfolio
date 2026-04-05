@@ -37,7 +37,7 @@ const About = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="py-20">
+      <section id="about" className="py-20">
         <SectionContent maxWidth="5xl">
           <div className="text-center text-lg text-gray-400 dark:text-gray-500">
             Loading...

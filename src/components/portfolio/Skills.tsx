@@ -9,7 +9,7 @@ const Skills = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section className="py-20">
+      <section id="skills" className="py-20">
         <SectionContent maxWidth="5xl">
           <div className="text-center">
             <div className="animate-pulse">
