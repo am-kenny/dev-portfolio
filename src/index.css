@@ -79,6 +79,13 @@ html.dark body {
   .theme-glow-crossfade {
     transition-duration: 0.01ms !important;
   }
+
+  .scroll-reveal,
+  .scroll-reveal.scroll-reveal--visible {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }
 
 /* Light/dark stacks behind copy (Hero, Projects): opacity only, same tokens */
@@ -108,6 +115,28 @@ html.dark body {
 
 .animate-fade-in {
   animation: fade-in 1s ease-out;
+}
+
+/* Scroll-triggered staggered cards (Skills / Experience / Projects) */
+@keyframes scroll-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.scroll-reveal.scroll-reveal--visible {
+  animation: scroll-reveal-in 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
 }
 
 /* Blob animation for background decoration */

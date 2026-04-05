@@ -115,7 +115,12 @@ const DebugRoute = (): JSX.Element => {
 function App(): JSX.Element {
   return (
     <PortfolioProvider>
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <PageTitle />
         <Routes>
           <Route path="/" element={<PortfolioWithDataCheck />} />

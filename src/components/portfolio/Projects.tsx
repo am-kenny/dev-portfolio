@@ -3,6 +3,7 @@
  * then expandable grid for the rest. Accepts `projects.projects` or `projects.items` from API/static data.
  */
 import { useState } from 'react'
+import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
@@ -128,26 +129,33 @@ const Projects = (): JSX.Element => {
       <div id="projects" className="scroll-mt-20" aria-hidden="true" />
       <section className="py-20" aria-labelledby="projects-heading">
         <SectionContent maxWidth="5xl">
-          <h2
-            id="projects-heading"
-            className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_26px_rgba(56,189,248,0.18),0_2px_12px_rgba(139,92,246,0.07)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
-          >
-            Projects
-          </h2>
+          <ScrollReveal index={0} className="w-full">
+            <h2
+              id="projects-heading"
+              className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_26px_rgba(56,189,248,0.18),0_2px_12px_rgba(139,92,246,0.07)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
+            >
+              Projects
+            </h2>
+          </ScrollReveal>
           <div className={hasMore ? 'relative' : ''}>
             <div className="space-y-12">
               {initialItems.map((project, index) => (
-                <ProjectCard
+                <ScrollReveal
                   key={
                     project.github ?? project.link ?? `${project.name}-${index}`
                   }
-                  project={project}
-                  index={index}
-                  reverse={index % 2 === 1}
-                  hideImageShadow={
-                    hasMore && !showAll && index === initialItems.length - 1
-                  }
-                />
+                  index={index + 1}
+                  className="w-full"
+                >
+                  <ProjectCard
+                    project={project}
+                    index={index}
+                    reverse={index % 2 === 1}
+                    hideImageShadow={
+                      hasMore && !showAll && index === initialItems.length - 1
+                    }
+                  />
+                </ScrollReveal>
               ))}
             </div>
             {hasMore && !showAll && (
@@ -165,18 +173,26 @@ const Projects = (): JSX.Element => {
                 <div
                   className={`pt-12 space-y-12 ${showAll ? 'opacity-100' : 'opacity-0'}`}
                 >
-                  {moreItems.map((project, i) => (
-                    <ProjectCard
-                      key={
-                        project.github ??
-                        project.link ??
-                        `${project.name}-${VISIBLE_INITIALLY + i}`
-                      }
-                      project={project}
-                      index={VISIBLE_INITIALLY + i}
-                      reverse={(VISIBLE_INITIALLY + i) % 2 === 1}
-                    />
-                  ))}
+                  {moreItems.map((project, i) => {
+                    const globalIndex = VISIBLE_INITIALLY + i
+                    return (
+                      <ScrollReveal
+                        key={
+                          project.github ??
+                          project.link ??
+                          `${project.name}-${globalIndex}`
+                        }
+                        index={globalIndex + 1}
+                        className="w-full"
+                      >
+                        <ProjectCard
+                          project={project}
+                          index={globalIndex}
+                          reverse={globalIndex % 2 === 1}
+                        />
+                      </ScrollReveal>
+                    )
+                  })}
                 </div>
               </div>
             </div>

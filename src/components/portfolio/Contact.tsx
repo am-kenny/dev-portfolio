@@ -4,6 +4,7 @@
  */
 import { useState, type FormEvent } from 'react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { dataSource } from '../../services/dataSource'
@@ -279,38 +280,44 @@ const Contact = (): JSX.Element => {
         <SectionContent maxWidth="4xl">
           <div className="relative overflow-visible px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-14">
             <div className="relative z-10">
-              <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
-                Get in touch
-              </h2>
-              <p className="text-lg text-slate-600 dark:text-gray-300 text-center mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
-                {tagline}
-              </p>
+              <ScrollReveal index={0} className="w-full">
+                <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
+                  Get in touch
+                </h2>
+                <p className="text-lg text-slate-600 dark:text-gray-300 text-center mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
+                  {tagline}
+                </p>
+              </ScrollReveal>
               <div
                 className={`grid gap-6 ${apiAvailable ? 'md:grid-cols-2' : 'max-w-md mx-auto'}`}
               >
-                <div className="rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-sm p-8 shadow-lg shadow-slate-900/[0.06] hover:border-slate-300/90 dark:border-gray-700/80 dark:bg-gray-800/40 dark:shadow-xl dark:hover:border-gray-600/80">
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4 drop-shadow-[0_2px_14px_rgba(56,189,248,0.14)] dark:drop-shadow-none">
-                    Contact
-                  </h3>
-                  <div className="flex flex-col gap-3">
-                    <ContactLinks contact={contact} personal={personal} />
-                  </div>
-                </div>
-                {apiAvailable && (
+                <ScrollReveal index={1} className="w-full">
                   <div className="rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-sm p-8 shadow-lg shadow-slate-900/[0.06] hover:border-slate-300/90 dark:border-gray-700/80 dark:bg-gray-800/40 dark:shadow-xl dark:hover:border-gray-600/80">
-                    <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-5 drop-shadow-[0_2px_14px_rgba(56,189,248,0.14)] dark:drop-shadow-none">
-                      Send a message
+                    <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4 drop-shadow-[0_2px_14px_rgba(56,189,248,0.14)] dark:drop-shadow-none">
+                      Contact
                     </h3>
-                    <ContactFormBlock
-                      onSubmit={handleSubmit}
-                      submitting={submitting}
-                      submitStatus={submitStatus}
-                      submitError={submitError}
-                      inputClass={inputBase}
-                      buttonClass={buttonBase}
-                      formIdPrefix="1"
-                    />
+                    <div className="flex flex-col gap-3">
+                      <ContactLinks contact={contact} personal={personal} />
+                    </div>
                   </div>
+                </ScrollReveal>
+                {apiAvailable && (
+                  <ScrollReveal index={2} className="w-full">
+                    <div className="rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-sm p-8 shadow-lg shadow-slate-900/[0.06] hover:border-slate-300/90 dark:border-gray-700/80 dark:bg-gray-800/40 dark:shadow-xl dark:hover:border-gray-600/80">
+                      <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-5 drop-shadow-[0_2px_14px_rgba(56,189,248,0.14)] dark:drop-shadow-none">
+                        Send a message
+                      </h3>
+                      <ContactFormBlock
+                        onSubmit={handleSubmit}
+                        submitting={submitting}
+                        submitStatus={submitStatus}
+                        submitError={submitError}
+                        inputClass={inputBase}
+                        buttonClass={buttonBase}
+                        formIdPrefix="1"
+                      />
+                    </div>
+                  </ScrollReveal>
                 )}
               </div>
             </div>
@@ -324,121 +331,131 @@ const Contact = (): JSX.Element => {
             <div className="relative z-10">
               {apiAvailable ? (
                 <>
-                  <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
-                    Get in touch
-                  </h2>
+                  <ScrollReveal index={0} className="w-full">
+                    <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
+                      Get in touch
+                    </h2>
+                  </ScrollReveal>
                   <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 drop-shadow-[0_3px_18px_rgba(56,189,248,0.18),0_1px_8px_rgba(99,102,241,0.08)] dark:drop-shadow-[0_2px_14px_rgba(2,6,23,0.85)]">
-                        Contact Information
-                      </h3>
-                      <p className="text-lg text-slate-600 dark:text-gray-300 mb-6 leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
-                        {tagline}
-                      </p>
-                      <div className="flex flex-col gap-3">
-                        {(contact?.email || personal?.email) && (
-                          <a
-                            href={`mailto:${contact?.email || personal?.email}`}
-                            className="inline-flex items-center gap-2 text-slate-800 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                          >
-                            {iconEmail}
-                            <span>{contact?.email || personal?.email}</span>
-                          </a>
-                        )}
-                        {contact?.phone && (
-                          <a
-                            href={`tel:${contact.phone}`}
-                            className="inline-flex items-center gap-2 text-slate-800 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                          >
-                            {iconPhone}
-                            <span>{contact.phone}</span>
-                          </a>
-                        )}
-                      </div>
-                      {contact?.socialLinks?.length ? (
-                        <div className="flex flex-wrap gap-4 mt-4">
-                          {contact.socialLinks.map((link) => {
-                            const Icon =
-                              platformIcons[
-                                link.platform?.toLowerCase() ?? ''
-                              ] ?? null
-                            return (
-                              <a
-                                key={link.platform ?? link.url}
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-slate-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                              >
-                                {Icon ? (
-                                  <Icon className="w-5 h-5 flex-shrink-0" />
-                                ) : null}
-                                <span>{link.platform}</span>
-                              </a>
-                            )
-                          })}
+                    <ScrollReveal index={1} className="w-full">
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 drop-shadow-[0_3px_18px_rgba(56,189,248,0.18),0_1px_8px_rgba(99,102,241,0.08)] dark:drop-shadow-[0_2px_14px_rgba(2,6,23,0.85)]">
+                          Contact Information
+                        </h3>
+                        <p className="text-lg text-slate-600 dark:text-gray-300 mb-6 leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
+                          {tagline}
+                        </p>
+                        <div className="flex flex-col gap-3">
+                          {(contact?.email || personal?.email) && (
+                            <a
+                              href={`mailto:${contact?.email || personal?.email}`}
+                              className="inline-flex items-center gap-2 text-slate-800 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                            >
+                              {iconEmail}
+                              <span>{contact?.email || personal?.email}</span>
+                            </a>
+                          )}
+                          {contact?.phone && (
+                            <a
+                              href={`tel:${contact.phone}`}
+                              className="inline-flex items-center gap-2 text-slate-800 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                            >
+                              {iconPhone}
+                              <span>{contact.phone}</span>
+                            </a>
+                          )}
                         </div>
-                      ) : null}
-                    </div>
-                    <div>
-                      <ContactFormBlock
-                        onSubmit={handleSubmit}
-                        submitting={submitting}
-                        submitStatus={submitStatus}
-                        submitError={submitError}
-                        inputClass={inputBase}
-                        buttonClass={buttonBase}
-                        formIdPrefix="4"
-                      />
-                    </div>
+                        {contact?.socialLinks?.length ? (
+                          <div className="flex flex-wrap gap-4 mt-4">
+                            {contact.socialLinks.map((link) => {
+                              const Icon =
+                                platformIcons[
+                                  link.platform?.toLowerCase() ?? ''
+                                ] ?? null
+                              return (
+                                <a
+                                  key={link.platform ?? link.url}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 text-slate-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                                >
+                                  {Icon ? (
+                                    <Icon className="w-5 h-5 flex-shrink-0" />
+                                  ) : null}
+                                  <span>{link.platform}</span>
+                                </a>
+                              )
+                            })}
+                          </div>
+                        ) : null}
+                      </div>
+                    </ScrollReveal>
+                    <ScrollReveal index={2} className="w-full">
+                      <div>
+                        <ContactFormBlock
+                          onSubmit={handleSubmit}
+                          submitting={submitting}
+                          submitStatus={submitStatus}
+                          submitError={submitError}
+                          inputClass={inputBase}
+                          buttonClass={buttonBase}
+                          formIdPrefix="4"
+                        />
+                      </div>
+                    </ScrollReveal>
                   </div>
                 </>
               ) : (
                 <div className="max-w-2xl mx-auto text-center">
-                  <h2 className="text-4xl font-bold mb-3 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
-                    Get in touch
-                  </h2>
-                  <p className="text-lg text-slate-600 dark:text-gray-300 mb-8 leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
-                    {tagline}
-                  </p>
+                  <ScrollReveal index={0} className="w-full">
+                    <h2 className="text-4xl font-bold mb-3 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
+                      Get in touch
+                    </h2>
+                    <p className="text-lg text-slate-600 dark:text-gray-300 mb-8 leading-relaxed drop-shadow-[0_2px_18px_rgba(14,165,233,0.1)] dark:drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
+                      {tagline}
+                    </p>
+                  </ScrollReveal>
                   {hasAnyLink && (
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {hasEmail && (
-                        <a
-                          href={`mailto:${contact?.email || personal?.email}`}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
-                        >
-                          {iconEmail}
-                          <span>Email</span>
-                        </a>
-                      )}
-                      {hasPhone && (
-                        <a
-                          href={`tel:${contact!.phone}`}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
-                        >
-                          {iconPhone}
-                          <span>Phone</span>
-                        </a>
-                      )}
-                      {contact?.socialLinks?.map((link) => {
-                        const Icon =
-                          platformIcons[link.platform?.toLowerCase() ?? ''] ??
-                          null
-                        return (
+                    <ScrollReveal index={1} className="w-full">
+                      <div className="flex flex-wrap justify-center gap-3">
+                        {hasEmail && (
                           <a
-                            key={link.platform ?? link.url}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`mailto:${contact?.email || personal?.email}`}
                             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
                           >
-                            {Icon ? <Icon className="w-5 h-5" /> : null}
-                            <span>{getPlatformLabel(link.platform)}</span>
+                            {iconEmail}
+                            <span>Email</span>
                           </a>
-                        )
-                      })}
-                    </div>
+                        )}
+                        {hasPhone && (
+                          <a
+                            href={`tel:${contact!.phone}`}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                          >
+                            {iconPhone}
+                            <span>Phone</span>
+                          </a>
+                        )}
+                        {contact?.socialLinks?.map((link) => {
+                          const Icon =
+                            platformIcons[link.platform?.toLowerCase() ?? ''] ??
+                            null
+                          return (
+                            <a
+                              key={link.platform ?? link.url}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                            >
+                              {Icon ? <Icon className="w-5 h-5" /> : null}
+                              <span>{getPlatformLabel(link.platform)}</span>
+                            </a>
+                          )
+                        })}
+                      </div>
+                    </ScrollReveal>
                   )}
                 </div>
               )}

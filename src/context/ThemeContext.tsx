@@ -30,7 +30,7 @@ export const ThemeProvider = ({
         ? window.localStorage.getItem(STORAGE_KEY)
         : null
     if (stored === 'dark' || stored === 'light') return stored
-    return 'light'
+    return 'dark'
   })
 
   useLayoutEffect(() => {

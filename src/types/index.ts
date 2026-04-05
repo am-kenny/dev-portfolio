@@ -20,6 +20,7 @@ export interface PersonalSection {
 
 export interface AboutSection {
   content: string
+  image?: string
 }
 
 export interface ProjectItem {
