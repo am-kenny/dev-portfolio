@@ -25,6 +25,7 @@ const ContactConfigForm = ({
     initialData || {
       email: '',
       phone: '',
+      cvUrl: '',
       socialLinks: [],
     }
   )
@@ -166,6 +167,25 @@ const ContactConfigForm = ({
             }
             disabled={disabled}
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+            CV / résumé link
+          </label>
+          <input
+            type="text"
+            className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            placeholder="/cv.pdf or https://…"
+            value={contact.cvUrl ?? ''}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleFieldChange('cvUrl', e.target.value)
+            }
+            disabled={disabled}
+          />
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Optional. Shown as “Download CV” on the site when set.
+          </p>
         </div>
 
         <div>

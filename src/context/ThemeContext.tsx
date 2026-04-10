@@ -1,7 +1,7 @@
 import {
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from 'react'
@@ -30,10 +30,10 @@ export const ThemeProvider = ({
         ? window.localStorage.getItem(STORAGE_KEY)
         : null
     if (stored === 'dark' || stored === 'light') return stored
-    return 'light'
+    return 'dark'
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = window.document.documentElement
     if (theme === 'dark') {
       root.classList.add('dark')

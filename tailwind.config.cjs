@@ -5,10 +5,10 @@ module.exports = {
   theme: {
     extend: {
       transitionDuration: {
-        DEFAULT: '300ms',
+        theme: 'var(--theme-transition-duration)',
       },
       transitionTimingFunction: {
-        DEFAULT: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        theme: 'var(--theme-transition-easing)',
       },
     },
   },

@@ -2,34 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme transition: single timing for consistency (matches Tailwind duration-300 + ease) */
+/*
+ * Theme toggle — single source of truth for duration + easing.
+ * Used by: global `*` (paint only), `html` background, `.theme-glow-crossfade`,
+ * canvas blend (`CanvasBackground.tsx` THEME_BLEND_MS), and Tailwind `duration-theme` / `ease-theme`.
+ */
 :root {
-  --theme-transition-duration: 0.3s;
+  --theme-transition-duration: 0.45s;
   --theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Your custom styles below */
 html {
   scroll-behavior: smooth;
-  background-color: #ffffff;
-  transition: background-color var(--theme-transition-duration)
-    var(--theme-transition-easing);
+  /* Light theme: warm dawn paper — cream / stone (no cool blue cast) */
+  background-color: #f5f0eb;
+  background-image:
+    linear-gradient(165deg, #fffdfb 0%, #faf6f1 38%, #f0ebe6 100%),
+    radial-gradient(
+      ellipse 100% 70% at 50% -5%,
+      rgba(251, 191, 36, 0.09) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 45% at 100% 100%,
+      rgba(214, 211, 209, 0.35) 0%,
+      transparent 50%
+    );
+  transition-property: background-color, background-image;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-easing);
 }
 
 html.dark {
-  background-color: #111827;
+  background-color: #020617;
+  background-image:
+    radial-gradient(circle at top, #1d293b 0, #020617 55%),
+    radial-gradient(circle at bottom, #000000 0, #020617 65%);
 }
 
-/* Smooth theme transition: animate color changes when light/dark is toggled */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: transparent;
+  color: #1c1917;
+}
+
+html.dark body {
+  color: #e5e7eb;
+}
+
+/*
+ * Theme / mode paint only (single timing). Omit box-shadow, filter, backdrop-filter here —
+ * transitioning those on every node tanks Chrome when `html.dark` toggles.
+ * Motion (transform, opacity) stays local — `.skill-card`, `.theme-glow-crossfade`, etc.
+ */
 *,
 *::before,
 *::after {
-  transition:
-    background-color var(--theme-transition-duration)
-      var(--theme-transition-easing),
-    color var(--theme-transition-duration) var(--theme-transition-easing),
-    border-color var(--theme-transition-duration) var(--theme-transition-easing),
-    fill var(--theme-transition-duration) var(--theme-transition-easing);
+  transition-property:
+    background-color, background-image, background-size, color, border-color,
+    fill, stroke, text-decoration-color, outline-color;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  html {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .theme-glow-crossfade {
+    transition-duration: 0.01ms !important;
+  }
+
+  .scroll-reveal,
+  .scroll-reveal.scroll-reveal--visible {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* Light/dark stacks behind copy (Hero, Projects): opacity only, same tokens */
+.theme-glow-crossfade {
+  transition-property: opacity;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-easing);
 }
 
 /* Skills section: ensure background transitions smoothly (not overridden by Tailwind) */
@@ -52,6 +115,28 @@ html.dark {
 
 .animate-fade-in {
   animation: fade-in 1s ease-out;
+}
+
+/* Scroll-triggered staggered cards (Skills / Experience / Projects) */
+@keyframes scroll-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.scroll-reveal.scroll-reveal--visible {
+  animation: scroll-reveal-in 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
 }
 
 /* Blob animation for background decoration */
@@ -131,6 +216,148 @@ html.dark {
 .dark .glass {
   background: rgba(31, 41, 55, 0.5);
   border: 1px solid rgba(75, 85, 99, 0.5);
+}
+
+/* Futuristic animated background */
+.futuristic-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(59, 130, 246, 0.35),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(236, 72, 153, 0.3),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 0% 80%,
+      rgba(56, 189, 248, 0.25),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(129, 140, 248, 0.35),
+      transparent 55%
+    ),
+    linear-gradient(135deg, #020617 0%, #020617 40%, #020617 100%);
+  background-size: 180% 180%;
+  animation: bg-pan 14s linear infinite;
+  transform: translate3d(
+      calc(var(--pointer-x, 0) * 32px),
+      calc(var(--pointer-y, 0) * 32px),
+      0
+    )
+    rotate3d(calc(var(--pointer-y, 0) * -1), calc(var(--pointer-x, 0)), 0, 4deg);
+  transform-origin: center;
+}
+
+.futuristic-bg::before,
+.futuristic-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(42px);
+  opacity: 0.7;
+}
+
+.futuristic-bg::before {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.9), transparent 70%);
+  animation: float-orb-1 16s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.futuristic-bg::after {
+  width: 360px;
+  height: 360px;
+  bottom: -120px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.9), transparent 70%);
+  animation: float-orb-2 18s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.futuristic-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.33) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.33) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 0%,
+    transparent 70%
+  );
+  animation: grid-drift 22s linear infinite;
+  transform: translate3d(
+    calc(var(--pointer-x, 0) * -24px),
+    calc(var(--pointer-y, 0) * -24px),
+    0
+  );
+}
+
+.dark .futuristic-grid {
+  opacity: 0.22;
+}
+
+@keyframes bg-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float-orb-1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(60px, 80px, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(40px, -40px, 0) scale(0.96);
+  }
+}
+
+@keyframes float-orb-2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-80px, -40px, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(-40px, 60px, 0) scale(0.95);
+  }
+}
+
+@keyframes grid-drift {
+  0% {
+    transform: translate3d(0, 0, 0) skewX(-5deg);
+  }
+  50% {
+    transform: translate3d(-40px, -40px, 0) skewX(-8deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) skewX(-5deg);
+  }
 }
 
 /* Gradient text animation */

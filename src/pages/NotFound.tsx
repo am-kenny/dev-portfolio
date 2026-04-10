@@ -26,7 +26,7 @@ const NotFound = (): JSX.Element => (
 
       <Link
         to="/"
-        className="inline-block bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+        className="inline-block bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg"
       >
         Back to home
       </Link>

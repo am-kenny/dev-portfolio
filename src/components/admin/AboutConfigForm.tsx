@@ -49,8 +49,8 @@ const AboutConfigForm = ({
   }
 
   const inputClass = disabled
-    ? 'w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed transition-colors duration-300 ease'
-    : 'w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 ease'
+    ? 'w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+    : 'w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

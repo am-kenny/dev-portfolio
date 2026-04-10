@@ -1,8 +1,14 @@
+/**
+ * Projects list: `#projects` scroll target + section. Shows first `VISIBLE_INITIALLY` items, gradient hint,
+ * then expandable grid for the rest. Accepts `projects.projects` or `projects.items` from API/static data.
+ */
 import { useState } from 'react'
+import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
 
+/** Items shown before "See all"; remainder toggles in a height-transition grid. */
 const VISIBLE_INITIALLY = 4
 
 interface ProjectCardProps {
@@ -45,7 +51,7 @@ const ProjectCard = ({
         {project.github && (
           <a
             href={project.github}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-200 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 transition-colors duration-200"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-200 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View on GitHub"
@@ -63,13 +69,13 @@ const ProjectCard = ({
         {project.link && (
           <a
             href={project.link}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-700 dark:text-emerald-300 bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-900/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 transition-colors duration-200"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-700 dark:text-emerald-300 bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-900/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View live project"
           >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/70 opacity-75" />
+              <span className="absolute inline-flex h-full w-full animate-ping motion-reduce:animate-none rounded-full bg-emerald-500/70 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
             <span>Live</span>
@@ -101,7 +107,7 @@ const Projects = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section id="projects" className="py-20 bg-white dark:bg-gray-900">
+      <section id="projects" className="py-20">
         <div className="container mx-auto px-4">
           <div className="col-span-full text-center text-gray-400 dark:text-gray-500">
             Loading...
@@ -121,31 +127,35 @@ const Projects = (): JSX.Element => {
   return (
     <>
       <div id="projects" className="scroll-mt-20" aria-hidden="true" />
-      <section
-        className="py-20 bg-gray-50 dark:bg-gray-900"
-        aria-labelledby="projects-heading"
-      >
+      <section className="py-20" aria-labelledby="projects-heading">
         <SectionContent maxWidth="5xl">
-          <h2
-            id="projects-heading"
-            className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100"
-          >
-            Projects
-          </h2>
+          <ScrollReveal index={0} className="w-full">
+            <h2
+              id="projects-heading"
+              className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_26px_rgba(56,189,248,0.18),0_2px_12px_rgba(139,92,246,0.07)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
+            >
+              Projects
+            </h2>
+          </ScrollReveal>
           <div className={hasMore ? 'relative' : ''}>
             <div className="space-y-12">
               {initialItems.map((project, index) => (
-                <ProjectCard
+                <ScrollReveal
                   key={
                     project.github ?? project.link ?? `${project.name}-${index}`
                   }
-                  project={project}
-                  index={index}
-                  reverse={index % 2 === 1}
-                  hideImageShadow={
-                    hasMore && !showAll && index === initialItems.length - 1
-                  }
-                />
+                  index={index + 1}
+                  className="w-full"
+                >
+                  <ProjectCard
+                    project={project}
+                    index={index}
+                    reverse={index % 2 === 1}
+                    hideImageShadow={
+                      hasMore && !showAll && index === initialItems.length - 1
+                    }
+                  />
+                </ScrollReveal>
               ))}
             </div>
             {hasMore && !showAll && (
@@ -157,24 +167,32 @@ const Projects = (): JSX.Element => {
           </div>
           {hasMore && (
             <div
-              className={`grid transition-[grid-template-rows] duration-300 ease-out ${showAll ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+              className={`grid transition-[grid-template-rows] duration-300 ease-theme ${showAll ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
             >
               <div className="overflow-hidden min-h-0">
                 <div
-                  className={`pt-12 space-y-12 transition-opacity duration-300 ease-out ${showAll ? 'opacity-100' : 'opacity-0'}`}
+                  className={`pt-12 space-y-12 ${showAll ? 'opacity-100' : 'opacity-0'}`}
                 >
-                  {moreItems.map((project, i) => (
-                    <ProjectCard
-                      key={
-                        project.github ??
-                        project.link ??
-                        `${project.name}-${VISIBLE_INITIALLY + i}`
-                      }
-                      project={project}
-                      index={VISIBLE_INITIALLY + i}
-                      reverse={(VISIBLE_INITIALLY + i) % 2 === 1}
-                    />
-                  ))}
+                  {moreItems.map((project, i) => {
+                    const globalIndex = VISIBLE_INITIALLY + i
+                    return (
+                      <ScrollReveal
+                        key={
+                          project.github ??
+                          project.link ??
+                          `${project.name}-${globalIndex}`
+                        }
+                        index={globalIndex + 1}
+                        className="w-full"
+                      >
+                        <ProjectCard
+                          project={project}
+                          index={globalIndex}
+                          reverse={globalIndex % 2 === 1}
+                        />
+                      </ScrollReveal>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -185,7 +203,7 @@ const Projects = (): JSX.Element => {
                 type="button"
                 onClick={() => setShowAll((prev) => !prev)}
                 aria-expanded={showAll}
-                className="px-6 py-3 rounded-lg font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-50 dark:focus:ring-offset-gray-900"
+                className="px-6 py-3 rounded-lg font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-50 dark:focus:ring-offset-gray-900"
               >
                 {showAll ? 'Show less' : 'See all'}
               </button>
@@ -199,10 +217,10 @@ const Projects = (): JSX.Element => {
         </SectionContent>
       </section>
       {!hasProjects && (
-        <section className="py-20 bg-white dark:bg-gray-900">
+        <section className="py-20">
           <SectionContent maxWidth="5xl">
             <div className="text-center text-gray-500 dark:text-gray-400">
-              No projects added yet. Add some from the admin panel!
+              No projects in portfolio data.
             </div>
           </SectionContent>
         </section>

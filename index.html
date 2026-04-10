@@ -5,7 +5,7 @@
     <script>
       ;(function () {
         const stored = localStorage.getItem('portfolio-theme')
-        if (stored === 'dark') {
+        if (stored !== 'light') {
           document.documentElement.classList.add('dark')
         }
       })()

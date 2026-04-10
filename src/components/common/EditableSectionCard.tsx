@@ -74,11 +74,7 @@ const EditableSectionCard = <TData,>({
               {section}
             </h2>
           </div>
-          <div
-            className={`transition-transform duration-300 ease ${
-              expanded ? 'rotate-90' : ''
-            }`}
-          >
+          <div className={expanded ? 'rotate-90' : ''}>
             <FaChevronRight className="text-gray-400" />
           </div>
         </>

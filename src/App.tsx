@@ -21,6 +21,8 @@ import Footer from './components/portfolio/Footer'
 import { pageTitles } from './constants/titleMap'
 import { isAdminEnabled } from './services/dataSource'
 import DataErrorPage from './components/common/DataErrorPage'
+import CanvasBackground from './components/common/CanvasBackground'
+import SectionNav from './components/common/SectionNav'
 import NotFound from './pages/NotFound'
 import type { ReactNode } from 'react'
 
@@ -34,6 +36,7 @@ const PortfolioLayout = (): JSX.Element => (
     <div className="fixed top-4 right-4 z-50">
       <ThemeToggle />
     </div>
+    <SectionNav />
     <Portfolio />
   </>
 )
@@ -72,14 +75,17 @@ const PageTitle = (): null => {
 }
 
 const Portfolio = (): JSX.Element => (
-  <main className="min-h-screen bg-white dark:bg-gray-900">
-    <Hero />
-    <About />
-    <Skills />
-    <Experience />
-    <Projects />
-    <Contact />
-    <Footer />
+  <main className="relative min-h-screen overflow-x-hidden text-slate-900 dark:text-slate-100">
+    <CanvasBackground />
+    <div className="relative z-10">
+      <Hero /> {/* Cauising lag on theme change */}
+      <About /> {/* Cauising lag on theme change */}
+      <Skills /> {/* OK */}
+      <Experience /> {/* OK */}
+      <Projects /> {/* Cauising lag on theme change */}
+      <Contact /> {/* Cauising lag on theme change */}
+      <Footer /> {/* OK */}
+    </div>
   </main>
 )
 
@@ -111,7 +117,12 @@ const DebugRoute = (): JSX.Element => {
 function App(): JSX.Element {
   return (
     <PortfolioProvider>
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <PageTitle />
         <Routes>
           <Route path="/" element={<PortfolioWithDataCheck />} />

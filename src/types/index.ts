@@ -8,6 +8,8 @@ export interface SocialLink {
 export interface ContactSection {
   email: string
   phone?: string
+  /** Public URL or site path to a résumé/CV file (e.g. `/cv.pdf`). Omit or leave empty to hide the button. */
+  cvUrl?: string
   socialLinks: SocialLink[]
 }
 
@@ -20,6 +22,7 @@ export interface PersonalSection {
 
 export interface AboutSection {
   content: string
+  image?: string
 }
 
 export interface ProjectItem {
