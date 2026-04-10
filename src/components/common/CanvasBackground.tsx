@@ -524,6 +524,9 @@ export default function CanvasBackground(): JSX.Element {
 
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
 
     /** Width/height from viewport metrics; extra height for `-top-[40px]` and parallax. */
     const readLogicalSize = (): { w: number; h: number } => {
@@ -576,27 +579,17 @@ export default function CanvasBackground(): JSX.Element {
       resizeDebounce = setTimeout(() => {
         resizeDebounce = undefined
         applyLogicalSize(true)
+        if (prefersReducedMotion) {
+          drawReducedMotionFrame()
+        }
       }, 160)
     }
-    if (shouldReactToWindowResize) {
+    if (shouldReactToWindowResize || prefersReducedMotion) {
       window.addEventListener('resize', onResize, { passive: true })
     }
 
     let time = 0
     let lastFrameMs = performance.now()
-
-    const onScroll = (): void => {
-      scrollRef.current = window.scrollY || 0
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    const onWindowPointerMove = (e: PointerEvent): void => {
-      updatePointerFromClient(e.clientX, e.clientY)
-    }
-    window.addEventListener('pointermove', onWindowPointerMove, {
-      passive: true,
-    })
 
     const tick = (): void => {
       const nowMs = performance.now()
@@ -684,19 +677,56 @@ export default function CanvasBackground(): JSX.Element {
       frameRef.current = requestAnimationFrame(tick)
     }
 
-    scrollRef.current = window.scrollY || 0
-    frameRef.current = requestAnimationFrame(tick)
+    const drawReducedMotionFrame = (): void => {
+      const { w: width, h: height } = canvasBufferRef.current
+      if (width <= 0 || height <= 0) return
+      const blend = theme === 'dark' ? 1 : 0
+      themeTransitionRef.current = null
+      themeBlendRef.current = blend
+      ctx.setTransform(dprRef.current, 0, 0, dprRef.current, 0, 0)
+      drawNeuralNetwork(
+        ctx,
+        width,
+        height,
+        nodesRef.current,
+        connectionsRef.current,
+        0,
+        0.5,
+        0.5,
+        0,
+        blend >= 0.5
+      )
+    }
+
+    const onScroll = (): void => {
+      scrollRef.current = window.scrollY || 0
+    }
+
+    const onWindowPointerMove = (e: PointerEvent): void => {
+      updatePointerFromClient(e.clientX, e.clientY)
+    }
+
+    if (prefersReducedMotion) {
+      drawReducedMotionFrame()
+    } else {
+      window.addEventListener('scroll', onScroll, { passive: true })
+      window.addEventListener('pointermove', onWindowPointerMove, {
+        passive: true,
+      })
+      scrollRef.current = window.scrollY || 0
+      frameRef.current = requestAnimationFrame(tick)
+    }
 
     return () => {
       cancelAnimationFrame(frameRef.current)
       if (resizeDebounce !== undefined) clearTimeout(resizeDebounce)
-      if (shouldReactToWindowResize) {
+      if (shouldReactToWindowResize || prefersReducedMotion) {
         window.removeEventListener('resize', onResize)
       }
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('pointermove', onWindowPointerMove)
     }
-  }, [initNetwork, updatePointerFromClient])
+  }, [initNetwork, theme, updatePointerFromClient])
 
   return (
     <div ref={containerRef} className="fixed inset-0 -z-10" aria-hidden>
