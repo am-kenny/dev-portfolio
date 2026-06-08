@@ -1,4 +1,5 @@
 import { useEffect, useState, type SyntheticEvent } from 'react'
+import type { ExperienceCompanyIcon } from '../../../types'
 
 const DefaultCompanyIcon = (): JSX.Element => (
   <svg
@@ -18,21 +19,27 @@ const DefaultCompanyIcon = (): JSX.Element => (
 )
 
 const iconSizeClasses = {
-  sm: 'w-9 h-9 rounded-lg',
-  md: 'w-11 h-11 rounded-xl',
-  lg: 'w-14 h-14 rounded-xl',
+  sm: 'w-9 h-9',
+  md: 'w-11 h-11',
+  lg: 'w-14 h-14',
+} as const
+
+const iconRadiusClasses = {
+  sm: { rounded: 'rounded-lg', square: 'rounded-sm' },
+  md: { rounded: 'rounded-xl', square: 'rounded-sm' },
+  lg: { rounded: 'rounded-xl', square: 'rounded-sm' },
 } as const
 
 type IconSize = keyof typeof iconSizeClasses
 
 interface CompanyIconProps {
-  company?: string
-  companyIcon?: string
+  companyName: string
+  icon?: ExperienceCompanyIcon
   size?: IconSize
 }
 
-const companyInitials = (company: string | undefined): string =>
-  (company ?? '')
+const companyInitials = (companyName: string | undefined): string =>
+  (companyName ?? '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -40,18 +47,21 @@ const companyInitials = (company: string | undefined): string =>
     .join('')
 
 const CompanyIconFallback = ({
-  company,
+  companyName,
   size,
+  rounded,
 }: {
-  company?: string
+  companyName?: string
   size: IconSize
+  rounded: boolean
 }): JSX.Element => {
   const box = iconSizeClasses[size]
-  const initials = companyInitials(company)
+  const radius = iconRadiusClasses[size][rounded ? 'rounded' : 'square']
+  const initials = companyInitials(companyName)
 
   return (
     <div
-      className={`${box} shrink-0 flex items-center justify-center bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50`}
+      className={`${box} ${radius} shrink-0 flex items-center justify-center bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50`}
       aria-hidden
     >
       {initials ? (
@@ -66,20 +76,28 @@ const CompanyIconFallback = ({
 }
 
 const CompanyIcon = ({
-  company,
-  companyIcon,
+  companyName,
+  icon,
   size = 'md',
 }: CompanyIconProps): JSX.Element => {
   const [imageFailed, setImageFailed] = useState(false)
   const box = iconSizeClasses[size]
-  const iconUrl = companyIcon?.trim()
+  const rounded = icon?.rounded !== false
+  const radius = iconRadiusClasses[size][rounded ? 'rounded' : 'square']
+  const iconUrl = icon?.url?.trim()
 
   useEffect(() => {
     setImageFailed(false)
   }, [iconUrl])
 
   if (!iconUrl || imageFailed) {
-    return <CompanyIconFallback company={company} size={size} />
+    return (
+      <CompanyIconFallback
+        companyName={companyName}
+        size={size}
+        rounded={rounded}
+      />
+    )
   }
 
   const onImageError = (_e: SyntheticEvent<HTMLImageElement>): void => {
@@ -88,7 +106,8 @@ const CompanyIcon = ({
 
   return (
     <div
-      className={`${box} shrink-0 overflow-hidden bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-600`}
+      className={`${box} ${radius} shrink-0 overflow-hidden bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-600`}
+      aria-hidden
     >
       <img
         src={iconUrl}

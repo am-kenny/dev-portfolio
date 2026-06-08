@@ -1,4 +1,8 @@
-import type { ExperienceJob } from '../../../types'
+import type {
+  ExperienceCompany,
+  ExperienceCompanyIcon,
+  ExperienceJob,
+} from '../../../types'
 
 const asString = (value: unknown): string => {
   if (typeof value === 'string') return value
@@ -16,17 +20,47 @@ const asStringArray = (value: unknown): string[] =>
     ? value.filter((item): item is string => typeof item === 'string')
     : []
 
+const parseCompanyIcon = (
+  iconRaw: unknown
+): ExperienceCompanyIcon | undefined => {
+  if (!iconRaw || typeof iconRaw !== 'object') return undefined
+
+  const icon = iconRaw as Record<string, unknown>
+  const url = asOptionalString(icon.url)
+  if (!url) return undefined
+
+  const rounded = icon.rounded !== false
+
+  return { url, rounded }
+}
+
+/** Parses nested `company: { name, icon? }`. */
+export const parseExperienceCompany = (
+  raw: Record<string, unknown>
+): ExperienceCompany => {
+  const companyRaw = raw.company
+
+  if (!companyRaw || typeof companyRaw !== 'object') {
+    return { name: '' }
+  }
+
+  const company = companyRaw as Record<string, unknown>
+  const name = asString(company.name).trim()
+  const icon = parseCompanyIcon(company.icon)
+  return { name, icon }
+}
+
 /** Stable React key for a job (no server id in JSON). */
 export const experienceJobKey = (job: ExperienceJob): string =>
-  `${job.company}-${job.startDate}-${job.title}`
+  `${job.company.name}-${job.startDate}-${job.title}`
 
-/** Required fields for a job card (title, company, startDate). */
+/** Required fields for a job card (title, company.name, startDate). */
 export const getExperienceJobDisplayFailure = (
   job: ExperienceJob
 ): string | null => {
   const missing: string[] = []
   if (!job.title.trim()) missing.push('title')
-  if (!job.company.trim()) missing.push('company')
+  if (!job.company.name.trim()) missing.push('company.name')
   if (!job.startDate.trim()) missing.push('startDate')
   return missing.length
     ? `missing required field(s): ${missing.join(', ')}`
@@ -38,7 +72,7 @@ export const isDisplayableExperienceJob = (job: ExperienceJob): boolean =>
   getExperienceJobDisplayFailure(job) == null
 
 /**
- * Coerces legacy/partial experience JSON into a safe ExperienceJob.
+ * Coerces partial experience JSON into a safe ExperienceJob.
  * Returns null for non-objects.
  */
 export const normalizeExperienceJob = (job: unknown): ExperienceJob | null => {
@@ -48,8 +82,7 @@ export const normalizeExperienceJob = (job: unknown): ExperienceJob | null => {
 
   return {
     title: asString(raw.title),
-    company: asString(raw.company),
-    companyIcon: asOptionalString(raw.companyIcon),
+    company: parseExperienceCompany(raw),
     startDate: asString(raw.startDate),
     endDate: asOptionalString(raw.endDate),
     isCurrent: raw.isCurrent === true,

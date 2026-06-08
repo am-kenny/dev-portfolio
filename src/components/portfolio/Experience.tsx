@@ -78,8 +78,8 @@ const Experience = (): JSX.Element => {
                         className={`flex flex-row md:flex-col gap-4 p-5 sm:p-6 md:border-r ${experienceAsideClass}`}
                       >
                         <CompanyIcon
-                          company={job.company}
-                          companyIcon={job.companyIcon}
+                          companyName={job.company.name}
+                          icon={job.company.icon}
                           size="lg"
                         />
                         <div className="flex flex-col gap-2 min-w-0 flex-1 md:flex-initial">
@@ -112,9 +112,9 @@ const Experience = (): JSX.Element => {
                               {job.title}
                             </h3>
                           ) : null}
-                          {job.company ? (
+                          {job.company.name ? (
                             <p className="text-blue-600 dark:text-blue-400 font-semibold mt-0.5">
-                              {job.company}
+                              {job.company.name}
                             </p>
                           ) : null}
                         </div>
