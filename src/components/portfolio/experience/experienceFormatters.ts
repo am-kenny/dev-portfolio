@@ -57,16 +57,20 @@ export const formatExperiencePeriod = (
   return end ? { start, end } : { start }
 }
 
-export const formatJobLocation = (job: ExperienceJob): string => {
-  const parts: string[] = []
-  const location = formatEnumValue(job.location ?? '')
-  if (location) parts.push(location)
+export type JobLocationParts = {
+  workMode?: string
+  place?: string
+}
+
+export const parseJobLocation = (job: ExperienceJob): JobLocationParts => {
+  const workMode = formatEnumValue(job.location ?? '') || undefined
+  let place: string | undefined
   if (job.city && job.country) {
-    parts.push(`${job.city}, ${job.country}`)
+    place = `${job.city}, ${job.country}`
   } else if (job.city) {
-    parts.push(job.city)
+    place = job.city
   } else if (job.country) {
-    parts.push(job.country)
+    place = job.country
   }
-  return parts.join(' · ')
+  return { workMode, place }
 }

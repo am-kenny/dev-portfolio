@@ -200,6 +200,22 @@ html.dark body {
     0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
+/* Experience achievements: expand/collapse only — keep theme paint on global `*` (0.45s) */
+.achievements-panel {
+  transition: grid-template-rows 300ms var(--theme-transition-easing);
+}
+
+.achievements-panel__content {
+  transition: opacity 300ms var(--theme-transition-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievements-panel,
+  .achievements-panel__content {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Progress bar animation */
 .progress-bar {
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);

@@ -7,6 +7,7 @@ import type { PortfolioData } from '../../types'
 import CollapsibleAchievements from './experience/CollapsibleAchievements'
 import CompanyIcon from './experience/CompanyIcon'
 import ExperienceTimelineRow from './experience/ExperienceTimelineRow'
+import JobLocation from './experience/JobLocation'
 import SkillsPills from './experience/SkillsPills'
 import {
   experienceAsideClass,
@@ -14,7 +15,7 @@ import {
 } from './experience/constants'
 import {
   formatExperiencePeriod,
-  formatJobLocation,
+  parseJobLocation,
 } from './experience/experienceFormatters'
 import {
   experienceJobKey,
@@ -53,7 +54,7 @@ const Experience = (): JSX.Element => {
           <div>
             {jobs.map((job, index) => {
               const jobKey = experienceJobKey(job)
-              const locationLine = formatJobLocation(job)
+              const jobLocation = parseJobLocation(job)
               const period = formatExperiencePeriod(
                 job.startDate,
                 job.endDate,
@@ -81,7 +82,7 @@ const Experience = (): JSX.Element => {
                           companyIcon={job.companyIcon}
                           size="lg"
                         />
-                        <div className="flex flex-col gap-1 min-w-0 flex-1 md:flex-initial">
+                        <div className="flex flex-col gap-2 min-w-0 flex-1 md:flex-initial">
                           {period ? (
                             <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 tabular-nums">
                               <time dateTime={period.start.dateTime}>
@@ -101,24 +102,22 @@ const Experience = (): JSX.Element => {
                               ) : null}
                             </p>
                           ) : null}
-                          {locationLine ? (
-                            <span className="text-sm text-gray-500 dark:text-gray-400 text-pretty">
-                              {locationLine}
-                            </span>
-                          ) : null}
+                          <JobLocation {...jobLocation} />
                         </div>
                       </aside>
                       <div className="p-5 sm:p-6 min-w-0">
-                        {job.title ? (
-                          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                            {job.title}
-                          </h3>
-                        ) : null}
-                        {job.company ? (
-                          <p className="text-blue-600 dark:text-blue-400 font-semibold mt-0.5">
-                            {job.company}
-                          </p>
-                        ) : null}
+                        <div className="min-w-0">
+                          {job.title ? (
+                            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                              {job.title}
+                            </h3>
+                          ) : null}
+                          {job.company ? (
+                            <p className="text-blue-600 dark:text-blue-400 font-semibold mt-0.5">
+                              {job.company}
+                            </p>
+                          ) : null}
+                        </div>
                         {job.description ? (
                           <p className="text-gray-700 dark:text-gray-300 mt-4 leading-relaxed text-pretty">
                             {job.description}
