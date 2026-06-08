@@ -6,6 +6,7 @@ import { useState, type FormEvent } from 'react'
 import { FaDownload, FaGithub, FaLinkedin } from 'react-icons/fa'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
+import SectionLoading from '../common/SectionLoading'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { dataSource } from '../../services/dataSource'
 import config from '../../services/config'
@@ -268,16 +269,11 @@ const Contact = (): JSX.Element => {
 
   if (loading || !data) {
     return (
-      <section
+      <SectionLoading
         id="contact"
         className="pt-20 pb-36 md:pb-44 text-slate-900 dark:text-white"
-      >
-        <SectionContent maxWidth="4xl">
-          <div className="text-center text-lg text-slate-500 dark:text-gray-400">
-            Loading...
-          </div>
-        </SectionContent>
-      </section>
+        maxWidth="4xl"
+      />
     )
   }
 

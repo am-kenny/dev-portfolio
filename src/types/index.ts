@@ -39,9 +39,19 @@ export interface ProjectsSection {
   items?: ProjectItem[]
 }
 
+export interface ExperienceCompanyIcon {
+  url: string
+  rounded: boolean
+}
+
+export interface ExperienceCompany {
+  name: string
+  icon?: ExperienceCompanyIcon
+}
+
 export interface ExperienceJob {
   title: string
-  company: string
+  company: ExperienceCompany
   startDate: string
   endDate?: string
   isCurrent?: boolean

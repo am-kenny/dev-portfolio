@@ -1,5 +1,6 @@
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
+import SectionLoading from '../common/SectionLoading'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { formatEnumValue } from '../../utils/formatters'
 import type { PortfolioData, SkillCategoryValue, SkillEntry } from '../../types'
@@ -8,25 +9,7 @@ const Skills = (): JSX.Element => {
   const { data, loading } = usePortfolio()
 
   if (loading || !data) {
-    return (
-      <section id="skills" className="py-20">
-        <SectionContent maxWidth="5xl">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
-              <div className="space-y-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"
-                  ></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </SectionContent>
-      </section>
-    )
+    return <SectionLoading id="skills" />
   }
 
   const { skills } = data as PortfolioData

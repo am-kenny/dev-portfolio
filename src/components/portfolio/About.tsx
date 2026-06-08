@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
+import SectionLoading from '../common/SectionLoading'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
 
@@ -36,15 +37,7 @@ const About = (): JSX.Element => {
   }, [aboutImage])
 
   if (loading || !data) {
-    return (
-      <section id="about" className="py-20">
-        <SectionContent maxWidth="5xl">
-          <div className="text-center text-lg text-gray-400 dark:text-gray-500">
-            Loading...
-          </div>
-        </SectionContent>
-      </section>
-    )
+    return <SectionLoading id="about" />
   }
 
   const { about, personalInfo } = data as AboutData
