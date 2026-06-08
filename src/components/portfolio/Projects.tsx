@@ -5,6 +5,7 @@
 import { useState } from 'react'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
+import SectionLoading from '../common/SectionLoading'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
 
@@ -106,15 +107,7 @@ const Projects = (): JSX.Element => {
   const [showAll, setShowAll] = useState(false)
 
   if (loading || !data) {
-    return (
-      <section id="projects" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="col-span-full text-center text-gray-400 dark:text-gray-500">
-            Loading...
-          </div>
-        </div>
-      </section>
-    )
+    return <SectionLoading id="projects" />
   }
 
   const { projects } = data as PortfolioData & { projects?: ProjectsSection }

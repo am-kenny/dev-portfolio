@@ -42,6 +42,7 @@ export interface ProjectsSection {
 export interface ExperienceJob {
   title: string
   company: string
+  companyIcon?: string
   startDate: string
   endDate?: string
   isCurrent?: boolean

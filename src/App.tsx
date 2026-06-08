@@ -81,7 +81,7 @@ const Portfolio = (): JSX.Element => (
       <Hero /> {/* Cauising lag on theme change */}
       <About /> {/* Cauising lag on theme change */}
       <Skills /> {/* OK */}
-      <Experience /> {/* OK */}
+      <Experience />
       <Projects /> {/* Cauising lag on theme change */}
       <Contact /> {/* Cauising lag on theme change */}
       <Footer /> {/* OK */}

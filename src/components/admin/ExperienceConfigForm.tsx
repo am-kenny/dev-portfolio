@@ -10,6 +10,7 @@ import {
 export interface ExperienceJobConfig {
   title: string
   company: string
+  companyIcon?: string
   startDate: string
   endDate?: string
   isCurrent: boolean
@@ -38,6 +39,7 @@ export interface ExperienceConfigFormProps {
 const emptyJob: ExperienceJobConfig = {
   title: '',
   company: '',
+  companyIcon: '',
   startDate: '',
   endDate: '',
   isCurrent: false,
@@ -51,6 +53,7 @@ const emptyJob: ExperienceJobConfig = {
 
 const normalizeJob = (job: ExperienceJobConfig): ExperienceJobConfig => ({
   ...job,
+  companyIcon: job.companyIcon?.trim() ?? '',
   startDate: job.startDate != null ? String(job.startDate) : '',
   endDate: job.isCurrent || job.endDate == null ? '' : String(job.endDate),
   achievements: Array.isArray(job.achievements) ? job.achievements : [],
@@ -254,6 +257,15 @@ const ExperienceConfigForm = ({
                 handleFieldChange('endDate', e.target.value)
               }
               disabled={editingJob.isCurrent}
+            />
+            <input
+              type="url"
+              className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 md:col-span-2"
+              placeholder="Company icon URL (optional)"
+              value={editingJob.companyIcon ?? ''}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleFieldChange('companyIcon', e.target.value)
+              }
             />
             <div className="flex items-center gap-2 col-span-2">
               <input
