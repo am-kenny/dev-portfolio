@@ -3,7 +3,6 @@
  */
 import { scrollToSection } from '../../utils/scroll'
 import { usePortfolio } from '../../context/PortfolioContext'
-import type { PortfolioData } from '../../types'
 
 const Hero = (): JSX.Element => {
   const { data, loading } = usePortfolio()
@@ -19,9 +18,7 @@ const Hero = (): JSX.Element => {
     )
   }
 
-  const { personalInfo } = data as PortfolioData & {
-    personalInfo?: { name?: string; title?: string }
-  }
+  const { personalInfo } = data
 
   return (
     <section

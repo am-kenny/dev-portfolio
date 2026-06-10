@@ -112,12 +112,12 @@ const iconPhone = (
 
 function ContactLinks({
   contact,
-  personal,
+  personalInfo,
 }: {
   contact: PortfolioData['contact']
-  personal?: { email?: string }
+  personalInfo?: PortfolioData['personalInfo']
 }) {
-  const email = contact?.email || personal?.email
+  const email = contact?.email || personalInfo?.email
   return (
     <>
       {email && (
@@ -173,14 +173,12 @@ const Contact = (): JSX.Element => {
     )
   }
 
-  const { contact, personal } = data as PortfolioData & {
-    personal?: { email?: string }
-  }
+  const { contact, personalInfo } = data
 
   const tagline =
     "I'm always interested in hearing about new projects and opportunities."
 
-  const hasEmail = contact?.email || personal?.email
+  const hasEmail = contact?.email || personalInfo?.email
   const hasPhone = contact?.phone
   const hasSocial = contact?.socialLinks?.length
   const hasAnyLink = hasEmail || hasPhone || hasSocial
@@ -207,7 +205,10 @@ const Contact = (): JSX.Element => {
                       Contact
                     </h3>
                     <div className="flex flex-col gap-3">
-                      <ContactLinks contact={contact} personal={personal} />
+                      <ContactLinks
+                        contact={contact}
+                        personalInfo={personalInfo}
+                      />
                     </div>
                     {cvUrl && (
                       <div className={downloadCvSeparatorWrap}>
@@ -242,7 +243,7 @@ const Contact = (): JSX.Element => {
                         <div className="flex flex-wrap justify-center gap-3 w-full">
                           {hasEmail && (
                             <a
-                              href={`mailto:${contact?.email || personal?.email}`}
+                              href={`mailto:${contact?.email || personalInfo?.email}`}
                               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
                             >
                               {iconEmail}

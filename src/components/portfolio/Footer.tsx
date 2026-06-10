@@ -19,7 +19,7 @@ const Footer = (): JSX.Element => {
   const { data } = usePortfolio()
   const portfolio = (data ?? {}) as PortfolioData
   const socialLinks = portfolio.contact?.socialLinks ?? []
-  const email = portfolio.contact?.email || portfolio.personal?.email
+  const email = portfolio.contact?.email || portfolio.personalInfo?.email
   const githubUrl = getSocialUrl(socialLinks, 'GitHub')
   const linkedInUrl = getSocialUrl(socialLinks, 'LinkedIn')
 

@@ -83,7 +83,7 @@ export interface SkillsSection {
 export type ErrorKind = 'config' | 'unavailable' | null
 
 export interface PortfolioData {
-  personal?: PersonalSection
+  personalInfo?: PersonalSection
   about?: AboutSection
   projects?: ProjectsSection
   experience?: ExperienceSection
