@@ -112,7 +112,6 @@ const Projects = (): JSX.Element => {
 
   const { projects } = data as PortfolioData & { projects?: ProjectsSection }
   const items: ProjectItem[] = projects?.projects ?? projects?.items ?? []
-  const hasProjects = items.length > 0
   const initialItems = items.slice(0, VISIBLE_INITIALLY)
   const moreItems = items.slice(VISIBLE_INITIALLY)
   const hasMore = moreItems.length > 0
@@ -209,15 +208,6 @@ const Projects = (): JSX.Element => {
           )}
         </SectionContent>
       </section>
-      {!hasProjects && (
-        <section className="py-20">
-          <SectionContent maxWidth="5xl">
-            <div className="text-center text-gray-500 dark:text-gray-400">
-              No projects in portfolio data.
-            </div>
-          </SectionContent>
-        </section>
-      )}
     </>
   )
 }
