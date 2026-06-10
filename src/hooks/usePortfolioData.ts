@@ -7,11 +7,20 @@ import type { PortfolioData, ErrorKind } from '../types'
 import type { UsePortfolioDataResult } from '../types/portfolioHooks'
 
 const fetchJson = async <T>(url: string): Promise<T> => {
-  const response = await fetch(url, { cache: 'no-cache' })
-  if (!response.ok) {
-    throw new Error(`Failed to fetch: ${response.status}`)
+  let response: Response
+  try {
+    response = await fetch(url, { cache: 'no-cache' })
+  } catch {
+    throw new Error('Network error while loading portfolio data.')
   }
-  return (await response.json()) as T
+  if (!response.ok) {
+    throw new Error(`Failed to fetch portfolio data (HTTP ${response.status})`)
+  }
+  try {
+    return (await response.json()) as T
+  } catch {
+    throw new Error('Invalid JSON in portfolio data.')
+  }
 }
 
 export const usePortfolioData = (): UsePortfolioDataResult => {
@@ -38,8 +47,10 @@ export const usePortfolioData = (): UsePortfolioDataResult => {
         )
         setErrorKind('config')
       }
-    } catch {
-      setError('Data is not available.')
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Data is not available.'
+      setError(message)
       setErrorKind('unavailable')
     } finally {
       setLoading(false)

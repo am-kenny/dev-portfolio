@@ -6,6 +6,18 @@ export interface DataErrorPageProps {
   onRetry?: () => Promise<void> | void
 }
 
+const PRODUCTION_UNAVAILABLE_MESSAGE = 'The portfolio could not be loaded.'
+
+const getUnavailableMessage = (message: string): string => {
+  if (import.meta.env.DEV) return message
+
+  const statusMatch = message.match(/HTTP (\d{3})/)
+  if (statusMatch) {
+    return `${PRODUCTION_UNAVAILABLE_MESSAGE} (HTTP ${statusMatch[1]})`
+  }
+  return PRODUCTION_UNAVAILABLE_MESSAGE
+}
+
 const DataErrorPage = ({
   message,
   isConfigError,
@@ -52,7 +64,7 @@ const DataErrorPage = ({
           {isConfigError ? 'Configuration Error' : 'Data not available'}
         </h1>
         <p className="text-gray-300 mb-8 text-lg whitespace-pre-line">
-          {isConfigError ? message : 'The portfolio could not be loaded.'}
+          {isConfigError ? message : getUnavailableMessage(message)}
         </p>
 
         {isConfigError && (
