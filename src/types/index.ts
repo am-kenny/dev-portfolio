@@ -82,10 +82,6 @@ export interface SkillsSection {
 
 export type ErrorKind = 'config' | 'unavailable' | null
 
-export interface SectionLoadingState {
-  [section: string]: boolean
-}
-
 export interface PortfolioData {
   personal?: PersonalSection
   about?: AboutSection
@@ -93,6 +89,5 @@ export interface PortfolioData {
   experience?: ExperienceSection
   skills?: SkillsSection
   contact?: ContactSection
-  // Allow additional sections managed by the admin panel
   [section: string]: unknown
 }

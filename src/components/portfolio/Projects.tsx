@@ -1,6 +1,6 @@
 /**
  * Projects list: `#projects` scroll target + section. Shows first `VISIBLE_INITIALLY` items, gradient hint,
- * then expandable grid for the rest. Accepts `projects.projects` or `projects.items` from API/static data.
+ * then expandable grid for the rest. Accepts `projects.projects` or `projects.items` from static data.
  */
 import { useState } from 'react'
 import ScrollReveal from '../common/ScrollReveal'

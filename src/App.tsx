@@ -6,10 +6,7 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom'
-import Admin from './pages/Admin'
-import AdminLogin from './pages/AdminLogin'
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
-import ApiHealthWrapper from './components/common/ApiHealthWrapper'
 import ThemeToggle from './components/common/ThemeToggle'
 import Hero from './components/portfolio/Hero'
 import About from './components/portfolio/About'
@@ -19,12 +16,10 @@ import Projects from './components/portfolio/Projects'
 import Contact from './components/portfolio/Contact'
 import Footer from './components/portfolio/Footer'
 import { pageTitles } from './constants/titleMap'
-import { isAdminEnabled } from './services/dataSource'
 import DataErrorPage from './components/common/DataErrorPage'
 import CanvasBackground from './components/common/CanvasBackground'
 import SectionNav from './components/common/SectionNav'
 import NotFound from './pages/NotFound'
-import type { ReactNode } from 'react'
 
 const Debug =
   import.meta.env.VITE_APP_DEBUG === 'true'
@@ -52,15 +47,7 @@ const PortfolioWithDataCheck = (): JSX.Element => {
       />
     )
   }
-  const content = <PortfolioLayout />
-  if (isAdminEnabled()) {
-    return (
-      <ApiHealthWrapper onApiRecovered={refreshData}>
-        {content}
-      </ApiHealthWrapper>
-    )
-  }
-  return content
+  return <PortfolioLayout />
 }
 
 const PageTitle = (): null => {
@@ -89,31 +76,6 @@ const Portfolio = (): JSX.Element => (
   </main>
 )
 
-export interface AdminRouteProps {
-  children: ReactNode
-}
-
-const AdminRoute = ({ children }: AdminRouteProps): JSX.Element =>
-  isAdminEnabled() ? (
-    <ApiHealthWrapper>{children}</ApiHealthWrapper>
-  ) : (
-    <Navigate to="/" replace />
-  )
-
-const DebugRoute = (): JSX.Element => {
-  if (!Debug) return <Navigate to="/" replace />
-  const content = (
-    <Suspense fallback={null}>
-      <Debug />
-    </Suspense>
-  )
-  return isAdminEnabled() ? (
-    <ApiHealthWrapper>{content}</ApiHealthWrapper>
-  ) : (
-    content
-  )
-}
-
 function App(): JSX.Element {
   return (
     <PortfolioProvider>
@@ -127,24 +89,16 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<PortfolioWithDataCheck />} />
           <Route
-            path="/admin/login"
-            element={
-              <AdminRoute>
-                <AdminLogin />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <Admin />
-              </AdminRoute>
-            }
-          />
-          <Route
             path="/debug"
-            element={Debug ? <DebugRoute /> : <Navigate to="/" replace />}
+            element={
+              Debug ? (
+                <Suspense fallback={null}>
+                  <Debug />
+                </Suspense>
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
