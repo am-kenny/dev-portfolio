@@ -6,7 +6,6 @@ import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import SectionLoading from '../common/SectionLoading'
 import { usePortfolio } from '../../context/PortfolioContext'
-import type { PortfolioData } from '../../types'
 
 const splitParagraphs = (text: string): string[] =>
   text
@@ -21,15 +20,10 @@ const initialsFromName = (name?: string): string => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
 
-type AboutData = PortfolioData & {
-  personalInfo?: { name?: string; title?: string }
-}
-
 const About = (): JSX.Element => {
   const { data, loading } = usePortfolio()
 
-  const aboutImage =
-    data != null ? ((data as AboutData).about?.image?.trim() ?? '') : ''
+  const aboutImage = data?.about?.image?.trim() ?? ''
 
   const [imageFailed, setImageFailed] = useState(false)
   useEffect(() => {
@@ -40,7 +34,7 @@ const About = (): JSX.Element => {
     return <SectionLoading id="about" />
   }
 
-  const { about, personalInfo } = data as AboutData
+  const { about, personalInfo } = data
 
   const rawAbout = about?.content?.trim() ?? ''
   const paragraphs = rawAbout ? splitParagraphs(rawAbout) : []

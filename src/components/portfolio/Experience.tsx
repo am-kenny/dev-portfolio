@@ -48,7 +48,7 @@ const Experience = (): JSX.Element => {
 
         {!jobs.length ? (
           <div className="text-center text-gray-500 dark:text-gray-400">
-            No experience entries yet. Add some from the admin panel!
+            No experience entries yet.
           </div>
         ) : (
           <div>

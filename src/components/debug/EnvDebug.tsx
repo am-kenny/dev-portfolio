@@ -1,53 +1,7 @@
-import { useState } from 'react'
-import config from '../../services/config'
-import {
-  dataSource,
-  isAdminEnabled,
-  getPortfolioDataUrl,
-} from '../../services/dataSource'
-
-interface ApiTestResultSuccess {
-  success: true
-  data: unknown
-  url: string
-}
-
-interface ApiTestResultError {
-  success: false
-  error: string
-  url: string
-}
-
-type ApiTestResult = ApiTestResultSuccess | ApiTestResultError | null
+import { dataSource, getPortfolioDataUrl } from '../../services/dataSource'
 
 const EnvDebug = (): JSX.Element | null => {
-  const [apiTestResult, setApiTestResult] = useState<ApiTestResult>(null)
-  const [loading, setLoading] = useState(false)
-
   const isDebugEnabled = import.meta.env.VITE_APP_DEBUG === 'true'
-
-  const testApiConnection = async (): Promise<void> => {
-    setLoading(true)
-    try {
-      const response = await fetch(config.getApiUrl('/api/health'))
-      const data = (await response.json()) as unknown
-      setApiTestResult({
-        success: true,
-        data,
-        url: config.getApiUrl('/api/health'),
-      })
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      setApiTestResult({
-        success: false,
-        error: message,
-        url: config.getApiUrl('/api/health'),
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   if (!isDebugEnabled) {
     return null
@@ -65,12 +19,11 @@ const EnvDebug = (): JSX.Element | null => {
           <div className="bg-gray-100 p-4 rounded-lg">
             <pre className="text-sm">
               {`VITE_DATA_SOURCE: ${
-                import.meta.env.VITE_DATA_SOURCE || 'NOT SET (default: api)'
+                import.meta.env.VITE_DATA_SOURCE ||
+                'NOT SET (default: embedded)'
               }
 VITE_EMBEDDED_JSON_PATH: ${import.meta.env.VITE_EMBEDDED_JSON_PATH || 'NOT SET'}
 VITE_EXTERNAL_JSON_URL: ${import.meta.env.VITE_EXTERNAL_JSON_URL || 'NOT SET'}
-VITE_API_HOSTNAME: ${import.meta.env.VITE_API_HOSTNAME || 'NOT SET'}
-VITE_API_PORT: ${import.meta.env.VITE_API_PORT || 'NOT SET'}
 VITE_APP_NAME: ${import.meta.env.VITE_APP_NAME || 'NOT SET (default: Portfolio)'}
 VITE_APP_DEBUG: ${import.meta.env.VITE_APP_DEBUG || 'NOT SET'}`}
             </pre>
@@ -82,67 +35,9 @@ VITE_APP_DEBUG: ${import.meta.env.VITE_APP_DEBUG || 'NOT SET'}`}
           <div className="bg-gray-100 p-4 rounded-lg">
             <pre className="text-sm">
               {`Mode: ${dataSource}
-Admin enabled: ${isAdminEnabled()}
-Portfolio data URL: ${getPortfolioDataUrl() || '(API)'}`}
+Portfolio data URL: ${getPortfolioDataUrl() || '(not configured)'}`}
             </pre>
           </div>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Configuration</h3>
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <pre className="text-sm">
-              {`API Base URL: ${config.apiBaseUrl}
-All API URLs:`}
-              {JSON.stringify(config.getApiUrls(), null, 2)}
-            </pre>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold mb-2">API Connection Test</h3>
-          {isAdminEnabled() ? (
-            <>
-              <button
-                onClick={testApiConnection}
-                disabled={loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              >
-                {loading ? 'Testing...' : 'Test API Connection'}
-              </button>
-              {apiTestResult && (
-                <div
-                  className={`mt-2 p-4 rounded-lg ${
-                    apiTestResult.success
-                      ? 'bg-green-100 border border-green-200'
-                      : 'bg-red-100 border border-red-200'
-                  }`}
-                >
-                  <h4 className="font-semibold mb-2">
-                    {apiTestResult.success ? '✅ Success' : '❌ Failed'}
-                  </h4>
-                  <div className="text-sm">
-                    <p>
-                      <strong>URL:</strong> {apiTestResult.url}
-                    </p>
-                    {apiTestResult.success ? (
-                      <pre className="mt-2 bg-white p-2 rounded">
-                        {JSON.stringify(apiTestResult.data, null, 2)}
-                      </pre>
-                    ) : (
-                      <p>
-                        <strong>Error:</strong> {apiTestResult.error}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-sm text-gray-500">
-              Only available when VITE_DATA_SOURCE=api.
-            </p>
-          )}
         </div>
 
         <div>
@@ -156,14 +51,10 @@ All API URLs:`}
                 Create a <code>.env</code> file in the frontend root directory
               </li>
               <li>
-                Add your variables: <code>VITE_API_HOSTNAME=localhost</code>
+                Add your variables, e.g. <code>VITE_DATA_SOURCE=embedded</code>
               </li>
               <li>
                 Restart your development server: <code>npm run dev</code>
-              </li>
-              <li>
-                Check that the Vite proxy in <code>vite.config.ts</code>{' '}
-                doesn&apos;t conflict
               </li>
             </ol>
           </div>

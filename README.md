@@ -2,7 +2,7 @@
 
 ## Overview
 
-Dev Portfolio is a modern, full-stack portfolio website built with React and Node.js. It features a dynamic frontend with an admin panel for content management, comprehensive API health monitoring, and a responsive design using Tailwind CSS.
+Dev Portfolio is a personal modern portfolio website built with React. It loads content from a static JSON file (embedded or external URL) and features a responsive design using Tailwind CSS.
 
 ## Architecture
 
@@ -13,40 +13,18 @@ Dev Portfolio is a modern, full-stack portfolio website built with React and Nod
 - **Routing**: React Router DOM for navigation
 - **State Management**: React Context API with custom hooks
 - **Icons**: React Icons library
-
-### Backend (Node.js + Express)
-
-- **Runtime**: Node.js with Express.js
-- **Authentication**: JWT-based authentication
-- **Validation**: Joi schema validation
-- **Testing**: Jest testing framework
-- **Data Storage**: JSON file-based storage
+- **Data**: Embedded JSON (`public/data/portfolio.json`) or external URL (S3, CDN)
 
 ## Key Features
 
-### 1. Portfolio Display
+### Portfolio Display
 
 - **Hero Section**: Personal introduction and call-to-action
 - **About Section**: Personal background and story
 - **Skills Section**: Technical skills with proficiency levels
 - **Experience Section**: Work history and achievements
 - **Projects Section**: Showcase of completed projects
-- **Contact Section**: Contact information and form
-
-### 2. Admin Panel
-
-- **Secure Login**: JWT-based authentication
-- **Content Management**: Edit all portfolio sections
-- **Real-time Updates**: Instant preview of changes
-- **Form Validation**: Client and server-side validation
-- **Section-specific Editing**: Focused editing for each section
-
-### 3. API Health Monitoring
-
-- **Global Health Checks**: Automatic API availability monitoring
-- **Graceful Degradation**: Error pages when API is unavailable
-- **Retry Mechanism**: User-initiated retry functionality
-- **Loading States**: Clear feedback during API checks
+- **Contact Section**: Contact information and social links
 
 ## Technology Stack
 
@@ -55,7 +33,6 @@ Dev Portfolio is a modern, full-stack portfolio website built with React and Nod
 - **React**: 18.2.0 - UI framework
 - **React Router DOM**: 6.22.3 - Client-side routing
 - **React Icons**: 5.5.0 - Icon library
-- **JWT Decode**: 4.0.0 - JWT token handling
 
 ### Development Dependencies
 
@@ -86,15 +63,23 @@ Dev Portfolio is a modern, full-stack portfolio website built with React and Nod
    npm install
    ```
 
-3. **Start development server**
+3. **Configure data source** (optional — defaults to embedded JSON)
+
+   Copy `.env.example` to `.env` and adjust as needed:
+
+   ```bash
+   VITE_DATA_SOURCE=embedded
+   VITE_EMBEDDED_JSON_PATH=/data/portfolio.json
+   ```
+
+4. **Start development server**
 
    ```bash
    npm run dev
    ```
 
-4. **Access the application**
+5. **Access the application**
    - Portfolio: http://localhost:5173
-   - Admin Panel: http://localhost:5173/admin
 
 ## Development Workflow
 
@@ -136,16 +121,9 @@ For support and questions:
 
 - Create an issue in the repository
 - Check the documentation in the `/docs` folder
-- Review the API health check documentation
-
-## Roadmap
 
 ### Planned Features
 
-- [ ] Dark mode support
-- [ ] Analytics integration
 - [ ] SEO optimization
 - [ ] Multi-language support
-- [ ] Advanced admin features
 - [ ] Automated testing
-- [ ] CI/CD pipeline

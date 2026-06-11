@@ -1,7 +1,6 @@
 /**
  * Data source configuration for portfolio data.
  * Modes:
- * - api: backend API + admin (read/write via API)
  * - embedded: static JSON in the app
  * - external: JSON stored at an external URL (e.g. S3, CDN)
  *
@@ -10,10 +9,10 @@
 
 import { VALID_DATA_SOURCES } from '../constants/dataSourceOptions'
 
-export type DataSourceMode = 'api' | 'embedded' | 'external'
+export type DataSourceMode = 'embedded' | 'external'
 
 const getDataSource = (): DataSourceMode => {
-  const raw = import.meta.env.VITE_DATA_SOURCE || 'api'
+  const raw = import.meta.env.VITE_DATA_SOURCE || 'embedded'
   const normalized = raw.toLowerCase().trim()
   return (VALID_DATA_SOURCES as readonly string[]).includes(normalized)
     ? (normalized as DataSourceMode)
@@ -29,8 +28,6 @@ const getExternalUrl = (): string => {
 }
 
 export const dataSource: DataSourceMode = getDataSource()
-
-export const isAdminEnabled = (): boolean => dataSource === 'api'
 
 export const getPortfolioDataUrl = (): string | null => {
   if (dataSource === 'embedded') {
@@ -64,7 +61,6 @@ export const getDataSourceConfigError = (): string | null => {
 
 export default {
   dataSource,
-  isAdminEnabled,
   getPortfolioDataUrl,
   getDataSourceConfigError,
   getEmbeddedPath,
