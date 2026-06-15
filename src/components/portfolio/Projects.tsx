@@ -4,8 +4,7 @@
  */
 import { useState } from 'react'
 import ScrollReveal from '../common/ScrollReveal'
-import SectionContent from '../common/SectionContent'
-import SectionLoading from '../common/SectionLoading'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
 
@@ -105,22 +104,26 @@ const ProjectCard = ({
 const Projects = (): JSX.Element => {
   const { data, loading } = usePortfolio()
   const [showAll, setShowAll] = useState(false)
+  const isLoading = loading || !data
 
-  if (loading || !data) {
-    return <SectionLoading id="projects" />
-  }
-
-  const { projects } = data as PortfolioData & { projects?: ProjectsSection }
+  const projects = data
+    ? (data as PortfolioData & { projects?: ProjectsSection }).projects
+    : undefined
   const items: ProjectItem[] = projects?.projects ?? projects?.items ?? []
   const initialItems = items.slice(0, VISIBLE_INITIALLY)
   const moreItems = items.slice(VISIBLE_INITIALLY)
   const hasMore = moreItems.length > 0
 
   return (
-    <>
-      <div id="projects" className="scroll-mt-20" aria-hidden="true" />
-      <section className="py-20" aria-labelledby="projects-heading">
-        <SectionContent maxWidth="5xl">
+    <SectionLoadTransition
+      id="projects"
+      className="scroll-mt-20 py-20"
+      loading={isLoading}
+      revealIndex={4}
+      ariaLabelledBy="projects-heading"
+    >
+      {data && (
+        <>
           <ScrollReveal index={0} className="w-full">
             <h2
               id="projects-heading"
@@ -206,9 +209,9 @@ const Projects = (): JSX.Element => {
               No projects to show.
             </p>
           )}
-        </SectionContent>
-      </section>
-    </>
+        </>
+      )}
+    </SectionLoadTransition>
   )
 }
 

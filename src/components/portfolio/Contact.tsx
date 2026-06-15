@@ -5,9 +5,18 @@
 import { FaDownload, FaGithub, FaLinkedin } from 'react-icons/fa'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
-import SectionLoading from '../common/SectionLoading'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
+import {
+  contactDesktopPillClass,
+  contactInnerWrapClass,
+  contactMobileCardClass,
+  contactSectionClass,
+  downloadCvButtonClass,
+  downloadCvSeparatorWrap,
+  downloadCvSeparatorWrapPills,
+} from './contact/constants'
 
 const platformIcons: Record<string, typeof FaGithub> = {
   github: FaGithub,
@@ -18,15 +27,6 @@ const platformLabels: Record<string, string> = {
   github: 'GitHub',
   linkedin: 'LinkedIn',
 }
-
-const downloadCvSeparatorWrap =
-  'mt-8 w-full border-t border-slate-200/50 pt-8 dark:border-gray-600/45'
-
-const downloadCvSeparatorWrapPills =
-  'mt-10 w-full max-w-2xl border-t border-slate-200/50 pt-10 dark:border-gray-600/45 flex justify-center'
-
-const downloadCvButtonClass =
-  'inline-flex items-center justify-center gap-2 rounded-full border border-slate-300/90 bg-white/70 px-6 py-2.5 text-sm font-medium text-slate-800 shadow-[0_4px_20px_rgba(15,23,42,0.06)] transition-colors hover:bg-white/95 hover:border-slate-400 dark:border-slate-500/70 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-800/80 dark:shadow-none'
 
 function downloadCvLinkProps(
   href: string
@@ -162,17 +162,23 @@ function ContactLinks({
 
 const Contact = (): JSX.Element => {
   const { data, loading } = usePortfolio()
+  const isLoading = loading || !data
 
-  if (loading || !data) {
-    return (
-      <SectionLoading
-        id="contact"
-        className="pt-20 pb-36 md:pb-44 text-slate-900 dark:text-white"
-        maxWidth="4xl"
-      />
-    )
-  }
+  return (
+    <SectionLoadTransition
+      id="contact"
+      as="div"
+      className="pb-16 md:pb-24"
+      maxWidth={false}
+      loading={isLoading}
+      revealIndex={5}
+    >
+      {data ? <ContactContent data={data} /> : null}
+    </SectionLoadTransition>
+  )
+}
 
+const ContactContent = ({ data }: { data: PortfolioData }): JSX.Element => {
   const { contact, personalInfo } = data
 
   const tagline =
@@ -185,10 +191,10 @@ const Contact = (): JSX.Element => {
   const cvUrl = getCvUrl(contact)
 
   return (
-    <div id="contact" className="pb-16 md:pb-24">
-      <section className="md:hidden py-20 text-slate-900 dark:text-white overflow-visible">
+    <>
+      <section className={`md:hidden ${contactSectionClass}`}>
         <SectionContent maxWidth="4xl">
-          <div className="relative overflow-visible px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-14">
+          <div className={contactInnerWrapClass}>
             <div className="relative z-10">
               <ScrollReveal index={0} className="w-full">
                 <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-gray-100 drop-shadow-[0_5px_28px_rgba(56,189,248,0.2),0_2px_12px_rgba(139,92,246,0.08)] dark:drop-shadow-[0_4px_28px_rgba(0,0,0,0.45)]">
@@ -200,7 +206,7 @@ const Contact = (): JSX.Element => {
               </ScrollReveal>
               <div className="grid gap-6 max-w-md mx-auto">
                 <ScrollReveal index={1} className="w-full">
-                  <div className="rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-sm p-8 shadow-lg shadow-slate-900/[0.06] hover:border-slate-300/90 dark:border-gray-700/80 dark:bg-gray-800/40 dark:shadow-xl dark:hover:border-gray-600/80">
+                  <div className={contactMobileCardClass}>
                     <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4 drop-shadow-[0_2px_14px_rgba(56,189,248,0.14)] dark:drop-shadow-none">
                       Contact
                     </h3>
@@ -223,9 +229,9 @@ const Contact = (): JSX.Element => {
         </SectionContent>
       </section>
 
-      <section className="hidden md:block py-20 text-slate-900 dark:text-white overflow-visible">
+      <section className={`hidden md:block ${contactSectionClass}`}>
         <SectionContent maxWidth="4xl">
-          <div className="relative overflow-visible px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-14">
+          <div className={contactInnerWrapClass}>
             <div className="relative z-10">
               <div className="max-w-2xl mx-auto text-center">
                 <ScrollReveal index={0} className="w-full">
@@ -244,7 +250,7 @@ const Contact = (): JSX.Element => {
                           {hasEmail && (
                             <a
                               href={`mailto:${contact?.email || personalInfo?.email}`}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                              className={`${contactDesktopPillClass} hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:hover:bg-blue-600`}
                             >
                               {iconEmail}
                               <span>Email</span>
@@ -253,7 +259,7 @@ const Contact = (): JSX.Element => {
                           {hasPhone && (
                             <a
                               href={`tel:${contact!.phone}`}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                              className={`${contactDesktopPillClass} hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:hover:bg-blue-600`}
                             >
                               {iconPhone}
                               <span>Phone</span>
@@ -270,7 +276,7 @@ const Contact = (): JSX.Element => {
                                 href={link.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 text-slate-800 hover:bg-blue-500 hover:text-white hover:border-blue-500 shadow-md shadow-slate-900/[0.06] dark:bg-gray-700/80 dark:hover:bg-blue-600 dark:text-gray-200 dark:border-gray-600 dark:shadow-none"
+                                className={`${contactDesktopPillClass} hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:hover:bg-blue-600`}
                               >
                                 {Icon ? <Icon className="w-5 h-5" /> : null}
                                 <span>{getPlatformLabel(link.platform)}</span>
@@ -298,7 +304,7 @@ const Contact = (): JSX.Element => {
           </div>
         </SectionContent>
       </section>
-    </div>
+    </>
   )
 }
 

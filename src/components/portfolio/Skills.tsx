@@ -1,18 +1,13 @@
 import ScrollReveal from '../common/ScrollReveal'
-import SectionContent from '../common/SectionContent'
-import SectionLoading from '../common/SectionLoading'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 import { usePortfolio } from '../../context/PortfolioContext'
 import { formatEnumValue } from '../../utils/formatters'
 import type { PortfolioData, SkillCategoryValue, SkillEntry } from '../../types'
 
 const Skills = (): JSX.Element => {
   const { data, loading } = usePortfolio()
-
-  if (loading || !data) {
-    return <SectionLoading id="skills" />
-  }
-
-  const { skills } = data as PortfolioData
+  const isLoading = loading || !data
+  const skills = data ? (data as PortfolioData).skills : undefined
 
   const proficiencyOrder: Record<string, number> = {
     expert: 0,
@@ -113,84 +108,88 @@ const Skills = (): JSX.Element => {
   const skillCategoryEntries = Object.entries(skills?.skillCategories || {})
 
   return (
-    <section id="skills" className="py-20">
-      <SectionContent maxWidth="5xl">
-        <ScrollReveal index={0} className="w-full">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 drop-shadow-[0_4px_22px_rgba(56,189,248,0.16),0_2px_10px_rgba(139,92,246,0.06)] dark:drop-shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-              Skills &amp; Technologies
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Technical expertise and proficiency levels
-            </p>
-          </div>
-        </ScrollReveal>
-
-        <div className="space-y-4">
-          {skillCategoryEntries.map(([category, categorySkills], cardIndex) => (
-            <ScrollReveal
-              key={category}
-              index={cardIndex + 1}
-              className="w-full"
-            >
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-white/20 dark:border-gray-700">
-                <div className="mb-3">
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
-                    {category}
-                  </h4>
-                  <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full"></div>
-                </div>
-
-                <div>{renderSkillTags(categorySkills)}</div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-
-        <ScrollReveal
-          index={skillCategoryEntries.length + 1}
-          className="mt-6 w-full text-center"
-        >
-          <div className="inline-flex items-center space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm border border-transparent dark:border-gray-700">
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              Proficiency:
-            </span>
-            <div className="flex items-center space-x-2">
-              {(
-                ['expert', 'advanced', 'intermediate', 'beginner'] as const
-              ).map((level) => {
-                let legendColor: string
-                switch (level) {
-                  case 'expert':
-                    legendColor = 'bg-purple-400 border-purple-500'
-                    break
-                  case 'advanced':
-                    legendColor = 'bg-blue-400 border-blue-500'
-                    break
-                  case 'intermediate':
-                    legendColor = 'bg-green-400 border-green-500'
-                    break
-                  case 'beginner':
-                  default:
-                    legendColor = 'bg-gray-400 border-gray-500'
-                    break
-                }
-                return (
-                  <div key={level} className="flex items-center space-x-1">
-                    <div
-                      className={`w-2 h-2 rounded-full ${legendColor}`}
-                    ></div>
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400 capitalize">
-                      {formatEnumValue(level)}
-                    </span>
-                  </div>
-                )
-              })}
+    <SectionLoadTransition id="skills" loading={isLoading} revealIndex={2}>
+      {data && (
+        <>
+          <ScrollReveal index={0} className="w-full">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 drop-shadow-[0_4px_22px_rgba(56,189,248,0.16),0_2px_10px_rgba(139,92,246,0.06)] dark:drop-shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+                Skills &amp; Technologies
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Technical expertise and proficiency levels
+              </p>
             </div>
+          </ScrollReveal>
+
+          <div className="space-y-4">
+            {skillCategoryEntries.map(
+              ([category, categorySkills], cardIndex) => (
+                <ScrollReveal
+                  key={category}
+                  index={cardIndex + 1}
+                  className="w-full"
+                >
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-white/20 dark:border-gray-700">
+                    <div className="mb-3">
+                      <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                        {category}
+                      </h4>
+                      <div className="w-8 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-full"></div>
+                    </div>
+
+                    <div>{renderSkillTags(categorySkills)}</div>
+                  </div>
+                </ScrollReveal>
+              )
+            )}
           </div>
-        </ScrollReveal>
-      </SectionContent>
-    </section>
+
+          <ScrollReveal
+            index={skillCategoryEntries.length + 1}
+            className="mt-6 w-full text-center"
+          >
+            <div className="inline-flex items-center space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm border border-transparent dark:border-gray-700">
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Proficiency:
+              </span>
+              <div className="flex items-center space-x-2">
+                {(
+                  ['expert', 'advanced', 'intermediate', 'beginner'] as const
+                ).map((level) => {
+                  let legendColor: string
+                  switch (level) {
+                    case 'expert':
+                      legendColor = 'bg-purple-400 border-purple-500'
+                      break
+                    case 'advanced':
+                      legendColor = 'bg-blue-400 border-blue-500'
+                      break
+                    case 'intermediate':
+                      legendColor = 'bg-green-400 border-green-500'
+                      break
+                    case 'beginner':
+                    default:
+                      legendColor = 'bg-gray-400 border-gray-500'
+                      break
+                  }
+                  return (
+                    <div key={level} className="flex items-center space-x-1">
+                      <div
+                        className={`w-2 h-2 rounded-full ${legendColor}`}
+                      ></div>
+                      <span className="text-xs font-medium text-gray-600 dark:text-gray-400 capitalize">
+                        {formatEnumValue(level)}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </ScrollReveal>
+        </>
+      )}
+    </SectionLoadTransition>
   )
 }
 
