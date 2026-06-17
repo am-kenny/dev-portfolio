@@ -1,9 +1,9 @@
 import {
+  type MutableRefObject,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
-  type MutableRefObject,
 } from 'react'
 
 /** Matches `ScrollReveal` default `rootMargin` bottom -5%. */

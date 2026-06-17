@@ -1,4 +1,4 @@
-import type { PortfolioData, ErrorKind } from './index'
+import type { ErrorKind, PortfolioData } from './index'
 
 export interface UsePortfolioDataResult {
   data: PortfolioData | null

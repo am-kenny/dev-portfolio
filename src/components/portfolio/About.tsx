@@ -2,10 +2,11 @@
  * About section: `#about`, renders `about.content` from portfolio data after load.
  */
 import { useEffect, useState } from 'react'
-import ScrollReveal from '../common/ScrollReveal'
-import SectionLoadTransition from '../common/SectionLoadTransition'
+
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
+import ScrollReveal from '../common/ScrollReveal'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 
 const splitParagraphs = (text: string): string[] =>
   text

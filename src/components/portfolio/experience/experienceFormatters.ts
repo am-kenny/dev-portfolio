@@ -1,5 +1,5 @@
-import { formatEnumValue } from '../../../utils/formatters'
 import type { ExperienceJob } from '../../../types'
+import { formatEnumValue } from '../../../utils/formatters'
 
 const MONTH_LABELS = [
   'Jan',

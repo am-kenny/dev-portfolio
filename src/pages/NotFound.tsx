@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
+
 import ThemeToggle from '../components/common/ThemeToggle'
 
 const NotFound = (): JSX.Element => (

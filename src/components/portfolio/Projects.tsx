@@ -3,10 +3,11 @@
  * then expandable grid for the rest. Accepts `projects.projects` or `projects.items` from static data.
  */
 import { useState } from 'react'
-import ScrollReveal from '../common/ScrollReveal'
-import SectionLoadTransition from '../common/SectionLoadTransition'
+
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, ProjectItem, ProjectsSection } from '../../types'
+import ScrollReveal from '../common/ScrollReveal'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 
 /** Items shown before "See all"; remainder toggles in a height-transition grid. */
 const VISIBLE_INITIALLY = 4

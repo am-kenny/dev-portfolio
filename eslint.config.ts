@@ -1,49 +1,42 @@
 import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import tsParser from '@typescript-eslint/parser'
-import tsPlugin from '@typescript-eslint/eslint-plugin'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  js.configs.recommended,
-  eslintConfigPrettier,
+export default defineConfig(
+  globalIgnores(['dist/**', 'node_modules/**']),
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{js,jsx,ts,tsx}', 'eslint.config.ts'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.browser,
+    },
     plugins: {
-      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      '@typescript-eslint': tsPlugin,
-    },
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-      },
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^_' },
-      ],
-      'no-undef': 'off',
-      'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      ...reactHooks.configs.recommended.rules,
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off',
       'react-refresh/only-export-components': [
         'error',
         { allowConstantExport: true },
+      ],
+      'simple-import-sort/exports': 'error',
+      'simple-import-sort/imports': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^[A-Z_]',
+        },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/consistent-type-imports': 'warn',
@@ -54,7 +47,8 @@ export default defineConfig([
     rules: { 'react-refresh/only-export-components': 'off' },
   },
   {
-    files: ['*.config.{js,ts}', 'vite.config.{js,ts}'],
-    languageOptions: { globals: { ...globals.node } },
+    files: ['*.config.{js,ts}', 'vite.config.{js,ts}', 'eslint.config.ts'],
+    languageOptions: { globals: globals.node },
   },
-])
+  eslintConfigPrettier
+)

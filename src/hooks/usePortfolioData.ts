@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
 import {
-  getPortfolioDataUrl,
   getDataSourceConfigError,
+  getPortfolioDataUrl,
 } from '../services/dataSource'
-import type { PortfolioData, ErrorKind } from '../types'
+import type { ErrorKind, PortfolioData } from '../types'
 import type { UsePortfolioDataResult } from '../types/portfolioHooks'
 
 const fetchJson = async <T>(url: string): Promise<T> => {

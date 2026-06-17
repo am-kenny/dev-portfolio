@@ -1,24 +1,25 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
   useLocation,
 } from 'react-router-dom'
-import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
-import ThemeToggle from './components/common/ThemeToggle'
-import Hero from './components/portfolio/Hero'
-import About from './components/portfolio/About'
-import Skills from './components/portfolio/Skills'
-import Experience from './components/portfolio/Experience'
-import Projects from './components/portfolio/Projects'
-import Contact from './components/portfolio/Contact'
-import Footer from './components/portfolio/Footer'
-import { pageTitles } from './constants/titleMap'
-import DataErrorPage from './components/common/DataErrorPage'
+
 import CanvasBackground from './components/common/CanvasBackground'
+import DataErrorPage from './components/common/DataErrorPage'
 import SectionNav from './components/common/SectionNav'
+import ThemeToggle from './components/common/ThemeToggle'
+import About from './components/portfolio/About'
+import Contact from './components/portfolio/Contact'
+import Experience from './components/portfolio/Experience'
+import Footer from './components/portfolio/Footer'
+import Hero from './components/portfolio/Hero'
+import Projects from './components/portfolio/Projects'
+import Skills from './components/portfolio/Skills'
+import { pageTitles } from './constants/titleMap'
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
 import NotFound from './pages/NotFound'
 
 const Debug =

@@ -1,4 +1,5 @@
-import { useEffect, useState, type SyntheticEvent } from 'react'
+import { type SyntheticEvent, useEffect, useState } from 'react'
+
 import type { ExperienceCompanyIcon } from '../../../types'
 
 const DefaultCompanyIcon = (): JSX.Element => (

@@ -3,11 +3,12 @@
  * Desktop: centered link row; mobile: card stack.
  */
 import { FaDownload, FaGithub, FaLinkedin } from 'react-icons/fa'
+
+import { usePortfolio } from '../../context/PortfolioContext'
+import type { PortfolioData } from '../../types'
 import ScrollReveal from '../common/ScrollReveal'
 import SectionContent from '../common/SectionContent'
 import SectionLoadTransition from '../common/SectionLoadTransition'
-import { usePortfolio } from '../../context/PortfolioContext'
-import type { PortfolioData } from '../../types'
 import {
   contactDesktopPillClass,
   contactInnerWrapClass,

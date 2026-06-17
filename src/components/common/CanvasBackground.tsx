@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
+
 import { useTheme } from '../../context/ThemeContext'
 
 /** Matches `index.css` `--theme-transition-duration` (0.45s → 450ms). */
