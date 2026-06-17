@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
-import ScrollReveal from '../common/ScrollReveal'
-import SectionLoadTransition from '../common/SectionLoadTransition'
+
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
+import ScrollReveal from '../common/ScrollReveal'
+import SectionLoadTransition from '../common/SectionLoadTransition'
 import CollapsibleAchievements from './experience/CollapsibleAchievements'
 import CompanyIcon from './experience/CompanyIcon'
-import ExperienceTimelineRow from './experience/ExperienceTimelineRow'
-import JobLocation from './experience/JobLocation'
-import SkillsPills from './experience/SkillsPills'
 import {
   experienceAsideClass,
   experienceCardClass,
@@ -16,10 +14,13 @@ import {
   formatExperiencePeriod,
   parseJobLocation,
 } from './experience/experienceFormatters'
+import ExperienceTimelineRow from './experience/ExperienceTimelineRow'
+import JobLocation from './experience/JobLocation'
 import {
   experienceJobKey,
   normalizeExperienceJobs,
 } from './experience/normalizeExperienceJob'
+import SkillsPills from './experience/SkillsPills'
 import { useExperienceTimeline } from './experience/useExperienceTimeline'
 
 const Experience = (): JSX.Element => {

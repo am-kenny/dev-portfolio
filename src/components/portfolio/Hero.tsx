@@ -1,18 +1,18 @@
 /**
  * Above-the-fold intro: name and title from `personalInfo`, CTAs to `#projects` and `#contact`.
  */
+import { usePortfolio } from '../../context/PortfolioContext'
+import { scrollToSection } from '../../utils/scroll'
 import LoadTransition from '../common/LoadTransition'
 import {
   HeroCtaPlaceholder,
-  HeroHeadlineSlot,
-  HeroTitlePlaceholder,
   heroCtaPrimaryClass,
   heroCtaRowClass,
   heroCtaSecondaryClass,
   heroHeadlineClass,
+  HeroHeadlineSlot,
+  HeroTitlePlaceholder,
 } from './HeroLoading'
-import { scrollToSection } from '../../utils/scroll'
-import { usePortfolio } from '../../context/PortfolioContext'
 
 const Hero = (): JSX.Element => {
   const { data, loading } = usePortfolio()

@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import EnvDebug from '../components/debug/EnvDebug'
+
 import ThemeToggle from '../components/common/ThemeToggle'
+import EnvDebug from '../components/debug/EnvDebug'
 
 const Debug = (): JSX.Element | null => {
   const navigate = useNavigate()

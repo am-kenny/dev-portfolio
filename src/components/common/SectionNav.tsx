@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import { usePortfolio } from '../../context/PortfolioContext'
 import { scrollToSection } from '../../utils/scroll'
 

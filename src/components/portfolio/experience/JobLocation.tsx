@@ -4,6 +4,7 @@ import {
   HiOutlineOfficeBuilding,
   HiOutlineSwitchHorizontal,
 } from 'react-icons/hi'
+
 import type { JobLocationParts } from './experienceFormatters'
 
 type JobLocationProps = JobLocationParts

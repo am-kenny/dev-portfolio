@@ -1,4 +1,5 @@
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
+
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
 
