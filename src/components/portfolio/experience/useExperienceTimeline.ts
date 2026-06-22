@@ -6,8 +6,8 @@ import {
   useState,
 } from 'react'
 
-/** Matches `ScrollReveal` default `rootMargin` bottom -5%. */
-const ROOT_MARGIN_BOTTOM_SHRINK = 0.05
+import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion'
+import { getRevealLeadY } from '../../../utils/intersection'
 /** Matches `top-6` on the connector track. */
 const LINE_START_OFFSET_PX = 24
 /** Matches `top-2` + half of `w-5` dot for the next row anchor. */
@@ -29,7 +29,7 @@ export const useExperienceTimeline = (
   const segmentCount = Math.max(0, activeJobCount - 1)
   const rowRefs = useRef<(HTMLDivElement | null)[]>([])
   const segmentMaxProgressRef = useRef<number[]>([])
-  const reducedMotionRef = useRef(false)
+  const reducedMotion = usePrefersReducedMotion()
   const [segments, setSegments] = useState<ExperienceTimelineSegment[]>(() =>
     Array.from({ length: segmentCount }, () => ({ progress: 0, heightPx: 1 }))
   )
@@ -44,25 +44,22 @@ export const useExperienceTimeline = (
   }, [activeJobCount, segmentCount])
 
   useLayoutEffect(() => {
-    reducedMotionRef.current = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
     segmentMaxProgressRef.current = Array(segmentCount).fill(
-      reducedMotionRef.current ? 1 : 0
+      reducedMotion ? 1 : 0
     )
     setSegments(
       Array.from({ length: segmentCount }, () => ({
-        progress: reducedMotionRef.current ? 1 : 0,
+        progress: reducedMotion ? 1 : 0,
         heightPx: 1,
       }))
     )
-  }, [segmentCount])
+  }, [segmentCount, reducedMotion])
 
   useEffect(() => {
     if (!enabled || segmentCount === 0) return undefined
 
     const update = () => {
-      const reduced = reducedMotionRef.current
+      const reduced = reducedMotion
       const next: ExperienceTimelineSegment[] = []
       for (let i = 0; i < segmentCount; i++) {
         const row = rowRefs.current[i]
@@ -83,7 +80,7 @@ export const useExperienceTimeline = (
           continue
         }
 
-        const leadY = window.innerHeight * (1 - ROOT_MARGIN_BOTTOM_SHRINK)
+        const leadY = getRevealLeadY()
         const raw = segmentPx > 1 ? (leadY - lineStartY) / segmentPx : 1
         const capped = Math.min(1, Math.max(0, raw))
         const prevMax = segmentMaxProgressRef.current[i] ?? 0
@@ -122,7 +119,7 @@ export const useExperienceTimeline = (
     const resizeObserver = new ResizeObserver(scheduleUpdate)
 
     window.addEventListener('resize', scheduleUpdate)
-    if (!reducedMotionRef.current) {
+    if (!reducedMotion) {
       window.addEventListener('scroll', scheduleUpdate, { passive: true })
     }
 
@@ -141,7 +138,7 @@ export const useExperienceTimeline = (
       cancelAnimationFrame(observeRaf)
       resizeObserver.disconnect()
     }
-  }, [segmentCount, activeJobCount, enabled])
+  }, [segmentCount, activeJobCount, enabled, reducedMotion])
 
   return { rowRefs, segments }
 }

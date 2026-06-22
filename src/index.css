@@ -82,8 +82,11 @@ html.dark body {
     transition-duration: 0.01ms !important;
   }
 
+  /* Scroll reveal: JS uses `usePrefersReducedMotion`; list every mode class here. */
   .scroll-reveal,
-  .scroll-reveal.scroll-reveal--visible {
+  .scroll-reveal.scroll-reveal--visible,
+  .scroll-reveal.scroll-reveal--settled,
+  .scroll-reveal.scroll-reveal--crossfade-visible {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
@@ -139,6 +142,13 @@ html.dark body {
 .scroll-reveal.scroll-reveal--visible {
   animation: scroll-reveal-in 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* Already on screen after load crossfade — stay visible, no re-animation */
+.scroll-reveal.scroll-reveal--settled {
+  opacity: 1;
+  transform: none;
+  animation: none;
 }
 
 /* Blob animation for background decoration */
@@ -479,7 +489,8 @@ html.dark body {
     opacity: 0;
   }
 
-  .load-transition__content--enter {
+  .load-transition__content--enter,
+  .load-transition__content--ready {
     animation: none;
     opacity: 1;
   }
@@ -589,9 +600,15 @@ html.dark body {
   animation-delay: var(--load-reveal-delay, 0ms);
 }
 
-/* Avoid double slide: outer fade only; skip scroll-reveal motion on first paint */
-.load-transition__content--enter .scroll-reveal,
-.load-transition__content--enter .scroll-reveal.scroll-reveal--visible {
+.load-transition__content--ready {
+  opacity: 1;
+}
+
+/* During crossfade — only in-reveal-range items stay visible (matches IO rules) */
+.load-transition__content--enter
+  .scroll-reveal.scroll-reveal--crossfade-visible,
+.load-transition__content--ready
+  .scroll-reveal.scroll-reveal--crossfade-visible {
   opacity: 1;
   transform: none;
   animation: none;

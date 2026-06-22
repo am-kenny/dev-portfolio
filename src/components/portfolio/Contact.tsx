@@ -6,9 +6,9 @@ import { FaDownload, FaGithub, FaLinkedin } from 'react-icons/fa'
 
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
-import ScrollReveal from '../common/ScrollReveal'
+import { SectionLoadTransition } from '../common/load-transition'
+import { ScrollReveal } from '../common/scroll-reveal'
 import SectionContent from '../common/SectionContent'
-import SectionLoadTransition from '../common/SectionLoadTransition'
 import {
   contactDesktopPillClass,
   contactInnerWrapClass,

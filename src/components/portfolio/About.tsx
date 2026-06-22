@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData } from '../../types'
-import ScrollReveal from '../common/ScrollReveal'
-import SectionLoadTransition from '../common/SectionLoadTransition'
+import { SectionLoadTransition } from '../common/load-transition'
+import { ScrollReveal } from '../common/scroll-reveal'
 
 const splitParagraphs = (text: string): string[] =>
   text
