@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import { useTheme } from '../../context/ThemeContext'
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 
 /** Matches `index.css` `--theme-transition-duration` (0.45s → 450ms). */
 const THEME_BLEND_MS = 450
@@ -461,6 +462,7 @@ function drawNeuralNetwork(
  */
 export default function CanvasBackground(): JSX.Element {
   const { theme } = useTheme()
+  const reducedMotion = usePrefersReducedMotion()
   /** 0 = light draw weight, 1 = dark; eases during theme change */
   const themeBlendRef = useRef(theme === 'dark' ? 1 : 0)
   const themeTransitionRef = useRef<ThemeTransition | null>(null)
@@ -525,9 +527,6 @@ export default function CanvasBackground(): JSX.Element {
 
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
 
     /** Width/height from viewport metrics; extra height for `-top-[40px]` and parallax. */
     const readLogicalSize = (): { w: number; h: number } => {
@@ -580,12 +579,12 @@ export default function CanvasBackground(): JSX.Element {
       resizeDebounce = setTimeout(() => {
         resizeDebounce = undefined
         applyLogicalSize(true)
-        if (prefersReducedMotion) {
+        if (reducedMotion) {
           drawReducedMotionFrame()
         }
       }, 160)
     }
-    if (shouldReactToWindowResize || prefersReducedMotion) {
+    if (shouldReactToWindowResize || reducedMotion) {
       window.addEventListener('resize', onResize, { passive: true })
     }
 
@@ -707,7 +706,7 @@ export default function CanvasBackground(): JSX.Element {
       updatePointerFromClient(e.clientX, e.clientY)
     }
 
-    if (prefersReducedMotion) {
+    if (reducedMotion) {
       drawReducedMotionFrame()
     } else {
       window.addEventListener('scroll', onScroll, { passive: true })
@@ -721,13 +720,13 @@ export default function CanvasBackground(): JSX.Element {
     return () => {
       cancelAnimationFrame(frameRef.current)
       if (resizeDebounce !== undefined) clearTimeout(resizeDebounce)
-      if (shouldReactToWindowResize || prefersReducedMotion) {
+      if (shouldReactToWindowResize || reducedMotion) {
         window.removeEventListener('resize', onResize)
       }
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('pointermove', onWindowPointerMove)
     }
-  }, [initNetwork, theme, updatePointerFromClient])
+  }, [initNetwork, theme, updatePointerFromClient, reducedMotion])
 
   return (
     <div ref={containerRef} className="fixed inset-0 -z-10" aria-hidden>

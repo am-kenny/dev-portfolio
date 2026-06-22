@@ -3,7 +3,7 @@
  */
 import { usePortfolio } from '../../context/PortfolioContext'
 import { scrollToSection } from '../../utils/scroll'
-import LoadTransition from '../common/LoadTransition'
+import { LoadTransition } from '../common/load-transition'
 import {
   HeroCtaPlaceholder,
   heroCtaPrimaryClass,

@@ -1,8 +1,8 @@
 import { type ElementType, type ReactNode, useCallback, useState } from 'react'
 
+import SectionContent, { type SectionContentMaxWidth } from '../SectionContent'
 import { SectionSkeletonBody } from './LoadingSkeleton'
 import LoadTransition, { type LoadTransitionPhase } from './LoadTransition'
-import SectionContent, { type SectionContentMaxWidth } from './SectionContent'
 import { sectionSkeletonFromId } from './sectionSkeletonVariant'
 
 export interface SectionLoadTransitionProps {

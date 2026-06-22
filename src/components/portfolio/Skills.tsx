@@ -1,8 +1,8 @@
 import { usePortfolio } from '../../context/PortfolioContext'
 import type { PortfolioData, SkillCategoryValue, SkillEntry } from '../../types'
 import { formatEnumValue } from '../../utils/formatters'
-import ScrollReveal from '../common/ScrollReveal'
-import SectionLoadTransition from '../common/SectionLoadTransition'
+import { SectionLoadTransition } from '../common/load-transition'
+import { ScrollReveal } from '../common/scroll-reveal'
 
 const Skills = (): JSX.Element => {
   const { data, loading } = usePortfolio()

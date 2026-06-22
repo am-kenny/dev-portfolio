@@ -6,12 +6,12 @@ import {
   downloadCvButtonClass,
   downloadCvSeparatorWrap,
   downloadCvSeparatorWrapPills,
-} from '../../constants/contactLayout'
+} from '../../../constants/contactLayout'
 import {
   experienceAsideClass,
   experienceCardClass,
-} from '../../constants/experienceLayout'
-import SectionContent from './SectionContent'
+} from '../../../constants/experienceLayout'
+import SectionContent from '../SectionContent'
 import type { SectionSkeletonVariant } from './sectionSkeletonVariant'
 
 interface SkeletonProps {
